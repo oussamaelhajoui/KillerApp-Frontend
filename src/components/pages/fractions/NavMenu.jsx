@@ -31,7 +31,7 @@ class NavMenu extends Component {
         --> */}
         <div className="logo">
           <NavLink to={"/"} className="simple-text">
-            JW-Player VidCat
+            Eow planning
           </NavLink>
         </div>
         <div className="sidebar-wrapper">

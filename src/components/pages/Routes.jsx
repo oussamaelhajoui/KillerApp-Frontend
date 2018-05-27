@@ -49,7 +49,7 @@ class RoutesPage extends Component {
                         <h1>Route overview</h1>
 
                         <div className="col s12">
-                            <PaginationRow table="populateUserTable" />
+                            <PaginationRow table="populateRouteTable" />
                             <div className="row table-container">
                                 <table className="striped">
                                     <thead>

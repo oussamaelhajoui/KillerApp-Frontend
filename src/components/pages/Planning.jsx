@@ -10,7 +10,7 @@ class Planning extends Component {
     render() {
         return (
             <Fragment>
-
+                plaanning
             </Fragment>
         );
     }

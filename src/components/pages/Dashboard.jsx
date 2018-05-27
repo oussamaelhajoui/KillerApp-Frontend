@@ -7,10 +7,10 @@ class Dashboard extends Component {
         var myChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"],
+                labels: ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"],
                 datasets: [{
-                    label: 'Videos per uur beoordeeld',
-                    data: [2, 1, 0, 0, 0, 1, 1, 3, 6, 12, 11, 15, 4, 17, 13, 12, 16, 15, 12, 9, 5, 3, 2, 2],
+                    label: 'Routes per dag',
+                    data: [4, 2, 3, 5, 2, 4, 2],
                 }]
             }
         });
@@ -159,7 +159,7 @@ class Dashboard extends Component {
                     <div className="col s12">
                         <div className="card">
                             <div className="card-header" data-background-color="orange">
-                                <h5 className="title">Aantal beoordeelde videos per uur</h5>
+                                <h5 className="title">Aantal routes per dag</h5>
                             </div>
                             <div className="card-content table-responsive">
                                 <canvas id="myChart" height="250" className="col s12" ></canvas>
