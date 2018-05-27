@@ -1,0 +1,16 @@
+.modal {
+    max-height: 90%;
+  }
+  
+  .modal-form-row {
+    margin-bottom: 0px;
+  }
+
+.add-role-button{
+  padding: 5px;
+}
+
+#roletable .selected{
+  color: white !important;
+  background: #9c27b0 !important;
+}

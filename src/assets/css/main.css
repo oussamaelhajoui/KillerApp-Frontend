@@ -1,0 +1,12 @@
+.icon-bar{
+    background-color: #555 !important;
+}
+
+.clickable-btn{
+    cursor: pointer;
+}
+
+.main-panel{
+    overflow: initial !important;
+    height: 100vh;
+}

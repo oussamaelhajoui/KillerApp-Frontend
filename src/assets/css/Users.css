@@ -1,0 +1,39 @@
+.modal {
+  max-height: 90%;
+}
+
+.modal-form-row {
+  margin-bottom: 0px;
+}
+
+.pagination li.active {
+  background-color: inherit;
+}
+
+.filterholder {
+  display: flex;
+}
+
+.filterholder>ul {
+  margin-left: auto;
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.table-container>.preloader-wrapper {
+  margin: 20px;
+}
+
+#AddUserModal {
+  overflow: visible;
+}
+
+@media only screen and (max-width: 992px) {
+  .pagination {
+    width: inherit;
+  }
+}
