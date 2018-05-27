@@ -27,12 +27,11 @@ class Routes extends Component {
   render() {
     return (
       <Layout>
-
         <Switch>
           {!this.props.user.loggedIn && <PrivateRoute exact path="/" component={Login} user={this.props.user} />}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/" component={Dashboard} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 2) ? <PrivateRoute exact path="/" component={MijnDashboard} user={this.props.user} /> : ""}
-          {(this.props.user.userRole === 1) ? <PrivateRoute exact path="Medewerkers" component={Medewerkers} user={this.props.user} /> : ""}
+          {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Medewerkers" component={Medewerkers} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Medewerkers/:idmedewerker" component={Medewerker} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="Routes" component={RoutesPage} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="Routes/:idroute" component={RoutePage} user={this.props.user} /> : ""}

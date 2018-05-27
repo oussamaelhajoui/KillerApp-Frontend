@@ -9,4 +9,5 @@
 .main-panel{
     overflow: initial !important;
     height: 100vh;
+    padding: 40px !important;
 }
