@@ -33,11 +33,11 @@ class Routes extends Component {
           {(this.props.user.userRole === 2) ? <PrivateRoute exact path="/" component={MijnDashboard} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Medewerkers" component={Medewerkers} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Medewerkers/:idmedewerker" component={Medewerker} user={this.props.user} /> : ""}
-          {(this.props.user.userRole === 1) ? <PrivateRoute exact path="Routes" component={RoutesPage} user={this.props.user} /> : ""}
-          {(this.props.user.userRole === 1) ? <PrivateRoute exact path="Routes/:idroute" component={RoutePage} user={this.props.user} /> : ""}
-          {(this.props.user.userRole === 1) ? <PrivateRoute exact path="Planning" component={Planning} user={this.props.user} /> : ""}
-          {(this.props.user.userRole === 1) ? <PrivateRoute exact path="Planning/idplanning" component={PlanningGebruiker} user={this.props.user} /> : ""}
-          {(this.props.user.userRole === 2) ? <PrivateRoute exact path="Planning" component={MijnPlanning} user={this.props.user} /> : ""}
+          {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Routes" component={RoutesPage} user={this.props.user} /> : ""}
+          {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Routes/:idroute" component={RoutePage} user={this.props.user} /> : ""}
+          {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Planning" component={Planning} user={this.props.user} /> : ""}
+          {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Planning/idplanning" component={PlanningGebruiker} user={this.props.user} /> : ""}
+          {(this.props.user.userRole === 2) ? <PrivateRoute exact path="/Planning" component={MijnPlanning} user={this.props.user} /> : ""}
           <Route
             path="/login"
             render={(...n) => (
