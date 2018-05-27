@@ -1,23 +1,22 @@
 import {
-    POPULATE_USER_TABLE,
+    POPULATE_ROUTE_TABLE,
     CHANGE_PAGINATION_COUNT,
     POPULATE_PAGINATION,
-    CHANGE_LOADING,
-    CHANGE_LOADING_USERS
+    CHANGE_LOADING_ROUTES
 } from "./types";
 import Restful from '../logic/Restful';
 
-export const populateUserTable = (data) => dispatch => {
+export const populateRouteTable = (data) => dispatch => {
     dispatch({
-        type: POPULATE_USER_TABLE,
+        type: POPULATE_ROUTE_TABLE,
         payload: {
-            loadingUsers: true,
-            users: []
+            loadingroutes: true,
+            routes: []
         }
     })
 
     Restful.Post(
-        "user/page", {
+        "route/page", {
             page: data.pagcurrent,
             amount: data.tableamount
         },
@@ -25,7 +24,8 @@ export const populateUserTable = (data) => dispatch => {
     )
         .then(response => response.json())
         .then(jsonResponse => {
-            if (jsonResponse["success"] == true) {
+            console.log(jsonResponse);
+            if (jsonResponse["sucess"] == true) {
 
                 let temppag = [];
 
@@ -33,10 +33,10 @@ export const populateUserTable = (data) => dispatch => {
                     temppag.push(i);
                 }
                 dispatch({
-                    type: POPULATE_USER_TABLE,
+                    type: POPULATE_ROUTE_TABLE,
                     payload: {
-                        loadingUsers: false,
-                        users: jsonResponse["users"]
+                        loadingroutes: false,
+                        routes: jsonResponse["routes"]
                     }
                 });
                 dispatch({
@@ -59,9 +59,9 @@ export const populateUserTable = (data) => dispatch => {
             } else {
 
                 dispatch({
-                    type: CHANGE_LOADING_USERS,
+                    type: CHANGE_LOADING_ROUTES,
                     payload: {
-                        loadingUsers: false
+                        loadingroutes: false
                     }
                 });
             }

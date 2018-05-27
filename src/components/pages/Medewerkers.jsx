@@ -24,8 +24,7 @@ class Users extends Component {
     let rdxActionDataUserTable = {
       pagcurrent: this.props.pagination.pagcurrent,
       tableamount: this.props.pagination.tableamount,
-      token: this.props.user.token,
-      query: ""
+      token: this.props.user.token
     }
     this.props.populateUserTable(rdxActionDataUserTable);
   }
@@ -38,10 +37,8 @@ class Users extends Component {
   render() {
     const users = this.props.users.users.map(user => (
       <tr key={user.id}>
-        <td>{user.firstname + " " + user.lastname}</td>
-        <td>{user.role === 1 ? "Admin" : "Freelancer"}</td>
-        <td>17</td>
-        <td>4:20</td>
+        <td>{user.username}</td>
+        <td>{user.role.naam}</td>
         <td>
           <Link to={`/users/${user.id}`}> Go to profile </Link>
         </td>
@@ -55,7 +52,6 @@ class Users extends Component {
             <h1>Users overview</h1>
 
             <div className="col s12">
-              <SearchRow table="populateUserTable" />
               <PaginationRow table="populateUserTable" />
               <div className="row table-container">
                 <table className="striped">
@@ -63,9 +59,7 @@ class Users extends Component {
                     <tr>
                       <th>Name</th>
                       <th>Role</th>
-                      <th>Categorised videos</th>
-                      <th>Average duration</th>
-                      <th />
+                      <th>Bekijk profiel</th>
                     </tr>
                   </thead>
                   <tbody>{users}</tbody>

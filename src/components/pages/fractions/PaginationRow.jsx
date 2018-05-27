@@ -25,8 +25,6 @@ class PaginationRow extends Component {
       pagcurrent: this.props.pagination.pagcurrent,
       tableamount: this.props.pagination.tableamount,
       token: this.props.user.token,
-      media_id: this.props.video.data.media_id,
-      query: ""
     }
     this.props[this.props.table](rdxActionDataTable);
   }
@@ -60,8 +58,6 @@ class PaginationRow extends Component {
                 pagcurrent: parseInt(e.target.text, 10),
                 tableamount: this.props.pagination.tableamount,
                 token: this.props.user.token,
-                media_id: this.props.video.data.media_id,
-                query: ""
               }
               this.props[this.props.table](rdxActionDataTable)
             }}
@@ -77,6 +73,7 @@ class PaginationRow extends Component {
       <div className="row filterholder">
         <div className="input-field">
           <select ref="selectamount" name="tableamount" value={this.props.pagination.tableamount} onChange={this.handleChange}>
+            <option defaultValue="10" selected>1</option>
             <option defaultValue="10" selected>10</option>
             <option defaultValue="25">25</option>
             <option defaultValue="50">50</option>
@@ -92,8 +89,6 @@ class PaginationRow extends Component {
                 pagcurrent: this.props.pagination.pagcurrent,
                 tableamount: this.props.pagination.tableamount,
                 token: this.props.user.token,
-                media_id: this.props.video.data.media_id,
-                query: ""
               }
               this.props[this.props.table](rdxActionDataTable)
             }}
@@ -112,9 +107,7 @@ class PaginationRow extends Component {
               let rdxActionDataTable = {
                 pagcurrent: this.props.pagination.pagcurrent,
                 tableamount: this.props.pagination.tableamount,
-                token: this.props.user.token,
-                media_id: this.props.video.data.media_id,
-                query: ""
+                token: this.props.user.token
               }
               this.props[this.props.table](rdxActionDataTable)
             }}

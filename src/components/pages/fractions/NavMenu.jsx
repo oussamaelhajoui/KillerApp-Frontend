@@ -59,7 +59,7 @@ class NavMenu extends Component {
                 activeClassName="active"
                 exact={false}
                 strict
-                to="/videos"
+                to="/routes"
               >
                 <i className="material-icons">featured_play_list</i>
                 <p>Routes</p>
