@@ -5,7 +5,6 @@ import $ from "jquery";
 import ReactDOM from "react-dom";
 import Restful from "../../../logic/Restful";
 import { populateUserTable } from '../../../actions/populateUserTable';
-import { populateVideoTable } from '../../../actions/populateVideoTable';
 
 class SearchRow extends Component {
   constructor(props) {
@@ -106,7 +105,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  populateUserTable,
-  populateVideoTable
+  populateUserTable
 }
 export default connect(mapStateToProps, mapDispatchToProps)(SearchRow);

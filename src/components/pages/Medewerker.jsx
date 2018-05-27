@@ -5,7 +5,6 @@ import LoadJS from 'loadjs';
 
 import { secondsToTimeString } from "../../logic/Libary"
 import { capitalizeFirstLetter } from '../../logic/Libary';
-import { populateRatingTable } from '../../actions/populateRatingTable';
 import { populatePagination } from '../../actions/populatePagination';
 import { resetPagination } from '../../actions/resetPagination';
 import PaginationRow from "./fractions/PaginationRow";
@@ -15,15 +14,6 @@ class User extends Component {
         super(props);
 
         this.userid = props.match.params.userid;
-
-        let rdxActionDataRatingTable = {
-            pagcurrent: this.props.pagination.pagcurrent,
-            tableamount: this.props.pagination.tableamount,
-            token: this.props.userRdx.token,
-            media_id: this.userid,
-            type: "user"
-        }
-        this.props.populateRatingTable(rdxActionDataRatingTable);
     }
 
     componentWillMount() {
@@ -110,13 +100,11 @@ class User extends Component {
 const mapStateToProps = state => ({
     user: state.user,
     pagination: state.pagination,
-    ratings: state.ratings,
     loggedUser: state.user,
     userDetail: state.user.user
 });
 
 const mapDispatchToProps = {
-    populateRatingTable,
     populatePagination,
     resetPagination,
     getUser

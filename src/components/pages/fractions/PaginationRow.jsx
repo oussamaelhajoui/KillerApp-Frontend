@@ -7,8 +7,6 @@ import $ from "jquery";
 import { changeTableAmount } from './../../../actions/changeTableAmount';
 import { changePaginationByArrow, changePaginationByNumber } from './../../../actions/changePagination';
 import { populateUserTable } from './../../../actions/populateUserTable';
-import { populateVideoTable } from './../../../actions/populateVideoTable';
-import { populateRatingTable } from './../../../actions/populateRatingTable';
 
 
 class PaginationRow extends Component {
@@ -147,7 +145,5 @@ const mapDispatchToProps = {
   changePaginationByArrow,
   changePaginationByNumber,
   populateUserTable,
-  populateVideoTable,
-  populateRatingTable
 }
 export default connect(mapStateToProps, mapDispatchToProps)(PaginationRow);

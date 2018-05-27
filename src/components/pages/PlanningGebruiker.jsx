@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
-class RoutesPage extends Component {
+class PlanningGebruiker extends Component {
     constructor(props) {
         super(props);
 
@@ -19,4 +19,4 @@ class RoutesPage extends Component {
 const mapStateToProps = state => ({
     user: state.user
 });
-export default connect(mapStateToProps, {})(RoutesPage);
+export default connect(mapStateToProps, {})(PlanningGebruiker);
