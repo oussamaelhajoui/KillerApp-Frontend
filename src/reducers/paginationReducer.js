@@ -23,29 +23,32 @@ export default (state = initialState, {
         ...state,
         pagli: payload.pagli
       };
-      // break;
+    // break;
     case CHANGE_PAGINATION_COUNT:
       return {
         ...state,
         pagcount: payload.pagcount
       };
-      // break;
+    // break;
     case CHANGE_PAGINATION_BY_NUMBER:
     case CHANGE_PAGINATION_BY_ARROW:
+      console.log("third", payload.pagcurrent);
+
       return {
         ...state,
         pagcurrent: payload.pagcurrent
       };
-      // break;
+    // break;
     case CHANGE_TABLE_AMOUNT:
       return {
         ...state,
         tableamount: payload.tableamount
       }
-      // break;
+    // break;
     default:
-      return { ...state
+      return {
+        ...state
       };
-      // break;
+    // break;
   }
 };

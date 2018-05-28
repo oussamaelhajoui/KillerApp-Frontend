@@ -14,7 +14,7 @@ export const populateRouteTable = (data) => dispatch => {
             routes: []
         }
     })
-
+    console.log("data", data);
     Restful.Post(
         "route/page", {
             page: data.pagcurrent,

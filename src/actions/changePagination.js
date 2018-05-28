@@ -28,7 +28,7 @@ export const changePaginationByArrow = (data) => dispatch => {
         default:
             break;
     }
-
+    console.log("action", tempPaginationCurr);
     dispatch({
         type: CHANGE_PAGINATION_BY_ARROW,
         payload: {
