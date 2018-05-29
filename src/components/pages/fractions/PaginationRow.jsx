@@ -74,7 +74,7 @@ class PaginationRow extends Component {
       <div className="row filterholder">
         <div className="input-field">
           <select ref="selectamount" name="tableamount" value={this.props.pagination.tableamount} onChange={this.handleChange}>
-            <option defaultValue="10" selected>1</option>
+            <option defaultValue="1" selected>1</option>
             <option defaultValue="10" selected>10</option>
             <option defaultValue="25">25</option>
             <option defaultValue="50">50</option>

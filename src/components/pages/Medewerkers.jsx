@@ -27,6 +27,7 @@ class Users extends Component {
       token: this.props.user.token
     }
     this.props.populateUserTable(rdxActionDataUserTable);
+
   }
 
   componentDidMount() {
@@ -100,8 +101,7 @@ class Users extends Component {
     let rdxActionDataUserTable = {
       page: this.props.pagination.pagcurrent,
       amount: this.props.pagination.tableamount,
-      token: this.props.user.token,
-      query: ""
+      token: this.props.user.token
     }
     this.props.populateUserTable(rdxActionDataUserTable)
 
