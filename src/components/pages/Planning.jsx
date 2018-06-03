@@ -11,7 +11,7 @@ import '../../assets/css/planning.css';
 import { getUsers } from '../../actions/getUsers';
 import { getRoutes } from '../../actions/getRoutes';
 import { getVoertuigen } from '../../actions/getVoertuigen';
-
+import { insertPlanning } from '../../actions/insertPlanning';
 
 import { GetStringFromDate, GetTimeFromDate } from '../../logic/Libary';
 
@@ -122,14 +122,22 @@ class Planning extends Component {
     }
 
     handleChangeSelect = (p) => {
-        this.setState({
-            medewerker: this.refs.medewerkerselect.value,
-            route: this.refs.routeselect.value,
-            voertuig: this.refs.voertuigselect.value,
-            geselecteerdeDatum: this.refs.datumpicker.value
-        });
+        if (this.refs.voertuigselect.value !== "" && this.refs.medewerkerselect.value !== "" && this.refs.voertuigselect.value !== "")
+            this.setState({
+                medewerker: JSON.parse(this.refs.medewerkerselect.value),
+                route: JSON.parse(this.refs.routeselect.value),
+                voertuig: JSON.parse(this.refs.voertuigselect.value),
+                geselecteerdeDatum: this.refs.datumpicker.value
+            });
 
         console.log(this.refs.datumpicker.value);
+
+    }
+    addPlanning = () => {
+        const data = {
+
+        }
+        this.props.insertPlanning(data);
 
     }
 
@@ -146,14 +154,14 @@ class Planning extends Component {
 
     render() {
         const users = this.props.users.users && this.props.users.users.map((user, index) => (
-            <option onClick={this.handleChangeSelect} key={user.id} value={user.username}>{user.username}</option>
+            <option onClick={this.handleChangeSelect} key={user.id} value={JSON.stringify(user)}>{user.username}</option>
         ));
         const routes = this.props.routes.routes && this.props.routes.routes.map((route, index) => (
-            <option onClick={this.handleChangeSelect} key={route.id} value={route.routenummer}>{route.routenummer}</option>
+            <option onClick={this.handleChangeSelect} key={route.id} value={JSON.stringify(route)}>{route.routenummer}</option>
         ));
 
         const voertuigen = this.props.voertuigen.voertuigen && this.props.voertuigen.voertuigen.map((voertuig, index) => (
-            <option onClick={this.handleChangeSelect} key={voertuig.id} value={voertuig.voertuigcode}>{voertuig.voertuigcode}</option>
+            <option onClick={this.handleChangeSelect} key={voertuig.id} value={JSON.stringify(voertuig)}>{voertuig.voertuigcode}</option>
         ));
         return (
             <Fragment>
@@ -190,9 +198,9 @@ class Planning extends Component {
                         </div>
                     </div>
                     {this.state.voertuig !== "" && this.state.medewerker !== "" && this.state.route !== "" ?
-                        <p>U heeft gekozen voor {this.state.medewerker} die de route {this.state.route} rijdt met het voertuig {this.state.voertuig} op de datum {this.state.geselecteerdeDatum}</p>
+                        <p>U heeft gekozen voor {this.state.medewerker.username} die de route {this.state.route.routenummer} rijdt met het voertuig {this.state.voertuig.voertuigcode} op de datum {this.state.geselecteerdeDatum} Die beginnen tussen de tijdzones {this.state.route.tijdstart} tot {this.state.route.tijdeind}</p>
                         : <p>voer alle gegevens in..</p>}
-                    <a className="waves-effect waves-light btn">voeg planning toe</a>
+                    <a className="waves-effect waves-light btn" onClick={this.addPlanning}>voeg planning toe</a>
                 </div>
                 {/* <Calendar openModalHandler={this.openModal.bind(this)} /> */}
 
@@ -207,4 +215,4 @@ const mapStateToProps = state => ({
     routes: state.routes,
     voertuigen: state.voertuigen
 });
-export default connect(mapStateToProps, { getUsers, getRoutes, getVoertuigen })(Planning);
+export default connect(mapStateToProps, { getUsers, getRoutes, getVoertuigen, insertPlanning })(Planning);

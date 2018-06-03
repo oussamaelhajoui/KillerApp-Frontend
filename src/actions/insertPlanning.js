@@ -25,20 +25,7 @@ export const insertPlanning = (data) => dispatch => {
                         loadingInsertPlanning: false
                     }
                 });
-                Restful.Post(`car/page/`, { page: 1, amount: 100 }, data.token)
-                    .then(response => { return response.json(); })
-                    .then(jsonResponse => {
-                        dispatch({
-                            type: GET_VOERTUIGEN,
-                            payload: {
-                                voertuigen: [...jsonResponse["car"]],
-                                loadingVoertuigen: false
-                            }
-                        });
-                    })
-                    .catch(message => {
-                        console.log(message);
-                    });
+
             }
 
         })
