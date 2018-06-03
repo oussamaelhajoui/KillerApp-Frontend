@@ -12,6 +12,7 @@ import { getUsers } from '../../actions/getUsers';
 import { getRoutes } from '../../actions/getRoutes';
 import { getVoertuigen } from '../../actions/getVoertuigen';
 import { insertPlanning } from '../../actions/insertPlanning';
+import { getPlanningen } from '../../actions/getPlanningen';
 
 // import { GetStringFromDate, GetTimeFromDate } from '../../logic/Libary';
 
@@ -41,6 +42,8 @@ class Planning extends Component {
         this.props.getUsers({ token: this.props.user.token });
         this.props.getRoutes({ token: this.props.user.token });
         this.props.getVoertuigen({ token: this.props.user.token });
+
+
     }
 
     componentDidMount() {
@@ -258,4 +261,12 @@ const mapStateToProps = state => ({
     voertuigen: state.voertuigen,
     planning: state.planning
 });
-export default connect(mapStateToProps, { getUsers, getRoutes, getVoertuigen, insertPlanning })(Planning);
+
+const mapDispatchToProps = {
+    getUsers,
+    getRoutes,
+    getVoertuigen,
+    insertPlanning,
+    getPlanningen
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Planning);
