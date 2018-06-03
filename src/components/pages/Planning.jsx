@@ -205,7 +205,7 @@ class Planning extends Component {
                     </div>
 
                     <div id="planningBekijken" className="col s12">
-                        <Calendar openModalHandler={this.openModal.bind(this)} />
+                        {this.props.planningen.planningen && <Calendar planningen={this.props.planningen.planningen} openModalHandler={this.openModal.bind(this)} />}
                     </div>
                     <div id="planningBekijkenMedewerker" className="col s12">Test 3</div>
                 </div>
@@ -264,7 +264,8 @@ const mapStateToProps = state => ({
     users: state.users,
     routes: state.routes,
     voertuigen: state.voertuigen,
-    planning: state.planning
+    planning: state.planning,
+    planningen: state.planningen
 });
 
 const mapDispatchToProps = {

@@ -8,6 +8,17 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 moment().locale('nl')
 moment.locale('nl')
 moment().format("dddd MMMM YYYY")
+
+
+const events = this.props.planningen.map(planning => {
+    return (
+        {
+            id: planning.idplanning,
+            title: `${planning.gebruiker.username} op ${planning.route.routenummer} met de auto ${planning.voertuig.voertuigcode}`
+        }
+    )
+})
+
 const myEventsList = [
     {
         id: 1,
