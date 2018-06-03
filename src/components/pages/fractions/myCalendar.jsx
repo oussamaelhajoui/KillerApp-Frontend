@@ -92,7 +92,7 @@ class myCalendar extends Component {
                     endAccessor="endDate"
                     defaultDate={new Date()}
                     defaultView={'agenda'}
-                    views={['day', 'agenda', 'work_week']}
+                    views={['day', 'agenda', 'week']}
                     popupOffset={{ x: 30, y: 20 }}
                     selectable={false}
                     toolbar={true}

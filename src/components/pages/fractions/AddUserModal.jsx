@@ -23,7 +23,7 @@ class AddUserModal extends Component {
   }
 
   componentWillMount() {
-    this.fetchRoles();
+    // this.fetchRoles();
   }
 
   componentDidMount() {
@@ -38,45 +38,45 @@ class AddUserModal extends Component {
   }
 
   handleSubmit(event) {
-    event.preventDefault();
+    // event.preventDefault();
 
-    let data = {
-      username: this.state.username,
-      firstname: this.state.firstname,
-      lastname: this.state.lastname,
-      email: this.state.email,
-      password: this.state.password,
-      role: this.state.role,
-    };
+    // let data = {
+    //   username: this.state.username,
+    //   firstname: this.state.firstname,
+    //   lastname: this.state.lastname,
+    //   email: this.state.email,
+    //   password: this.state.password,
+    //   role: this.state.role,
+    // };
 
-    Restful.Post("user/add", data, this.props.user.token)
-      .then(response => response.json())
-      .then(jsonResponse => {
-        if (jsonResponse["success"] === true) {
-          // User added succesfully
-        }
-      })
-      .catch(message => {
-        return false;
-      });
+    // Restful.Post("user/add", data, this.props.user.token)
+    //   .then(response => response.json())
+    //   .then(jsonResponse => {
+    //     if (jsonResponse["success"] === true) {
+    //       // User added succesfully
+    //     }
+    //   })
+    //   .catch(message => {
+    //     return false;
+    //   });
   }
 
-  fetchRoles() {
-    this.setState({ roles: [] }, () => {
-      Restful.Get("role/get", this.props.user.token)
-        .then(response => response.json())
-        .then(jsonResponse => {
-          if (jsonResponse.length > 0) {
-            this.setState({ roles: jsonResponse }, () => {
-              $("select").material_select();
-            });
-          }
-        })
-        .catch(message => {
-          console.log(message);
-        });
-    });
-  }
+  // fetchRoles() {
+  //   this.setState({ roles: [] }, () => {
+  //     Restful.Get("role/get", this.props.user.token)
+  //       .then(response => response.json())
+  //       .then(jsonResponse => {
+  //         if (jsonResponse.length > 0) {
+  //           this.setState({ roles: jsonResponse }, () => {
+  //             $("select").material_select();
+  //           });
+  //         }
+  //       })
+  //       .catch(message => {
+  //         console.log(message);
+  //       });
+  //   });
+  // }
 
   render() {
     const roles = this.state.roles.map(role =>

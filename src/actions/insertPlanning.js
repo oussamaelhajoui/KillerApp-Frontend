@@ -23,7 +23,7 @@ export const insertPlanning = (data) => dispatch => {
                     payload: {
                         successInsert: true,
                         loadingInsertPlanning: false,
-                        planning: jsonResponse["schedule"]
+                        planning: { ...jsonResponse["schedule"] }
                     }
                 });
 

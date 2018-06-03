@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 
-// import Calendar from './fractions/myCalendar';
+import Calendar from './fractions/myCalendar';
 import $ from 'jquery';
 import moment from 'moment';
 import 'moment/locale/nl';
@@ -14,6 +14,8 @@ import { getVoertuigen } from '../../actions/getVoertuigen';
 import { insertPlanning } from '../../actions/insertPlanning';
 
 import { GetStringFromDate, GetTimeFromDate } from '../../logic/Libary';
+
+import Swal from 'sweetalert2'
 
 class Planning extends Component {
 
@@ -42,19 +44,7 @@ class Planning extends Component {
     }
 
     componentDidMount() {
-        const modal = this.refs.modal;
-        $(modal).modal({
-            dismissible: true, // Modal can be dismissed by clicking outside of the modal
-            opacity: .85, // Opacity of modal background
-            inDuration: 300, // Transition in duration
-            outDuration: 200, // Transition out duration
-            startingTop: '4%', // Starting top style attribute
-            endingTop: '10%', // Ending top style attribute
-            ready: function (modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
-                console.log("Ready");
-            },
-            complete: function () { console.log('Closed'); } // Callback for Modal close
-        });
+        $('ul.tabs').tabs();
 
 
         $("select").material_select();
@@ -83,38 +73,11 @@ class Planning extends Component {
             ampmclickable: true, // make AM PM clickable
             aftershow: function () { } //Function for after opening timepicker
         });
-
-
-
     }
 
 
 
     openModal(open, dateStart, dateEnd) {
-        if (open) {
-            this.setState({
-                dateStart,
-                dateEnd
-            })
-
-            const elem = this.refs.modal;
-            const headerContent = this.refs.modalHeader;
-            $(elem).modal('open');
-
-            let datestart = GetStringFromDate(dateStart);
-            let dateend = GetStringFromDate(dateEnd);
-
-            let dayStart = new Date(dateStart).getDate();
-            let dayEnd = new Date(dateEnd).getDate();
-
-
-            if (dayStart === dayEnd) {
-                headerContent.innerHTML = `${GetTimeFromDate(dateStart)} tot ${GetTimeFromDate(dateEnd)}`
-            } else {
-                headerContent.innerHTML = ` ${datestart} tot  ${dateend}`
-            }
-
-        }
     }
 
     ChangeTimeValue(props) {
@@ -159,10 +122,21 @@ class Planning extends Component {
         $(this.refs.medewerkerselect).material_select(this.handleChangeSelect);
         $(this.refs.routeselect).material_select(this.handleChangeSelect);
         $(this.refs.voertuigselect).material_select(this.handleChangeSelect);
+        console.log(this.props.planning.successInsert);
 
+        if (this.props.planning.successInsert === true) {
+            Swal({
+                position: 'top-end',
+                type: 'success',
+                title: 'Your work has been saved',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            $('select').val('');
+            $('#datum').val('');
+            $('select').material_select();
+        }
     }
-
-
 
     render() {
         const users = this.props.users.users && this.props.users.users.map((user, index) => (
@@ -177,89 +151,101 @@ class Planning extends Component {
         ));
         return (
             <Fragment>
-                {/* {weekday} */}
-                {/* {weekday.forEach(day => { console.log(day); return day; })} */}
-
-                <p className="centerText">Selecteer hier de medewerker en de route dat gereden moet worden op de geselecteerde tijd.</p>
                 <div className="row">
-                    <div className="input-field col s12">
-                        <div className="input-field">
-                            <input type="text" name="datum" id="datum" ref="datumpicker" className="datepicker" onChange={this.handleChangeSelect} />
-                            <label htmlFor="datum">Datum</label>
+                    <div className="col s12">
+                        <ul className="tabs">
+                            <li className="tab col s4"><a className="active" href="#planningToevoegen">Nieuwe planning</a></li>
+                            <li className="tab col s4"><a href="#planningBekijken">Bekijk planning</a></li>
+                            <li className="tab col s4"><a href="#planningBekijkenMedewerker">Bekijk planning op medewerker</a></li>
+                        </ul>
+                    </div>
+                    <div id="planningToevoegen" className="col s12">
+                        <p className="centerText">Selecteer hier de medewerker en de route dat gereden moet worden op de geselecteerde tijd.</p>
+                        <div className="row">
+                            <div className="input-field col s12">
+                                <div className="input-field">
+                                    <input type="text" name="datum" id="datum" ref="datumpicker" className="datepicker" onChange={this.handleChangeSelect} />
+                                    <label htmlFor="datum">Datum</label>
+                                </div>
+                            </div>
+                            <div className="input-field col s12">
+                                <select onChange={this.handleChangeSelect} ref="medewerkerselect">
+                                    <option value="" disabled selected>Kies de chauffeur</option>
+                                    {users}
+                                </select>
+                                <label>Selecteer Medewerker</label>
+                            </div>
+                            <div className="input-field col s12">
+                                <select onChange={this.handleChangeSelect} ref="routeselect">
+                                    <option value="" disabled selected>Kies de route</option>
+                                    {routes}
+                                </select>
+                                <label>Selecteer Route</label>
+                            </div>
+                            <div className="input-field col s12">
+                                <select onChange={this.handleChangeSelect} ref="voertuigselect">
+                                    <option value="" disabled selected>kies het voertuig</option>
+                                    {voertuigen}
+                                </select>
+                                <label>Selecteer Voertuig</label>
+                            </div>
+                            {this.state.voertuig !== "" && this.state.medewerker !== "" && this.state.route !== "" ?
+                                <p>U heeft gekozen voor {this.state.medewerker.username} die de route {this.state.route.routenummer} rijdt met het voertuig {this.state.voertuig.voertuigcode} op de datum {this.state.geselecteerdeDatum} Die beginnen tussen de tijdzones {this.state.route.tijdstart} tot {this.state.route.tijdeind}</p>
+                                : <p>voer alle gegevens in..</p>}
+                            <a className="waves-effect waves-light btn" onClick={this.addPlanning}>voeg planning toe</a>
                         </div>
                     </div>
-                    <div className="input-field col s12">
-                        <select onChange={this.handleChangeSelect} ref="medewerkerselect">
-                            <option value="" disabled selected>Kies de chauffeur</option>
-                            {users}
-                        </select>
-                        <label>Selecteer Medewerker</label>
+
+                    <div id="planningBekijken" className="col s12">
+                        <Calendar openModalHandler={this.openModal.bind(this)} />
                     </div>
-                    <div className="input-field col s12">
-                        <select onChange={this.handleChangeSelect} ref="routeselect">
-                            <option value="" disabled selected>Kies de route</option>
-                            {routes}
-                        </select>
-                        <label>Selecteer Route</label>
-                    </div>
-                    <div className="input-field col s12">
-                        <select onChange={this.handleChangeSelect} ref="voertuigselect">
-                            <option value="" disabled selected>kies het voertuig</option>
-                            {voertuigen}
-                        </select>
-                        <label>Selecteer Voertuig</label>
-                    </div>
-                    {this.state.voertuig !== "" && this.state.medewerker !== "" && this.state.route !== "" ?
-                        <p>U heeft gekozen voor {this.state.medewerker.username} die de route {this.state.route.routenummer} rijdt met het voertuig {this.state.voertuig.voertuigcode} op de datum {this.state.geselecteerdeDatum} Die beginnen tussen de tijdzones {this.state.route.tijdstart} tot {this.state.route.tijdeind}</p>
-                        : <p>voer alle gegevens in..</p>}
-                    <a className="waves-effect waves-light btn" onClick={this.addPlanning}>voeg planning toe</a>
+                    <div id="planningBekijkenMedewerker" className="col s12">Test 3</div>
                 </div>
 
+
                 {this.props.planning.loadingInsertPlanning && (
-                    <div class="preloader-wrapper big active">
-                        <div class="spinner-layer spinner-blue">
-                            <div class="circle-clipper left">
-                                <div class="circle"></div>
-                            </div><div class="gap-patch">
-                                <div class="circle"></div>
-                            </div><div class="circle-clipper right">
-                                <div class="circle"></div>
+                    <div className="preloader-wrapper big active">
+                        <div className="spinner-layer spinner-blue">
+                            <div className="circle-clipper left">
+                                <div className="circle"></div>
+                            </div><div className="gap-patch">
+                                <div className="circle"></div>
+                            </div><div className="circle-clipper right">
+                                <div className="circle"></div>
                             </div>
                         </div>
 
-                        <div class="spinner-layer spinner-red">
-                            <div class="circle-clipper left">
-                                <div class="circle"></div>
-                            </div><div class="gap-patch">
-                                <div class="circle"></div>
-                            </div><div class="circle-clipper right">
-                                <div class="circle"></div>
+                        <div className="spinner-layer spinner-red">
+                            <div className="circle-clipper left">
+                                <div className="circle"></div>
+                            </div><div className="gap-patch">
+                                <div className="circle"></div>
+                            </div><div className="circle-clipper right">
+                                <div className="circle"></div>
                             </div>
                         </div>
 
-                        <div class="spinner-layer spinner-yellow">
-                            <div class="circle-clipper left">
-                                <div class="circle"></div>
-                            </div><div class="gap-patch">
-                                <div class="circle"></div>
-                            </div><div class="circle-clipper right">
-                                <div class="circle"></div>
+                        <div className="spinner-layer spinner-yellow">
+                            <div className="circle-clipper left">
+                                <div className="circle"></div>
+                            </div><div className="gap-patch">
+                                <div className="circle"></div>
+                            </div><div className="circle-clipper right">
+                                <div className="circle"></div>
                             </div>
                         </div>
 
-                        <div class="spinner-layer spinner-green">
-                            <div class="circle-clipper left">
-                                <div class="circle"></div>
-                            </div><div class="gap-patch">
-                                <div class="circle"></div>
-                            </div><div class="circle-clipper right">
-                                <div class="circle"></div>
+                        <div className="spinner-layer spinner-green">
+                            <div className="circle-clipper left">
+                                <div className="circle"></div>
+                            </div><div className="gap-patch">
+                                <div className="circle"></div>
+                            </div><div className="circle-clipper right">
+                                <div className="circle"></div>
                             </div>
                         </div>
                     </div>
                 )}
-                {/* <Calendar openModalHandler={this.openModal.bind(this)} /> */}
-
             </Fragment>
         );
     }
