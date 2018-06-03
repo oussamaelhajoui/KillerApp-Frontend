@@ -2,7 +2,6 @@ import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 import $ from "jquery";
 import { connect } from "react-redux";
-import SearchRow from "./fractions/SearchRow";
 import AddUserModal from "./fractions/AddUserModal";
 import PaginationRow from "./fractions/PaginationRow";
 

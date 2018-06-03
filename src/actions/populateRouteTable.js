@@ -25,7 +25,7 @@ export const populateRouteTable = (data) => dispatch => {
         .then(response => response.json())
         .then(jsonResponse => {
             console.log(jsonResponse);
-            if (jsonResponse["sucess"] == true) {
+            if (jsonResponse["sucess"] === true) {
 
                 let temppag = [];
 

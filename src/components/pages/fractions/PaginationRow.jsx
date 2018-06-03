@@ -86,7 +86,7 @@ class PaginationRow extends Component {
           <li
             onClick={e => {
               this.props.changePaginationByArrow({ direction: "previous", pagcurrent: this.props.pagination.pagcurrent, pagli: this.props.pagination.pagli });
-              if (this.props.pagination.pagcurrent != 1) {
+              if (this.props.pagination.pagcurrent !== 1) {
                 let rdxActionDataTable = {
                   pagcurrent: this.props.pagination.pagcurrent - 1,
                   tableamount: this.props.pagination.tableamount,
@@ -110,7 +110,7 @@ class PaginationRow extends Component {
               this.props.changePaginationByArrow({ direction: "next", pagcurrent: this.props.pagination.pagcurrent, pagli: this.props.pagination.pagli });
               console.log("second", this.props.pagination.pagcurrent);
 
-              if (this.props.pagination.pagcurrent != this.props.pagination.pagcount) {
+              if (this.props.pagination.pagcurrent !== this.props.pagination.pagcount) {
                 let rdxActionDataTable = {
                   pagcurrent: this.props.pagination.pagcurrent + 1,
                   tableamount: this.props.pagination.tableamount,

@@ -14,6 +14,7 @@ class Dashboard extends Component {
                 }]
             }
         });
+        console.log(myChart);
     }
 
 
@@ -21,41 +22,24 @@ class Dashboard extends Component {
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col s4">
+                    <div className="col s6">
                         <div className="card card-stats">
                             <div className="card-header" data-background-color="orange">
                                 <i className="material-icons">content_copy</i>
                             </div>
                             <div className="card-content">
-                                <p className="category">Aantal videos beoordeeld</p>
+                                <p className="category">Aantal routes</p>
                                 <h4 className="title">666</h4>
                             </div>
                             <div className="card-footer">
                                 <div className="stats">
                                     <i className="material-icons text-info">info</i>
-                                    <a className="text-info" href="#pablo">Bekijk videos</a>
+                                    <a className="text-info" href="#pablo">Bekijk routes</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="col s4">
-                        <div className="card card-stats">
-                            <div className="card-header" data-background-color="green">
-                                <i className="material-icons">store</i>
-                            </div>
-                            <div className="card-content">
-                                <p className="category">Aantal beoordelingen</p>
-                                <h4 className="title">1998</h4>
-                            </div>
-                            <div className="card-footer">
-                                <div className="stats">
-                                    <i className="material-icons text-info">info</i>
-                                    <a className="text-info" href="#pablo">Bekijk beoordelingen</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col s4">
+                    <div className="col s6">
                         <div className="card card-stats">
                             <div className="card-header" data-background-color="red">
                                 <i className="material-icons">info_outline</i>
@@ -118,7 +102,7 @@ class Dashboard extends Component {
                     <div className="col s6">
                         <div className="card">
                             <div className="card-header" data-background-color="orange">
-                                <h5 className="title">Slechtste videos</h5>
+                                <h5 className="title">Slechtste routes</h5>
                             </div>
                             <div className="card-content table-responsive">
                                 <table className="table table-hover">
@@ -130,23 +114,23 @@ class Dashboard extends Component {
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Video 1</td>
+                                            <td>Route 1</td>
                                             <td>5%</td>
                                         </tr>
                                         <tr>
-                                            <td>Video 2</td>
+                                            <td>Route 2</td>
                                             <td>7%</td>
                                         </tr>
                                         <tr>
-                                            <td>Video 3</td>
+                                            <td>Route 3</td>
                                             <td>7.5%</td>
                                         </tr>
                                         <tr>
-                                            <td>Video 4</td>
+                                            <td>Route 4</td>
                                             <td>8.3%</td>
                                         </tr>
                                         <tr>
-                                            <td>Video 5</td>
+                                            <td>Route 5</td>
                                             <td>9%</td>
                                         </tr>
                                     </tbody>

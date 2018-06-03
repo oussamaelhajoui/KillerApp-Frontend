@@ -4,7 +4,6 @@ import $ from "jquery";
 import "./../../assets/css/Users.css";
 import { connect } from "react-redux";
 
-import SearchRow from "./fractions/SearchRow";
 import AddUserModal from "./fractions/AddUserModal";
 import PaginationRow from "./fractions/PaginationRow";
 

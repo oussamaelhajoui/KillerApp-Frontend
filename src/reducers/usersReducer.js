@@ -1,4 +1,4 @@
-import { POPULATE_USER_TABLE, CHANGE_LOADING_USERS } from "../actions/types";
+import { GET_USERS, CHANGE_LOADING_USERS, POPULATE_USER_TABLE } from "../actions/types";
 
 const initialState = {
   users: [],
@@ -6,7 +6,9 @@ const initialState = {
 };
 
 export default (state = initialState, { type, payload }) => {
+
   switch (type) {
+    case GET_USERS:
     case POPULATE_USER_TABLE:
       return {
         ...state,

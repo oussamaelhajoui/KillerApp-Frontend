@@ -15,3 +15,11 @@
 .rbc-calendar {
     min-height: 600px;
 }
+
+.row{
+    margin: 10px 5px 10px 5px;
+}
+
+.centerText{
+    text-align: center;
+}

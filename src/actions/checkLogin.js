@@ -1,5 +1,4 @@
 import { CHECK_LOGIN } from "./types";
-import Restful from '../logic/Restful';
 
 export const checkLogin = () => dispatch => {
   if (

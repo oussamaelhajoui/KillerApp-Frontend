@@ -60,3 +60,18 @@ export const sqlToJsDate = (sqlDate) => {
 
   return new Date(sYear, sMonth, sDay, sHour, sMinute, sSecond, sMillisecond);
 }
+
+export const GetStringFromDate = (genDate) => {
+  let DateStartDay = new Date(genDate).getDay();
+  let DateStartMonth = new Date(genDate).getMonth();
+  let DateStartYear = new Date(genDate).getFullYear();
+  let DateStartHour = new Date(genDate).getHours();
+  let DateStartMinute = new Date(genDate).getMinutes();
+  return `${DateStartDay}-${DateStartMonth}-${DateStartYear} ${DateStartHour}:${DateStartMinute} `;
+}
+
+export const GetTimeFromDate = (genDate) => {
+  let DateStartHour = new Date(genDate).getHours();
+  let DateStartMinute = new Date(genDate).getMinutes();
+  return `${DateStartHour}:${DateStartMinute} `;
+}

@@ -1,10 +1,28 @@
-import { GET_USERS } from "./types";
+import { GET_USERS, CHANGE_LOADING_USERS } from "./types";
 
-export const getUsers = () => dispatch => {
+import Restful from '../logic/Restful';
+
+export const getUsers = (data) => dispatch => {
   dispatch({
-    type: GET_USERS,
+    type: CHANGE_LOADING_USERS,
     payload: {
-      users: data.username ? data.username : null
+      loadingUsers: true
     }
   });
+  Restful.Post(`user/page/`, { page: 1, amount: 100 }, data.token)
+    .then(response => { return response.json(); })
+    .then(jsonResponse => {
+      dispatch({
+        type: GET_USERS,
+        payload: {
+          users: [...jsonResponse["users"]],
+          loadingUsers: false
+        }
+      });
+    })
+    .catch(message => {
+      console.log(message);
+    });
+  // 
+
 };

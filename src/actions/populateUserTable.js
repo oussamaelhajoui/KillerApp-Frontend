@@ -2,7 +2,6 @@ import {
     POPULATE_USER_TABLE,
     CHANGE_PAGINATION_COUNT,
     POPULATE_PAGINATION,
-    CHANGE_LOADING,
     CHANGE_LOADING_USERS
 } from "./types";
 import Restful from '../logic/Restful';
@@ -25,7 +24,7 @@ export const populateUserTable = (data) => dispatch => {
     )
         .then(response => response.json())
         .then(jsonResponse => {
-            if (jsonResponse["success"] == true) {
+            if (jsonResponse["success"] === true) {
 
                 let temppag = [];
 
