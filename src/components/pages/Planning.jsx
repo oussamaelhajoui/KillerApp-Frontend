@@ -13,7 +13,7 @@ import { getRoutes } from '../../actions/getRoutes';
 import { getVoertuigen } from '../../actions/getVoertuigen';
 import { insertPlanning } from '../../actions/insertPlanning';
 
-import { GetStringFromDate, GetTimeFromDate } from '../../logic/Libary';
+// import { GetStringFromDate, GetTimeFromDate } from '../../logic/Libary';
 
 import Swal from 'sweetalert2'
 

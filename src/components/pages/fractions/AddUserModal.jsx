@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import $ from "jquery";
 import ReactDOM from "react-dom";
-import Restful from "../../../logic/Restful";
+// import Restful from "../../../logic/Restful";
 
 class AddUserModal extends Component {
   constructor(props) {
