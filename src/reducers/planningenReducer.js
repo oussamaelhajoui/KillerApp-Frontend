@@ -6,8 +6,6 @@ const initialState = {
 };
 
 export default (state = initialState, { type, payload }) => {
-    console.log(type);
-    console.log(payload);
     switch (type) {
         case GET_PLANNINGEN:
             return {

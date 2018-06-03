@@ -42,6 +42,7 @@ class Planning extends Component {
         this.props.getUsers({ token: this.props.user.token });
         this.props.getRoutes({ token: this.props.user.token });
         this.props.getVoertuigen({ token: this.props.user.token });
+        this.props.getPlanningen({ token: this.props.user.token });
 
 
     }
@@ -138,7 +139,11 @@ class Planning extends Component {
             $('select').val('');
             $('#datum').val('');
             $('select').material_select();
+            this.props.getPlanningen({ token: this.props.user.token });
+
         }
+
+        console.log(this.props.planningen);
     }
 
     render() {
