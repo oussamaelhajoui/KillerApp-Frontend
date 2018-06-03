@@ -9,10 +9,10 @@ export const insertPlanning = (data) => dispatch => {
             loadingInsertPlanning: true
         }
     });
-    Restful.Post(`planning/create/`, {
+    Restful.Post(`Schedule/create/`, {
         gebruiker: data.medewerker,
         route: data.route,
-        voertuig: data.route,
+        voertuig: data.voertuig,
         datum: data.datum
     }, data.token)
         .then(response => { return response.json(); })
@@ -21,8 +21,9 @@ export const insertPlanning = (data) => dispatch => {
                 dispatch({
                     type: INSERT_PLANNING,
                     payload: {
-                        success: true,
-                        loadingInsertPlanning: false
+                        successInsert: true,
+                        loadingInsertPlanning: false,
+                        planning: jsonResponse["schedule"]
                     }
                 });
 
@@ -33,7 +34,7 @@ export const insertPlanning = (data) => dispatch => {
             dispatch({
                 type: INSERT_PLANNING,
                 payload: {
-                    success: false,
+                    successInsert: false,
                     loadingInsertPlanning: false
                 }
             });

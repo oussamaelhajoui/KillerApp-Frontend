@@ -134,8 +134,20 @@ class Planning extends Component {
 
     }
     addPlanning = () => {
-        const data = {
+        if (this.refs.voertuigselect.value !== "" && this.refs.medewerkerselect.value !== "" && this.refs.voertuigselect.value !== "")
+            this.setState({
+                medewerker: JSON.parse(this.refs.medewerkerselect.value),
+                route: JSON.parse(this.refs.routeselect.value),
+                voertuig: JSON.parse(this.refs.voertuigselect.value),
+                geselecteerdeDatum: this.refs.datumpicker.value
+            });
 
+        const data = {
+            medewerker: this.state.medewerker.id,
+            route: this.state.route.id,
+            voertuig: this.state.voertuig.id,
+            datum: this.state.geselecteerdeDatum,
+            token: this.props.user.token
         }
         this.props.insertPlanning(data);
 
@@ -171,6 +183,12 @@ class Planning extends Component {
                 <p className="centerText">Selecteer hier de medewerker en de route dat gereden moet worden op de geselecteerde tijd.</p>
                 <div className="row">
                     <div className="input-field col s12">
+                        <div className="input-field">
+                            <input type="text" name="datum" id="datum" ref="datumpicker" className="datepicker" onChange={this.handleChangeSelect} />
+                            <label htmlFor="datum">Datum</label>
+                        </div>
+                    </div>
+                    <div className="input-field col s12">
                         <select onChange={this.handleChangeSelect} ref="medewerkerselect">
                             <option value="" disabled selected>Kies de chauffeur</option>
                             {users}
@@ -191,17 +209,55 @@ class Planning extends Component {
                         </select>
                         <label>Selecteer Voertuig</label>
                     </div>
-                    <div className="input-field col s12">
-                        <div className="input-field">
-                            <input type="text" name="datum" id="datum" ref="datumpicker" className="datepicker" onChange={this.handleChangeSelect} />
-                            <label htmlFor="datum">Datum</label>
-                        </div>
-                    </div>
                     {this.state.voertuig !== "" && this.state.medewerker !== "" && this.state.route !== "" ?
                         <p>U heeft gekozen voor {this.state.medewerker.username} die de route {this.state.route.routenummer} rijdt met het voertuig {this.state.voertuig.voertuigcode} op de datum {this.state.geselecteerdeDatum} Die beginnen tussen de tijdzones {this.state.route.tijdstart} tot {this.state.route.tijdeind}</p>
                         : <p>voer alle gegevens in..</p>}
                     <a className="waves-effect waves-light btn" onClick={this.addPlanning}>voeg planning toe</a>
                 </div>
+
+                {this.props.planning.loadingInsertPlanning && (
+                    <div class="preloader-wrapper big active">
+                        <div class="spinner-layer spinner-blue">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div><div class="gap-patch">
+                                <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+
+                        <div class="spinner-layer spinner-red">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div><div class="gap-patch">
+                                <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+
+                        <div class="spinner-layer spinner-yellow">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div><div class="gap-patch">
+                                <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+
+                        <div class="spinner-layer spinner-green">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div><div class="gap-patch">
+                                <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 {/* <Calendar openModalHandler={this.openModal.bind(this)} /> */}
 
             </Fragment>
@@ -213,6 +269,7 @@ const mapStateToProps = state => ({
     user: state.user,
     users: state.users,
     routes: state.routes,
-    voertuigen: state.voertuigen
+    voertuigen: state.voertuigen,
+    planning: state.planning
 });
 export default connect(mapStateToProps, { getUsers, getRoutes, getVoertuigen, insertPlanning })(Planning);
