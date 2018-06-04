@@ -1,0 +1,6 @@
+[0604/120329.953:ERROR:process_info.cc(329)] VirtualQueryEx: Toegang geweigerd. (0x5)
+[0604/120329.955:ERROR:process_info.cc(550)] ReadMemoryInfo failed
+[0604/120329.965:ERROR:process_reader_win.cc(151)] SuspendThread: Toegang geweigerd. (0x5)
+[0604/120329.965:ERROR:exception_snapshot_win.cc(88)] thread ID 6948 not found in process
+[0604/120329.965:WARNING:crash_report_exception_handler.cc(62)] ProcessSnapshotWin::Initialize failed
+[0604/120329.965:ERROR:scoped_process_suspend.cc(40)] NtResumeProcess: Er is geprobeerd toegang te krijgen tot een proces dat wordt afgesloten. (0xc000010a)

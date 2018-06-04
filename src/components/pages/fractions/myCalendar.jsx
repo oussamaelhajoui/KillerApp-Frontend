@@ -4,7 +4,7 @@ import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/nl';
 
-// import Swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 moment().locale('nl')
@@ -42,7 +42,18 @@ class myCalendar extends Component {
 
 
     selecteventhandler = (props) => {
-        console.log("checking", props);
+        const data = JSON.parse(props.desc);
+        Swal({
+            title: props.title,
+            html: `
+                    Route: ${data.route.routenummer}<br/>
+                    Datum: ${data.datum.split("T")[0]}<br/>
+                    Tijd: ${data.route.tijdstart} - ${data.route.tijdeind} <br/>
+                    Voertuig: ${data.voertuig.voertuigcode} - ${data.voertuig.soort.soort}`,
+            type: 'info',
+            focusConfirm: false,
+
+        })
 
     }
 
@@ -68,7 +79,7 @@ class myCalendar extends Component {
     }
 
     render() {
-        let events = "";
+        let events = [{}];
         if (this.state.planningen.planningen.length > 0) {
             events = this.state.planningen.planningen.map(planning => {
                 console.log(planning);
@@ -91,13 +102,9 @@ class myCalendar extends Component {
             events = [...events];
         } else { events = [{}] }
 
-        // console.log("events trig", this.state.planningen);
         console.log("events", events);
         return (
             <div>
-                {/* {this.state.planningen.planningen.length} */}
-                {/* {this.props.planningen.planningen.length > 0 ? "found something" : { ...this.props.planningen }} */}
-                {/* {this.state.planningen.map(planning => <p>found me</p>)} */}
                 <BigCalendar
                     formats={{
                         dateFormat: "dddd MMMM YYYY",

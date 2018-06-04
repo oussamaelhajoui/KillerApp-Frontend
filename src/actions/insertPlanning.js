@@ -1,4 +1,4 @@
-import { INSERT_PLANNING, CHANGE_LOADING_INSERT_PLANNING } from "./types";
+import { INSERT_PLANNING, CHANGE_LOADING_INSERT_PLANNING, ERROR_INSERT } from "./types";
 
 import Restful from '../logic/Restful';
 
@@ -6,6 +6,7 @@ export const insertPlanning = (data) => dispatch => {
     dispatch({
         type: CHANGE_LOADING_INSERT_PLANNING,
         payload: {
+            successInsert: false,
             loadingInsertPlanning: true
         }
     });
@@ -13,7 +14,7 @@ export const insertPlanning = (data) => dispatch => {
         gebruiker: data.medewerker,
         route: data.route,
         voertuig: data.voertuig,
-        datum: data.datum
+        datum: data.datum.replace(",", "")
     }, data.token)
         .then(response => { return response.json(); })
         .then(jsonResponse => {
@@ -32,11 +33,7 @@ export const insertPlanning = (data) => dispatch => {
         })
         .catch(message => {
             dispatch({
-                type: INSERT_PLANNING,
-                payload: {
-                    successInsert: false,
-                    loadingInsertPlanning: false
-                }
+                type: ERROR_INSERT
             });
         });
 

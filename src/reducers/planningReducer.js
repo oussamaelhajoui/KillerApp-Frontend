@@ -1,10 +1,11 @@
-import { GET_PLANNING, CHANGE_LOADING_PLANNING, INSERT_PLANNING, CHANGE_LOADING_INSERT_PLANNING } from "../actions/types";
+import { GET_PLANNING, CHANGE_LOADING_PLANNING, INSERT_PLANNING, CHANGE_LOADING_INSERT_PLANNING, ERROR_INSERT, CHANGE_SUCCESS_INSERT } from "../actions/types";
 
 const initialState = {
     planning: {},
     loadingInsertPlanning: false,
     loadingPlanning: false,
-    successInsert: false
+    successInsert: false,
+    errorInsertMsg: ""
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -30,12 +31,25 @@ export default (state = initialState, { type, payload }) => {
                 loadingInsertPlanning: payload.loadingInsertPlanning
             };
         // break;
+        case ERROR_INSERT:
+            return {
+                ...state,
+                loadingInsertPlanning: false,
+                errorInsertMsg: "Could not insert the data",
+                successInsert: false
+            };
         case CHANGE_LOADING_PLANNING:
             return {
                 ...state,
                 loadingPlanning: payload.loadingPlanning,
             };
         // break;
+        case CHANGE_SUCCESS_INSERT:
+            return {
+                ...state,
+                successInsert: payload.successInsert
+            };
+        // break;=
         default:
             return { ...state };
         // break;

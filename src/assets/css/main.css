@@ -23,3 +23,7 @@
 .centerText{
     text-align: center;
 }
+
+.swal2-select{
+    display: none !important;
+}

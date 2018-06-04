@@ -13,6 +13,7 @@ import { getRoutes } from '../../actions/getRoutes';
 import { getVoertuigen } from '../../actions/getVoertuigen';
 import { insertPlanning } from '../../actions/insertPlanning';
 import { getPlanningen } from '../../actions/getPlanningen';
+import { resetInsert } from '../../actions/resetInsertPlanning';
 
 // import { GetStringFromDate, GetTimeFromDate } from '../../logic/Libary';
 
@@ -129,16 +130,17 @@ class Planning extends Component {
 
         if (this.props.planning.successInsert === true) {
             Swal({
-                position: 'top-end',
+                position: 'center',
                 type: 'success',
                 title: 'Your work has been saved',
-                showConfirmButton: false,
-                timer: 1500
+                showConfirmButton: true
+                // timer: 1500
             });
             $('select').val('');
             $('#datum').val('');
             $('select').material_select();
-            this.props.getPlanningen({ token: this.props.user.token });
+            // this.props.getPlanningen({ token: this.props.user.token });
+            this.props.resetInsert();
 
         }
 
@@ -162,7 +164,7 @@ class Planning extends Component {
                     <div className="col s12">
                         <ul className="tabs">
                             <li className="tab col s4"><a className="active" href="#planningToevoegen">Nieuwe planning</a></li>
-                            <li className="tab col s4"><a href="#planningBekijken">Bekijk planning</a></li>
+                            <li className="tab col s4" onClick={(e) => this.props.getPlanningen({ token: this.props.user.token })}><a href="#planningBekijken">Bekijk planning</a></li>
                             <li className="tab col s4"><a href="#planningBekijkenMedewerker">Medewerker</a></li>
                         </ul>
                     </div>
@@ -272,6 +274,7 @@ const mapDispatchToProps = {
     getRoutes,
     getVoertuigen,
     insertPlanning,
-    getPlanningen
+    getPlanningen,
+    resetInsert
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Planning);
