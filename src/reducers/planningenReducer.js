@@ -10,7 +10,7 @@ export default (state = initialState, { type, payload }) => {
         case GET_PLANNINGEN:
             return {
                 ...state,
-                planningen: { ...payload.planningen },
+                planningen: [...payload.planningen],
                 loadingPlanningen: payload.loadingPlanningen
             };
         // break;

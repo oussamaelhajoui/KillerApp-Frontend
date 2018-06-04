@@ -126,7 +126,6 @@ class Planning extends Component {
         $(this.refs.medewerkerselect).material_select(this.handleChangeSelect);
         $(this.refs.routeselect).material_select(this.handleChangeSelect);
         $(this.refs.voertuigselect).material_select(this.handleChangeSelect);
-        console.log(this.props.planning.successInsert);
 
         if (this.props.planning.successInsert === true) {
             Swal({
@@ -143,7 +142,7 @@ class Planning extends Component {
 
         }
 
-        console.log(this.props.planningen);
+        // console.log(this.props.planningen);
     }
 
     render() {
@@ -164,7 +163,7 @@ class Planning extends Component {
                         <ul className="tabs">
                             <li className="tab col s4"><a className="active" href="#planningToevoegen">Nieuwe planning</a></li>
                             <li className="tab col s4"><a href="#planningBekijken">Bekijk planning</a></li>
-                            <li className="tab col s4"><a href="#planningBekijkenMedewerker">Bekijk planning op medewerker</a></li>
+                            <li className="tab col s4"><a href="#planningBekijkenMedewerker">Medewerker</a></li>
                         </ul>
                     </div>
                     <div id="planningToevoegen" className="col s12">
@@ -205,7 +204,7 @@ class Planning extends Component {
                     </div>
 
                     <div id="planningBekijken" className="col s12">
-                        {this.props.planningen.planningen && <Calendar planningen={this.props.planningen.planningen} openModalHandler={this.openModal.bind(this)} />}
+                        {this.props.planningen && <Calendar planningen={this.props.planningen} openModalHandler={this.openModal.bind(this)} />}
                     </div>
                     <div id="planningBekijkenMedewerker" className="col s12">Test 3</div>
                 </div>

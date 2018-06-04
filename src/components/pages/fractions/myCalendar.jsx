@@ -4,58 +4,15 @@ import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/nl';
 
+// import Swal from 'sweetalert2';
+
 import "react-big-calendar/lib/css/react-big-calendar.css";
 moment().locale('nl')
 moment.locale('nl')
 moment().format("dddd MMMM YYYY")
 
 
-const events = this.props.planningen.map(planning => {
-    return (
-        {
-            id: planning.idplanning,
-            title: `${planning.gebruiker.username} op ${planning.route.routenummer} met de auto ${planning.voertuig.voertuigcode}`
-        }
-    )
-})
 
-const myEventsList = [
-    {
-        id: 1,
-        title: 'Route 3001',
-        startDate: new Date(2018, 5, 1, 18, 13, 23, 43),
-        endDate: new Date(2018, 5, 1, 20, 32, 23),
-        desc: 'Pre-meeting meeting, to prepare for the meeting',
-    },
-    {
-        id: 2,
-        title: 'Route 3001',
-        startDate: new Date(2018, 5, 1, 18, 13, 23, 43),
-        endDate: new Date(2018, 5, 1, 20, 32, 23),
-        desc: 'Pre-meeting meeting, to prepare for the meeting',
-    },
-    {
-        id: 3,
-        title: 'Route 3021',
-        startDate: new Date(2018, 5, 1, 18, 13, 23, 43),
-        endDate: new Date(2018, 5, 1, 20, 32, 23),
-        desc: 'Pre-meeting meeting, to prepare for the meeting',
-    },
-    {
-        id: 4,
-        title: 'Route 3031',
-        startDate: new Date(2018, 5, 1, 18, 13, 23, 43),
-        endDate: new Date(2018, 5, 1, 20, 32, 23),
-        desc: 'Pre-meeting meeting, to prepare for the meeting',
-    },
-    {
-        id: 5,
-        title: 'Meeting 2',
-        startDate: new Date(2018, 5, 1, 6, 13, 23, 43),
-        endDate: new Date(2018, 5, 1, 13, 32, 23),
-        desc: 'Pre-meeting meeting, to prepare for the meeting 2',
-    }
-]
 
 BigCalendar.setLocalizer(
     BigCalendar.momentLocalizer(moment)
@@ -75,9 +32,18 @@ max.setMinutes(0, 0, 0);
 
 class myCalendar extends Component {
 
+    state = {
+        planningen: {
+            loadingPlanningen: false,
+            planningen: []
+        }
+    }
+
+
 
     selecteventhandler = (props) => {
         console.log("checking", props);
+
     }
 
     selecthandler2 = (props) => {
@@ -89,16 +55,56 @@ class myCalendar extends Component {
         console.log("selecting", props);
     }
 
+
+    componentDidUpdate() {
+        console.log(this.props);
+        if (this.props.planningen !== this.state.planningen) {
+            this.setState({
+                planningen: this.props.planningen
+            })
+        }
+        console.log(this.state);
+
+    }
+
     render() {
+        let events = "";
+        if (this.state.planningen.planningen.length > 0) {
+            events = this.state.planningen.planningen.map(planning => {
+                console.log(planning);
+                let datum = planning.datum.split("T")[0];
+                let tijdStart = planning.route.tijdstart;
+                let tijdEind = planning.route.tijdeind;
+                const dateStart = new Date(`${datum} ${tijdStart}`);
+                const dateEind = new Date(`${datum} ${tijdEind}`);
+
+                return (
+                    {
+                        id: planning.idplanning,
+                        title: `${planning.gebruiker.username} op ${planning.route.routenummer} met de auto ${planning.voertuig.voertuigcode}`,
+                        startDate: dateStart,
+                        endDate: dateEind,
+                        desc: JSON.stringify(planning)
+                    }
+                )
+            });
+            events = [...events];
+        } else { events = [{}] }
+
+        // console.log("events trig", this.state.planningen);
+        console.log("events", events);
         return (
             <div>
+                {/* {this.state.planningen.planningen.length} */}
+                {/* {this.props.planningen.planningen.length > 0 ? "found something" : { ...this.props.planningen }} */}
+                {/* {this.state.planningen.map(planning => <p>found me</p>)} */}
                 <BigCalendar
                     formats={{
                         dateFormat: "dddd MMMM YYYY",
                         weekdayFormat: "dddd MMMM YYYY",
                         dayFormat: 'dddd DD MMMM',
                     }}
-                    events={myEventsList}
+                    events={events}
                     startAccessor="startDate"
                     endAccessor="endDate"
                     defaultDate={new Date()}
