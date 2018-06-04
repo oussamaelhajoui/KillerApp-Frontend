@@ -32,8 +32,6 @@ export default (state = initialState, {
     // break;
     case CHANGE_PAGINATION_BY_NUMBER:
     case CHANGE_PAGINATION_BY_ARROW:
-      console.log("third", payload.pagcurrent);
-
       return {
         ...state,
         pagcurrent: payload.pagcurrent
