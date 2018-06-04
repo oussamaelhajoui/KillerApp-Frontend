@@ -8,7 +8,6 @@ const initialState = {
 export default (state = initialState, { type, payload }) => {
     switch (type) {
         case GET_PLANNINGENUSER:
-            console.log(payload.planningen);
             return {
                 ...state,
                 planningen: [...payload.planningen],

@@ -12,8 +12,6 @@ export const getPlanningenOnUser = (data) => dispatch => {
         .then(response => { return response.json(); })
         .then(jsonResponse => {
             if (jsonResponse["success"]) {
-                console.log("fetched", jsonResponse["schedule"]);
-
                 dispatch({
                     type: GET_PLANNINGENUSER,
                     payload: {
