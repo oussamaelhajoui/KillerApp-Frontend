@@ -1,20 +1,21 @@
-import { GET_PLANNINGENUSER, CHANGE_LOADING_PLANNINGUSER } from "../actions/types";
+import { GET_PLANNINGENUSER, CHANGE_LOADING_PLANNINENGUSER } from "../actions/types";
 
 const initialState = {
-    planningen: [{}],
+    planningen: [],
     loadingPlanning: false,
 };
 
 export default (state = initialState, { type, payload }) => {
     switch (type) {
         case GET_PLANNINGENUSER:
+            console.log(payload.planningen);
             return {
                 ...state,
-                planning: [...payload.planning],
-                loadingPlanning: payload.loadingPlanning
+                planningen: [...payload.planningen],
+                loadingPlanningen: payload.loadingPlanning
             };
         // break;
-        case CHANGE_LOADING_PLANNINGUSER:
+        case CHANGE_LOADING_PLANNINENGUSER:
             return {
                 ...state,
                 loadingPlanning: payload.loadingPlanning,
