@@ -14,6 +14,7 @@ import { getVoertuigen } from '../../actions/getVoertuigen';
 import { insertPlanning } from '../../actions/insertPlanning';
 import { getPlanningen } from '../../actions/getPlanningen';
 import { resetInsert } from '../../actions/resetInsertPlanning';
+import { getPlanningenOnUser } from '../../actions/getPlanningenOnUser';
 
 // import { GetStringFromDate, GetTimeFromDate } from '../../logic/Libary';
 
@@ -92,7 +93,6 @@ class Planning extends Component {
     }
 
     handleChangeSelect = () => {
-        console.log(this.refs.datumpicker.value);
         if (this.refs.voertuigselect.value !== "" && this.refs.medewerkerselect.value !== "" && this.refs.routeselect.value !== "" && this.refs.datumpicker.value !== "")
             this.setState({
                 medewerker: JSON.parse(this.refs.medewerkerselect.value),
@@ -103,14 +103,17 @@ class Planning extends Component {
     }
 
     handleChangeSelectFilter = () => {
-        this.setState({
-            medewerkerFilter: JSON.parse(this.refs.medewerkerselectFilter)
-        })
+        if (this.refs.medewerkerselectFilter.value !== "") {
+            this.setState({
+                medewerkerFilter: JSON.parse(this.refs.medewerkerselectFilter.value)
+            })
 
-        const data = {
-            medewerker: this.state.medewerker.id
+            const data = {
+                medewerker: this.state.medewerkerFilter.id,
+                token: this.props.user.token
+            }
+            this.props.getPlanningenOnUser(data);
         }
-        this.props.getPlanningFilter(data);
     }
 
     addPlanning = () => {
@@ -160,12 +163,10 @@ class Planning extends Component {
             $('select').val('');
             $('#datum').val('');
             $('select').material_select();
-            // this.props.getPlanningen({ token: this.props.user.token });
             this.props.resetInsert();
 
         }
 
-        // console.log(this.props.planningen);
     }
 
     render() {
@@ -271,6 +272,7 @@ const mapDispatchToProps = {
     getVoertuigen,
     insertPlanning,
     getPlanningen,
-    resetInsert
+    resetInsert,
+    getPlanningenOnUser
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Planning);
