@@ -58,6 +58,7 @@ class myCalendar extends Component {
 
 
     componentDidUpdate() {
+        console.log(this.state);
         if (this.props.planningen !== this.state.planningen) {
             this.setState({
                 planningen: this.props.planningen

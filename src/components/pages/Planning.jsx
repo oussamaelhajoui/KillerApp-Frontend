@@ -146,6 +146,7 @@ class Planning extends Component {
 
 
     componentDidUpdate() {
+        console.log(this.props.getPlanningenOnUser);
         $('select').material_select();
         $(this.refs.medewerkerselect).material_select(this.handleChangeSelect);
         $(this.refs.routeselect).material_select(this.handleChangeSelect);
@@ -248,7 +249,7 @@ class Planning extends Component {
                             </div>
                         </div>
                         <div className="row">
-                            {this.props.planningen && <Calendar planningen={this.props.planningen} openModalHandler={this.openModal.bind(this)} />}
+                            {this.props.planningen && <Calendar planningen={this.props.planningenUser} openModalHandler={this.openModal.bind(this)} />}
                         </div>
                     </div>
                 </div>
@@ -263,7 +264,8 @@ const mapStateToProps = state => ({
     routes: state.routes,
     voertuigen: state.voertuigen,
     planning: state.planning,
-    planningen: state.planningen
+    planningen: state.planningen,
+    planningenUser: state.planningenUser
 });
 
 const mapDispatchToProps = {
