@@ -10,6 +10,8 @@ import Medewerkers from "./../components/pages/Medewerkers";
 import Medewerker from "./../components/pages/Medewerker";
 import RoutesPage from "./../components/pages/Routes";
 import RoutePage from "./../components/pages/Route";
+import Voertuigen from "./../components/pages/Voertuigen";
+import Voertuig from "./../components/pages/Voertuig";
 import Planning from "./../components/pages/Planning";
 import PlanningGebruiker from "./../components/pages/PlanningGebruiker";
 import MijnPlanning from "./../components/pages/MijnPlanning";
@@ -35,8 +37,10 @@ class Routes extends Component {
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Medewerkers/:idmedewerker" component={Medewerker} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Routes" component={RoutesPage} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Routes/:idroute" component={RoutePage} user={this.props.user} /> : ""}
+          {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/voertuigen" component={Voertuigen} user={this.props.user} /> : ""}
+          {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/voertuigen/:idvoertuig" component={Voertuig} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Planning" component={Planning} user={this.props.user} /> : ""}
-          {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Planning/idplanning" component={PlanningGebruiker} user={this.props.user} /> : ""}
+          {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Planning/:idplanning" component={PlanningGebruiker} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 2) ? <PrivateRoute exact path="/Planning" component={MijnPlanning} user={this.props.user} /> : ""}
           <Route
             path="/login"

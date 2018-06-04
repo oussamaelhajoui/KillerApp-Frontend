@@ -40,7 +40,7 @@ class Users extends Component {
         <td>{user.username}</td>
         <td>{user.role.naam}</td>
         <td>
-          <Link to={`/users/${user.id}`}> Go to profile </Link>
+          <Link to={`/medewerkers/${user.id}`}> Go to profile </Link>
         </td>
       </tr>
     ));

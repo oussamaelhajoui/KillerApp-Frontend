@@ -83,7 +83,7 @@ class NavMenu extends Component {
                 activeClassName="active"
                 exact={true}
                 strict
-                to="/settings"
+                to="/voertuigen"
               >
                 <i className="material-icons">directions_car</i>
                 <p>Auto's</p>
