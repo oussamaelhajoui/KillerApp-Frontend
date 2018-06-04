@@ -22,7 +22,8 @@ export default (state = initialState, { type, payload }) => {
                 ...state,
                 successInsert: payload.successInsert,
                 loadingInsertPlanning: payload.loadingInsertPlanning,
-                planning: { ...payload.planning }
+                planning: { ...payload.planning },
+                errorInsertMsg: ""
             };
         // break;
         case CHANGE_LOADING_INSERT_PLANNING:
@@ -35,7 +36,7 @@ export default (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 loadingInsertPlanning: false,
-                errorInsertMsg: "Could not insert the data",
+                errorInsertMsg: "Data kon niet ingevoerd worden.",
                 successInsert: false
             };
         case CHANGE_LOADING_PLANNING:

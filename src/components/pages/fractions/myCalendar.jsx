@@ -11,14 +11,9 @@ moment().locale('nl')
 moment.locale('nl')
 moment().format("dddd MMMM YYYY")
 
-
-
-
 BigCalendar.setLocalizer(
     BigCalendar.momentLocalizer(moment)
 );
-
-
 
 const min = new Date();
 min.setHours(6);
@@ -28,18 +23,13 @@ const max = new Date();
 max.setHours(20);
 max.setMinutes(0, 0, 0);
 
-
-
 class myCalendar extends Component {
-
     state = {
         planningen: {
             loadingPlanningen: false,
             planningen: []
         }
     }
-
-
 
     selecteventhandler = (props) => {
         const data = JSON.parse(props.desc);
@@ -68,13 +58,11 @@ class myCalendar extends Component {
 
 
     componentDidUpdate() {
-        console.log(this.props);
         if (this.props.planningen !== this.state.planningen) {
             this.setState({
                 planningen: this.props.planningen
             })
         }
-        console.log(this.state);
 
     }
 
@@ -82,7 +70,6 @@ class myCalendar extends Component {
         let events = [{}];
         if (this.state.planningen.planningen.length > 0) {
             events = this.state.planningen.planningen.map(planning => {
-                console.log(planning);
                 let datum = planning.datum.split("T")[0];
                 let tijdStart = planning.route.tijdstart;
                 let tijdEind = planning.route.tijdeind;
@@ -102,7 +89,6 @@ class myCalendar extends Component {
             events = [...events];
         } else { events = [{}] }
 
-        console.log("events", events);
         return (
             <div>
                 <BigCalendar

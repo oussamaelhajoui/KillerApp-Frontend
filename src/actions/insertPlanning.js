@@ -27,8 +27,12 @@ export const insertPlanning = (data) => dispatch => {
                         planning: { ...jsonResponse["schedule"] }
                     }
                 });
-
+            } else {
+                dispatch({
+                    type: ERROR_INSERT
+                });
             }
+
 
         })
         .catch(message => {

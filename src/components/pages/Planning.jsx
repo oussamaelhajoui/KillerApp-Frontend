@@ -27,7 +27,9 @@ class Planning extends Component {
         medewerker: "",
         voertuig: "",
         route: "",
-        geselecteerdeDatum: ""
+        geselecteerdeDatum: "",
+        error: false,
+        medewerkerFilter: ""
     }
 
 
@@ -89,35 +91,53 @@ class Planning extends Component {
         console.log(props);
     }
 
-    handleChangeSelect = (p) => {
-        if (this.refs.voertuigselect.value !== "" && this.refs.medewerkerselect.value !== "" && this.refs.voertuigselect.value !== "")
-            this.setState({
-                medewerker: JSON.parse(this.refs.medewerkerselect.value),
-                route: JSON.parse(this.refs.routeselect.value),
-                voertuig: JSON.parse(this.refs.voertuigselect.value),
-                geselecteerdeDatum: this.refs.datumpicker.value
-            });
-
+    handleChangeSelect = () => {
         console.log(this.refs.datumpicker.value);
-
-    }
-    addPlanning = () => {
-        if (this.refs.voertuigselect.value !== "" && this.refs.medewerkerselect.value !== "" && this.refs.voertuigselect.value !== "")
+        if (this.refs.voertuigselect.value !== "" && this.refs.medewerkerselect.value !== "" && this.refs.routeselect.value !== "" && this.refs.datumpicker.value !== "")
             this.setState({
                 medewerker: JSON.parse(this.refs.medewerkerselect.value),
                 route: JSON.parse(this.refs.routeselect.value),
                 voertuig: JSON.parse(this.refs.voertuigselect.value),
                 geselecteerdeDatum: this.refs.datumpicker.value
             });
+    }
+
+    handleChangeSelectFilter = () => {
+        this.setState({
+            medewerkerFilter: JSON.parse(this.refs.medewerkerselectFilter)
+        })
 
         const data = {
-            medewerker: this.state.medewerker.id,
-            route: this.state.route.id,
-            voertuig: this.state.voertuig.id,
-            datum: this.state.geselecteerdeDatum,
-            token: this.props.user.token
+            medewerker: this.state.medewerker.id
         }
-        this.props.insertPlanning(data);
+        this.props.getPlanningFilter(data);
+    }
+
+    addPlanning = () => {
+        if (this.refs.voertuigselect.value !== "" || this.refs.medewerkerselect.value !== "" || this.refs.routeselect.value !== "" || this.refs.datumpicker.value !== "") {
+            this.setState({
+                medewerker: JSON.parse(this.refs.medewerkerselect.value),
+                route: JSON.parse(this.refs.routeselect.value),
+                voertuig: JSON.parse(this.refs.voertuigselect.value),
+                geselecteerdeDatum: this.refs.datumpicker.value,
+                error: false
+            });
+
+            const data = {
+                medewerker: this.state.medewerker.id,
+                route: this.state.route.id,
+                voertuig: this.state.voertuig.id,
+                datum: this.state.geselecteerdeDatum,
+                token: this.props.user.token
+            }
+            this.props.insertPlanning(data);
+        } else {
+            this.setState({
+                error: true
+            })
+        }
+
+
 
     }
 
@@ -127,14 +147,15 @@ class Planning extends Component {
         $(this.refs.medewerkerselect).material_select(this.handleChangeSelect);
         $(this.refs.routeselect).material_select(this.handleChangeSelect);
         $(this.refs.voertuigselect).material_select(this.handleChangeSelect);
+        $(this.refs.medewerkerselectFilter).material_select(this.handleChangeSelectFilter);
 
         if (this.props.planning.successInsert === true) {
             Swal({
                 position: 'center',
                 type: 'success',
                 title: 'Your work has been saved',
-                showConfirmButton: true
-                // timer: 1500
+                showConfirmButton: true,
+                timer: 1500
             });
             $('select').val('');
             $('#datum').val('');
@@ -201,60 +222,35 @@ class Planning extends Component {
                             {this.state.voertuig !== "" && this.state.medewerker !== "" && this.state.route !== "" ?
                                 <p>U heeft gekozen voor {this.state.medewerker.username} die de route {this.state.route.routenummer} rijdt met het voertuig {this.state.voertuig.voertuigcode} op de datum {this.state.geselecteerdeDatum} Die beginnen tussen de tijdzones {this.state.route.tijdstart} tot {this.state.route.tijdeind}</p>
                                 : <p>voer alle gegevens in..</p>}
-                            <a className="waves-effect waves-light btn" onClick={this.addPlanning}>voeg planning toe</a>
+                            <a className={this.props.planning.loadingInsertPlanning ? "waves-effect waves-light btn disabled" : "waves-effect waves-light btn"} onClick={this.addPlanning}>
+                                {this.props.planning.loadingInsertPlanning && (
+                                    <div class="progress">
+                                        <div class="indeterminate"></div>
+                                    </div>
+                                )}
+                                voeg planning toe</a>
+                            {this.props.planning.errorInsertMsg !== "" && <p>{this.props.planning.errorInsertMsg}</p>}
+                            {this.state.error && <p>Niet alle gegevens zijn ingevoerd</p>}
                         </div>
                     </div>
-
                     <div id="planningBekijken" className="col s12">
                         {this.props.planningen && <Calendar planningen={this.props.planningen} openModalHandler={this.openModal.bind(this)} />}
                     </div>
-                    <div id="planningBekijkenMedewerker" className="col s12">Test 3</div>
-                </div>
-
-
-                {this.props.planning.loadingInsertPlanning && (
-                    <div className="preloader-wrapper big active">
-                        <div className="spinner-layer spinner-blue">
-                            <div className="circle-clipper left">
-                                <div className="circle"></div>
-                            </div><div className="gap-patch">
-                                <div className="circle"></div>
-                            </div><div className="circle-clipper right">
-                                <div className="circle"></div>
+                    <div id="planningBekijkenMedewerker" className="col s12">
+                        <div className="row">
+                            <div className="input-field col s12">
+                                <select onChange={this.handleChangeSelect} ref="medewerkerselectFilter">
+                                    <option value="" disabled selected>Kies de chauffeur</option>
+                                    {users}
+                                </select>
+                                <label>Selecteer Medewerker</label>
                             </div>
                         </div>
-
-                        <div className="spinner-layer spinner-red">
-                            <div className="circle-clipper left">
-                                <div className="circle"></div>
-                            </div><div className="gap-patch">
-                                <div className="circle"></div>
-                            </div><div className="circle-clipper right">
-                                <div className="circle"></div>
-                            </div>
-                        </div>
-
-                        <div className="spinner-layer spinner-yellow">
-                            <div className="circle-clipper left">
-                                <div className="circle"></div>
-                            </div><div className="gap-patch">
-                                <div className="circle"></div>
-                            </div><div className="circle-clipper right">
-                                <div className="circle"></div>
-                            </div>
-                        </div>
-
-                        <div className="spinner-layer spinner-green">
-                            <div className="circle-clipper left">
-                                <div className="circle"></div>
-                            </div><div className="gap-patch">
-                                <div className="circle"></div>
-                            </div><div className="circle-clipper right">
-                                <div className="circle"></div>
-                            </div>
+                        <div className="row">
+                            {this.props.planningen && <Calendar planningen={this.props.planningen} openModalHandler={this.openModal.bind(this)} />}
                         </div>
                     </div>
-                )}
+                </div>
             </Fragment>
         );
     }
