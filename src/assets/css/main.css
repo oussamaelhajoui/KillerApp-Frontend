@@ -27,3 +27,22 @@
 .swal2-select{
     display: none !important;
 }
+
+.sidebar[data-color="purple"] .nav li.active a, .off-canvas-sidebar[data-color="purple"] .nav li.active a{
+    background-color: #27b097 !important;
+    box-shadow: 0 12px 20px -10px rgba(0, 255, 114, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(0, 137, 255, 0.52) !important;
+}
+
+.card [data-background-color="orange"]{
+    background: linear-gradient(60deg, #26ffb7, #26deff) !important;
+    box-shadow: 0 12px 20px -10px rgba(0, 255, 114, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(0, 137, 255, 0.52) !important;
+    
+}
+
+.card [data-background-color="orange"] .title{
+    color: white!important;
+    text-shadow: 0 0 15px #222;
+}
+thead.text-warning{
+    color: #27b097;
+}

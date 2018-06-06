@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Chart from "chart.js";
+import { Link } from 'react-router-dom';
 
 class Dashboard extends Component {
     componentDidMount() {
@@ -11,6 +12,13 @@ class Dashboard extends Component {
                 datasets: [{
                     label: 'Routes per dag',
                     data: [4, 2, 3, 5, 2, 4, 2],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
                 }]
             }
         });
@@ -29,12 +37,12 @@ class Dashboard extends Component {
                             </div>
                             <div className="card-content">
                                 <p className="category">Aantal routes</p>
-                                <h4 className="title">666</h4>
+                                <h4 className="title">55</h4>
                             </div>
                             <div className="card-footer">
                                 <div className="stats">
                                     <i className="material-icons text-info">info</i>
-                                    <a className="text-info" href="#pablo">Bekijk routes</a>
+                                    <Link to="/routes"><span className="text-info" href="#pablo">Bekijk routes</span></Link>
                                 </div>
                             </div>
                         </div>
@@ -46,14 +54,13 @@ class Dashboard extends Component {
                             </div>
                             <div className="card-content">
                                 <p className="category">Medewerkers</p>
-                                <h4 className="title">49/50
-                                    <small> Online</small>
+                                <h4 className="title">49
                                 </h4>
                             </div>
                             <div className="card-footer">
                                 <div className="stats">
                                     <i className="material-icons text-info">info</i>
-                                    <a className="text-info" href="#pablo">Bekijk medewerkers</a>
+                                    <Link to="/medewerkers"><span className="text-info" href="#pablo">Bekijk medewerkers</span></Link>
                                 </div>
                             </div>
                         </div>
@@ -63,7 +70,7 @@ class Dashboard extends Component {
                     <div className="col s6">
                         <div className="card">
                             <div className="card-header" data-background-color="orange">
-                                <h5 className="title">Slechtste medewerker</h5>
+                                <h5 className="title">Tegenvallende medewerkers</h5>
                             </div>
                             <div className="card-content table-responsive">
                                 <table className="table table-hover">
