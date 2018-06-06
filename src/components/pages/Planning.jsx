@@ -157,7 +157,7 @@ class Planning extends Component {
             Swal({
                 position: 'center',
                 type: 'success',
-                title: 'Your work has been saved',
+                title: 'De planning is opgeslagen!',
                 showConfirmButton: true,
                 timer: 1500
             });

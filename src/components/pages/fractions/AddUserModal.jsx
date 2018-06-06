@@ -3,7 +3,9 @@ import { connect } from "react-redux";
 
 import $ from "jquery";
 import ReactDOM from "react-dom";
-// import Restful from "../../../logic/Restful";
+
+import Swal from 'sweetalert2';
+import Restful from "../../../logic/Restful";
 
 class AddUserModal extends Component {
   constructor(props) {
@@ -14,6 +16,9 @@ class AddUserModal extends Component {
       lastname: "",
       email: "",
       password: "",
+      straat: "",
+      Huisnummer: 0,
+      postcode: "",
       role: "",
       roles: []
     };
@@ -23,7 +28,7 @@ class AddUserModal extends Component {
   }
 
   componentWillMount() {
-    // this.fetchRoles();
+    this.fetchRoles();
   }
 
   componentDidMount() {
@@ -38,49 +43,59 @@ class AddUserModal extends Component {
   }
 
   handleSubmit(event) {
-    // event.preventDefault();
+    event.preventDefault();
 
-    // let data = {
-    //   username: this.state.username,
-    //   firstname: this.state.firstname,
-    //   lastname: this.state.lastname,
-    //   email: this.state.email,
-    //   password: this.state.password,
-    //   role: this.state.role,
-    // };
+    let data = {
+      username: this.state.username,
+      firstname: this.state.firstname,
+      lastname: this.state.lastname,
+      email: this.state.email,
+      password: this.state.password,
+      role: this.state.role,
+      straat: this.state.straat,
+      Huisnummer: this.state.Huisnummer,
+      postcode: this.state.postcode
+    };
 
-    // Restful.Post("user/add", data, this.props.user.token)
-    //   .then(response => response.json())
-    //   .then(jsonResponse => {
-    //     if (jsonResponse["success"] === true) {
-    //       // User added succesfully
-    //     }
-    //   })
-    //   .catch(message => {
-    //     return false;
-    //   });
+    Restful.Post("user/add", data, this.props.user.token)
+      .then(response => response.json())
+      .then(jsonResponse => {
+        if (jsonResponse["success"] === true) {
+          // User added succesfully
+          Swal({
+            title: "De ingevoerde medewerker is opgeslagen",
+            type: "success",
+            showConfirmButton: true,
+            timer: 1500
+          })
+        }
+      })
+      .catch(message => {
+        return false;
+      });
   }
 
-  // fetchRoles() {
-  //   this.setState({ roles: [] }, () => {
-  //     Restful.Get("role/get", this.props.user.token)
-  //       .then(response => response.json())
-  //       .then(jsonResponse => {
-  //         if (jsonResponse.length > 0) {
-  //           this.setState({ roles: jsonResponse }, () => {
-  //             $("select").material_select();
-  //           });
-  //         }
-  //       })
-  //       .catch(message => {
-  //         console.log(message);
-  //       });
-  //   });
-  // }
+  fetchRoles() {
+    this.setState({ roles: [] }, () => {
+      Restful.Get("user/Roles", this.props.user.token)
+        .then(response => response.json())
+        .then(jsonResponse => {
+          console.log(jsonResponse);
+          if (jsonResponse["rollen"].length > 0) {
+            this.setState({ roles: jsonResponse["rollen"] }, () => {
+              $("select").material_select();
+            });
+          }
+        })
+        .catch(message => {
+          console.log(message);
+        });
+    });
+  }
 
   render() {
     const roles = this.state.roles.map(role =>
-      <option key={role.id} value={role.id}>{role.name}</option>
+      <option key={role.id} value={role.id}>{role.naam}</option>
     );
 
     return (
@@ -104,7 +119,7 @@ class AddUserModal extends Component {
                   </div>
                 </div>
                 <div className="row modal-form-row">
-                  <div className="input-field col s12">
+                  <div className="input-field col s6">
                     <input
                       name="firstname"
                       type="text"
@@ -114,9 +129,7 @@ class AddUserModal extends Component {
                     />
                     <label htmlFor="firstname">First name</label>
                   </div>
-                </div>
-                <div className="row modal-form-row">
-                  <div className="input-field col s12">
+                  <div className="input-field col s6">
                     <input
                       name="lastname"
                       type="text"
@@ -149,6 +162,38 @@ class AddUserModal extends Component {
                       className="validate"
                     />
                     <label htmlFor="password">Password</label>
+                  </div>
+                </div>
+                <div className="row modal-form-row">
+                  <div className="input-field col s6">
+                    <input
+                      name="straat"
+                      type="text"
+                      value={this.state.password}
+                      onChange={this.handleChange}
+                      className="validate"
+                    />
+                    <label htmlFor="straat">Straat</label>
+                  </div>
+                  <div className="input-field col s2">
+                    <input
+                      name="huisnummer"
+                      type="text"
+                      value={this.state.Huisnummer}
+                      onChange={this.handleChange}
+                      className="validate"
+                    />
+                    <label htmlFor="huisnummer">Huisnummer</label>
+                  </div>
+                  <div className="input-field col s4">
+                    <input
+                      name="postcode"
+                      type="text"
+                      value={this.state.postcode}
+                      onChange={this.handleChange}
+                      className="validate"
+                    />
+                    <label htmlFor="postcode">Postcode</label>
                   </div>
                 </div>
                 <div className="row modal-form-row">
