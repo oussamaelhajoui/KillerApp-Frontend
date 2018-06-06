@@ -63,7 +63,7 @@ class Voertuigen extends Component {
                                     <tbody>{cars}</tbody>
                                 </table>
 
-                                <div className={this.props.users.loadingUsers === true ? "preloader-wrapper big active" : "preloader-wrapper big"}>
+                                <div className={this.props.voertuigen.loadingVoertuigen === true ? "preloader-wrapper big active" : "preloader-wrapper big"}>
                                     <div className="spinner-layer spinner-blue-only">
                                         <div className="circle-clipper left">
                                             <div className="circle" />

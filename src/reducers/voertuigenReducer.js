@@ -13,13 +13,13 @@ export default (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 voertuigen: [...payload.voertuigen],
-                loadingVoertuigen: payload.loadingUsers
+                loadingVoertuigen: payload.loadingVoertuigen
             };
         // break;
         case CHANGE_LOADING_VOERTUIGEN:
             return {
                 ...state,
-                loadingVoertuigen: payload.loadingUsers
+                loadingVoertuigen: payload.loadingVoertuigen
             };
         // break;
         default:
