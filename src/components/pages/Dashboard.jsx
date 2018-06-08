@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Chart from "chart.js";
 import { Link } from 'react-router-dom';
 import { getPlanningen } from '../../actions/getPlanningen';
+import { getUsers } from '../../actions/getUsers';
+import { getRoutes } from '../../actions/getRoutes';
 import { connect } from 'react-redux';
 
 
@@ -22,13 +24,61 @@ class Dashboard extends Component {
             Sunday: 0
 
         },
-        Chart: null
+        Chart: null,
+        userAmount: 0,
+        routeAmount: 0
     }
 
+    componentDidMount() {
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"],
+                datasets: [{
+                    label: 'Routes per dag',
+                    data: [0, 0, 0, 0, 0, 0, 0],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        });
 
-    constructor(props) {
-        super(props);
+        this.setState({ Chart: myChart }, () => {
+            this.initData();
+        })
+    }
 
+    getMonday(d) {
+        d = new Date(d);
+        var day = d.getDay(),
+            diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+        return new Date(d.setDate(diff));
+    }
+
+    getSunday(d) {
+        d = new Date(d);
+        var day = d.getDay(),
+            diff = d.getDate() - day + 7;
+        return new Date(d.setDate(diff));
+    }
+
+    countInArray(array, what) {
+        var count = 0;
+        for (var i = 0; i < array.length; i++) {
+            if (array[i] === what) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    initData = () => {
         this.props.getPlanningen({ token: this.props.loggedUser.token })
             .then(planningen => {
                 if (this.props.planningen.planningen.length > 0) {
@@ -82,64 +132,25 @@ class Dashboard extends Component {
                         this.state.Chart.data.datasets[0].data.push(this.state.planningValues.Sunday);
                         this.state.Chart.update();
                     });
-                    console.log(this.state.planningValues)
 
                 }
-            })
-    }
+            });
 
-    componentDidMount() {
-        var ctx = document.getElementById("myChart");
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"],
-                datasets: [{
-                    label: 'Routes per dag',
-                    data: [0, 0, 0, 0, 0, 0, 0],
-                    backgroundColor: [
-                        'rgba(54, 162, 235, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(54, 162, 235, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            }
-        });
+        this.props.getUsers({ token: this.props.loggedUser.token })
+            .then(users => {
+                console.log("users", users);
+                this.setState({ userAmount: users.length })
+            });
 
-        this.setState({ Chart: myChart })
-    }
-
-    getMonday(d) {
-        d = new Date(d);
-        var day = d.getDay(),
-            diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
-        return new Date(d.setDate(diff));
-    }
-
-    getSunday(d) {
-        d = new Date(d);
-        var day = d.getDay(),
-            diff = d.getDate() - day + 7;
-        return new Date(d.setDate(diff));
-    }
-
-    countInArray(array, what) {
-        var count = 0;
-        for (var i = 0; i < array.length; i++) {
-            if (array[i] === what) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-
-    componentDidUpdate() {
-
+        this.props.getRoutes({ token: this.props.loggedUser.token })
+            .then(routes => {
+                console.log("routes", routes);
+                this.setState({ routeAmount: routes.length })
+            });
 
     }
+
+
 
 
     render() {
@@ -153,7 +164,7 @@ class Dashboard extends Component {
                             </div>
                             <div className="card-content">
                                 <p className="category">Aantal routes</p>
-                                <h4 className="title">55</h4>
+                                <h4 className="title">{this.state.routeAmount}</h4>
                             </div>
                             <div className="card-footer">
                                 <div className="stats">
@@ -170,8 +181,7 @@ class Dashboard extends Component {
                             </div>
                             <div className="card-content">
                                 <p className="category">Medewerkers</p>
-                                <h4 className="title">49
-                                </h4>
+                                <h4 className="title">{this.state.userAmount}</h4>
                             </div>
                             <div className="card-footer">
                                 <div className="stats">
@@ -287,6 +297,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-    getPlanningen
+    getPlanningen,
+    getUsers,
+    getRoutes
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
