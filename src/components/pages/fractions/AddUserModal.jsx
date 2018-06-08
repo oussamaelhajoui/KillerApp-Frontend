@@ -19,6 +19,7 @@ class AddUserModal extends Component {
       straat: "",
       huisnummer: 0,
       postcode: "",
+      stad: "",
       role: "",
       roles: []
     };
@@ -51,13 +52,14 @@ class AddUserModal extends Component {
       achternaam: this.state.lastname,
       email: this.state.email,
       password: this.state.password,
-      role: this.state.role,
+      roleid: this.state.role,
       straat: this.state.straat,
+      stad: this.state.stad,
       Huisnummer: this.state.Huisnummer,
       postcode: this.state.postcode
     };
 
-    Restful.Post("user/add", data, this.props.user.token)
+    Restful.Post("user/register", data, this.props.user.token)
       .then(response => response.json())
       .then(jsonResponse => {
         if (jsonResponse["success"] === true) {
@@ -67,6 +69,8 @@ class AddUserModal extends Component {
             type: "success",
             showConfirmButton: true,
             timer: 1500
+          }).then(res => {
+            this.props.addedHandler();
           })
         }
       })
@@ -165,7 +169,17 @@ class AddUserModal extends Component {
                   </div>
                 </div>
                 <div className="row modal-form-row">
-                  <div className="input-field col s6">
+                  <div className="input-field col s4">
+                    <input
+                      name="stad"
+                      type="text"
+                      value={this.state.stad}
+                      onChange={this.handleChange}
+                      className="validate"
+                    />
+                    <label htmlFor="straat">Stad</label>
+                  </div>
+                  <div className="input-field col s4">
                     <input
                       name="straat"
                       type="text"
@@ -185,7 +199,7 @@ class AddUserModal extends Component {
                     />
                     <label htmlFor="huisnummer">Huisnummer</label>
                   </div>
-                  <div className="input-field col s4">
+                  <div className="input-field col s2">
                     <input
                       name="postcode"
                       type="text"

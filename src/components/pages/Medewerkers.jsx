@@ -20,18 +20,22 @@ class Users extends Component {
 
     this.populateUserTable = this.populateUserTable.bind(this);
 
-    let rdxActionDataUserTable = {
-      pagcurrent: this.props.pagination.pagcurrent,
-      tableamount: this.props.pagination.tableamount,
-      token: this.props.user.token
-    }
-    this.props.populateUserTable(rdxActionDataUserTable);
+    this.FetchDataForUser();
 
   }
 
   componentDidMount() {
     $(".modal").modal();
     $("select").material_select();
+  }
+
+  FetchDataForUser = () => {
+    let rdxActionDataUserTable = {
+      pagcurrent: this.props.pagination.pagcurrent,
+      tableamount: this.props.pagination.tableamount,
+      token: this.props.user.token
+    }
+    this.props.populateUserTable(rdxActionDataUserTable);
   }
 
   render() {
@@ -89,7 +93,7 @@ class Users extends Component {
           </div>
         </div>
 
-        <AddUserModal />
+        <AddUserModal addedHandler={this.FetchDataForUser} />
       </Fragment>
     );
   }
