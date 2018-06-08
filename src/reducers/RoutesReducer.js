@@ -1,8 +1,9 @@
-import { POPULATE_ROUTE_TABLE, CHANGE_LOADING_ROUTES, GET_ROUTES } from "../actions/types";
+import { POPULATE_ROUTE_TABLE, CHANGE_LOADING_ROUTES, GET_ROUTES, GET_ROUTE } from "../actions/types";
 
 const initialState = {
     routes: [],
-    loadingroutes: false
+    loadingroutes: false,
+    selectedRoute: {}
 };
 
 export default (state = initialState, { type, payload }) => {
@@ -20,6 +21,12 @@ export default (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 loadingroutes: payload.loadingroutes
+            };
+        // break;
+        case GET_ROUTE:
+            return {
+                ...state,
+                selectedRoute: payload.selectedRoute,
             };
         // break;
         default:
