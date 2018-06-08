@@ -17,7 +17,7 @@ class AddUserModal extends Component {
       email: "",
       password: "",
       straat: "",
-      Huisnummer: 0,
+      huisnummer: 0,
       postcode: "",
       role: "",
       roles: []
@@ -47,8 +47,8 @@ class AddUserModal extends Component {
 
     let data = {
       username: this.state.username,
-      firstname: this.state.firstname,
-      lastname: this.state.lastname,
+      voornaam: this.state.firstname,
+      achternaam: this.state.lastname,
       email: this.state.email,
       password: this.state.password,
       role: this.state.role,
@@ -169,7 +169,7 @@ class AddUserModal extends Component {
                     <input
                       name="straat"
                       type="text"
-                      value={this.state.password}
+                      value={this.state.straat}
                       onChange={this.handleChange}
                       className="validate"
                     />
@@ -179,7 +179,7 @@ class AddUserModal extends Component {
                     <input
                       name="huisnummer"
                       type="text"
-                      value={this.state.Huisnummer}
+                      value={this.state.huisnummer}
                       onChange={this.handleChange}
                       className="validate"
                     />
