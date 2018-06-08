@@ -41,6 +41,7 @@ class Users extends Component {
   render() {
     const users = this.props.users.users.map(user => (
       <tr key={user.id}>
+        <td>{`${user.voornaam !== "" ? user.voornaam : "Onbekend"} ${user.achternaam}`}</td>
         <td>{user.username}</td>
         <td>{user.role.naam}</td>
         <td>
@@ -61,8 +62,9 @@ class Users extends Component {
                 <table className="striped">
                   <thead>
                     <tr>
-                      <th>Name</th>
-                      <th>Role</th>
+                      <th>Naam</th>
+                      <th>Gebruikersnaam</th>
+                      <th>Rol</th>
                       <th>Bekijk profiel</th>
                     </tr>
                   </thead>

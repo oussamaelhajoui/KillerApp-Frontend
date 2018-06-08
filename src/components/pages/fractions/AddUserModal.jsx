@@ -55,7 +55,7 @@ class AddUserModal extends Component {
       roleid: this.state.role,
       straat: this.state.straat,
       stad: this.state.stad,
-      Huisnummer: this.state.Huisnummer,
+      huisnummer: this.state.huisnummer,
       postcode: this.state.postcode
     };
 

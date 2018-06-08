@@ -3,7 +3,7 @@ import Restful from '../logic/Restful';
 
 export const getUser = (data) => dispatch => {
     console.log("getting user", data);
-    Restful.Get(`user/get/${data.id}`, data.token)
+    Restful.Get(`user/select/${data.id}`, data.token)
         .then(response => response.json())
         .then(jsonResponse => {
             console.log(jsonResponse);

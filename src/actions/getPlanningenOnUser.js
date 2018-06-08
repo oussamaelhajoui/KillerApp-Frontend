@@ -8,7 +8,7 @@ export const getPlanningenOnUser = (data) => dispatch => {
             loadingPlanningen: true
         }
     });
-    Restful.Get(`schedule/onuser/${data.medewerker}`, data.token)
+    Restful.Get(`schedule/onuser/${data.id}`, data.token)
         .then(response => { return response.json(); })
         .then(jsonResponse => {
             if (jsonResponse["success"]) {

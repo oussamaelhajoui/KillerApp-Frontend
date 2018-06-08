@@ -7,87 +7,95 @@ import { secondsToTimeString } from "../../logic/Libary"
 import { capitalizeFirstLetter } from '../../logic/Libary';
 import { populatePagination } from '../../actions/populatePagination';
 import { resetPagination } from '../../actions/resetPagination';
+import { getPlanningenOnUser } from '../../actions/getPlanningenOnUser';
+
 import PaginationRow from "./fractions/PaginationRow";
 
 class User extends Component {
     constructor(props) {
         super(props);
 
-        this.userid = props.match.params.userid;
+        this.userid = props.match.params.idmedewerker;
     }
 
     componentWillMount() {
         this.props.getUser({ id: this.userid, token: this.props.loggedUser.token });
+        this.props.getPlanningenOnUser({ id: this.userid, token: this.props.loggedUser.token });
     }
 
-    componentDidUpdate() {
-        LoadJS("https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js", () => {
-            window.Materialize.updateTextFields();
-        });
-    }
 
     render() {
-        const ratings = this.props.ratings.ratings.map((rating, i) => (
-            <tr key={i}>
-                <td>{rating.video_id}</td>
-                <td>{rating.iab}</td>
-                <td>{rating.pleasure}</td>
-                <td>{rating.arousal}</td>
-                <td>{rating.dominance}</td>
-                <td>{secondsToTimeString(rating.duration)}</td>
-            </tr>
-        ));
+        const planningen = this.props.planningenUser.planningen.map(planning => {
+            return (
+                <tr>
+                    <td>{planning.idplanning}</td>
+                    <td>{planning.datum.split("T")[0]}</td>
+                    <td>{planning.route.routenummer}</td>
+                    <td>{planning.voertuig.voertuigcode}</td>
+                    <td>{planning.echtestarttijd}</td>
+                    <td>{planning.echteeindtijd}</td>
+                    <td>{planning.route.tijdstart}</td>
+                    <td>{planning.route.tijdeind}</td>
+                    <td>{planning.gezien ? "Ja" : "Nee"}</td>
+                </tr>
+            )
+        })
         return (
             <Fragment>
                 <div className="container-fluid">
                     <div className="row">
-                        <h1> Video's that {capitalizeFirstLetter(this.props.userDetail.firstname)} has rated </h1>
-                        <div className="col s8">
-                            <PaginationRow table="populateRatingTable" />
+                        <h1> Informatie over {this.props.userDetail.voornaam} </h1>
+                        <div className="col s12">
                             <div className="row table-container">
-                                <table className="striped">
+                                <table className="bordered centered">
                                     <thead>
                                         <tr>
-                                            <th>Video ID</th>
-                                            <th>Category</th>
-                                            <th>Pleasure</th>
-                                            <th>Arousal</th>
-                                            <th>Dominance</th>
-                                            <th>Duration</th>
+                                            <th>Id</th>
+                                            <th>Gebruikersnaam</th>
+                                            <th>Naam</th>
+                                            <th>Adres</th>
+                                            <th>Stad</th>
+                                            <th>Postcode</th>
                                         </tr>
                                     </thead>
-                                    <tbody>{ratings}</tbody>
+                                    <tbody>
+                                        <tr>
+                                            <td>{this.props.userDetail.id}</td>
+                                            <td>{this.props.userDetail.username}</td>
+                                            <td>{`${this.props.userDetail.voornaam !== "" ? this.props.userDetail.voornaam : "Onbekend"} ${this.props.userDetail.achternaam} `}</td>
+                                            <td>{`${this.props.userDetail.straat} ${this.props.userDetail.huisnummer}`}</td>
+                                            <td>{this.props.userDetail.stad}</td>
+                                            <td>{this.props.userDetail.postcode}</td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
-                        <div className="col l4 m12">
+                        <div className="col l12 m12">
+                            <h3 className="center">Planning</h3>
+                            <PaginationRow table="populateRatingTable" />
+                            <div className="col s12">
+                                <div className="row table-container">
+                                    <table className="striped responsive-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Id</th>
+                                                <th>datum</th>
+                                                <th>route</th>
+                                                <th>voertuig</th>
+                                                <th>start tijd</th>
+                                                <th>eind tijd</th>
+                                                <th>route tijd start</th>
+                                                <th>route tijd eind</th>
+                                                <th>gezien</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>{planningen}</tbody>
+                                    </table>
+                                </div>
+                            </div>
                             <div className="row">
-                                <form className="col s12">
-                                    <div className="row">
-                                        <div className="input-field col s6">
-                                            <input value={this.props.userDetail.firstname ? this.props.userDetail.firstname : ""} id="first_name" type="text" className="validate" />
-                                            <label htmlFor="first_name">First Name</label>
-                                        </div>
-                                        <div className="input-field col s6">
-                                            <input value={this.props.userDetail.lastname ? this.props.userDetail.lastname : ""} id="last_name" type="text" className="validate" />
-                                            <label htmlFor="last_name">Last Name</label>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="input-field col s12">
-                                            <input placeholder="Enter new password" id="password" type="password" className="validate" />
-                                            <label htmlFor="password">Password</label>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="input-field col s12">
-                                            <input value={this.props.userDetail.email ? this.props.userDetail.email : ""} id="email" type="email" className="validate" />
-                                            <label htmlFor="email">Email</label>
-                                        </div>
-                                    </div>
-                                    <a className="waves-effect waves-light btn red">Remove</a>
-                                    <a className="waves-effect waves-light btn purple right">Save</a>
-                                </form>
+                                <a className="waves-effect waves-light btn red">Zet op non-actief</a>
                             </div>
                         </div>
                     </div>
@@ -101,12 +109,14 @@ const mapStateToProps = state => ({
     user: state.user,
     pagination: state.pagination,
     loggedUser: state.user,
-    userDetail: state.user.user
+    userDetail: state.user.user,
+    planningenUser: state.planningenUser
 });
 
 const mapDispatchToProps = {
     populatePagination,
     resetPagination,
-    getUser
+    getUser,
+    getPlanningenOnUser
 }
 export default connect(mapStateToProps, mapDispatchToProps)(User);

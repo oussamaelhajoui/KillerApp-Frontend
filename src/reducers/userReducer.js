@@ -13,8 +13,12 @@ const initialState = {
   user: {
     id: null,
     username: null,
-    firstname: null,
-    lastname: null,
+    voornaam: null,
+    achternaam: null,
+    straat: null,
+    huisnummer: null,
+    postcode: null,
+    stad: null,
     email: null,
     role: null
   },
@@ -79,7 +83,7 @@ export default (state = initialState, action) => {
     case GET_USER:
       return {
         ...state,
-        user: { ...action.payload.newUser }
+        user: { ...action.payload.newUser.user }
       };
     // break;
     case ERROR_LOGIN:
