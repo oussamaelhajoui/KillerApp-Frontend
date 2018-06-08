@@ -7,6 +7,7 @@ import voertuigenReducer from "./voertuigenReducer";
 import planningReducer from "./planningReducer";
 import planningenReducer from "./planningenReducer";
 import planningenUser from "./planningUserReducer";
+import usersRoute from "./usersRouteReducer";
 
 export default combineReducers({
   user: userReducer,
@@ -16,5 +17,6 @@ export default combineReducers({
   planning: planningReducer,
   planningen: planningenReducer,
   voertuigen: voertuigenReducer,
-  planningenUser
+  planningenUser,
+  usersRoute
 });
