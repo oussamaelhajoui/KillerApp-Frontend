@@ -37,7 +37,7 @@ class RoutesPage extends Component {
                 <td>{routes.tijdeind}</td>
                 <td>{routes.vastevoertuig !== null ? routes.vastevoertuig.voertuigcode : "Geen"}</td>
                 <td>
-                    <Link to={`/users/${routes.id}`}> Go to profile </Link>
+                    <Link to={`/routes/${routes.id}`}> Details </Link>
                 </td>
             </tr>
         ));
@@ -57,7 +57,7 @@ class RoutesPage extends Component {
                                             <th>Tijd start</th>
                                             <th>Tijd eind</th>
                                             <th>Vaste voertuig</th>
-                                            <th>Bekijk route</th>
+                                            <th>Bekijk details</th>
                                         </tr>
                                     </thead>
                                     <tbody>{users}</tbody>

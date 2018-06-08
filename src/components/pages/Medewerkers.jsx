@@ -45,7 +45,7 @@ class Users extends Component {
         <td>{user.username}</td>
         <td>{user.role.naam}</td>
         <td>
-          <Link to={`/medewerkers/${user.id}`}> Go to profile </Link>
+          <Link to={`/medewerkers/${user.id}`}> Details</Link>
         </td>
       </tr>
     ));
@@ -65,7 +65,7 @@ class Users extends Component {
                       <th>Naam</th>
                       <th>Gebruikersnaam</th>
                       <th>Rol</th>
-                      <th>Bekijk profiel</th>
+                      <th>Bekijk details</th>
                     </tr>
                   </thead>
                   <tbody>{users}</tbody>

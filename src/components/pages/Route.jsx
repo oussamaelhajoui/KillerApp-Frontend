@@ -7,7 +7,7 @@ class RoutePage extends Component {
     render() {
         return (
             <Fragment>
-
+                route
             </Fragment>
         );
     }
