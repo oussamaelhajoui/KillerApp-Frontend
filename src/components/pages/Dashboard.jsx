@@ -4,12 +4,88 @@ import { Link } from 'react-router-dom';
 import { getPlanningen } from '../../actions/getPlanningen';
 import { connect } from 'react-redux';
 
+
+
+
+
 class Dashboard extends Component {
+
+    state = {
+        planningCurrentWeek: [],
+        planningValues: {
+            Monday: 0,
+            Tuesday: 0,
+            Wednesday: 0,
+            Thursday: 0,
+            Friday: 0,
+            Saturday: 0,
+            Sunday: 0
+
+        },
+        Chart: null
+    }
+
 
     constructor(props) {
         super(props);
 
-        this.props.getPlanningen();
+        this.props.getPlanningen({ token: this.props.loggedUser.token })
+            .then(planningen => {
+                if (this.props.planningen.planningen.length > 0) {
+                    let planningCurrentWeek = this.props.planningen.planningen.filter(planning => {
+                        let tmpDate = new Date(planning.datum)
+                        let Maandag = this.getMonday(new Date());
+                        let Zondag = this.getSunday(new Date());
+                        if (tmpDate >= Maandag && tmpDate <= Zondag) {
+                            return true
+                        } else {
+                            return false;
+                        }
+                    })
+
+                    this.setState({ planningCurrentWeek })
+                    let arr = {};
+                    var weekday = new Array(7);
+                    weekday[0] = "Sunday";
+                    weekday[1] = "Monday";
+                    weekday[2] = "Tuesday";
+                    weekday[3] = "Wednesday";
+                    weekday[4] = "Thursday";
+                    weekday[5] = "Friday";
+                    weekday[6] = "Saturday";
+
+                    planningCurrentWeek.forEach(element1 => {
+                        planningCurrentWeek.forEach(element2 => {
+                            if (element1.datum === element2.datum) {
+                                let tmpDate = new Date(element1.datum);
+                                let day = weekday[tmpDate.getDay()];
+                                if (day in arr) {
+                                    arr[day] = arr[day] + 1;
+                                } else {
+                                    arr[day] = 1;
+                                }
+                            }
+                        })
+                    });
+                    this.setState({ planningValues: { ...this.state.planningValues, ...arr } }, () => {
+
+                        for (let i = 0; i < 100; i++) {
+                            this.state.Chart.data.datasets[0].data.pop();
+                        }
+
+                        this.state.Chart.data.datasets[0].data.push(this.state.planningValues.Monday);
+                        this.state.Chart.data.datasets[0].data.push(this.state.planningValues.Tuesday);
+                        this.state.Chart.data.datasets[0].data.push(this.state.planningValues.Wednesday);
+                        this.state.Chart.data.datasets[0].data.push(this.state.planningValues.Thursday);
+                        this.state.Chart.data.datasets[0].data.push(this.state.planningValues.Friday);
+                        this.state.Chart.data.datasets[0].data.push(this.state.planningValues.Saturday);
+                        this.state.Chart.data.datasets[0].data.push(this.state.planningValues.Sunday);
+                        this.state.Chart.update();
+                    });
+                    console.log(this.state.planningValues)
+
+                }
+            })
     }
 
     componentDidMount() {
@@ -20,7 +96,7 @@ class Dashboard extends Component {
                 labels: ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"],
                 datasets: [{
                     label: 'Routes per dag',
-                    data: [4, 2, 3, 5, 2, 4, 2],
+                    data: [0, 0, 0, 0, 0, 0, 0],
                     backgroundColor: [
                         'rgba(54, 162, 235, 0.2)'
                     ],
@@ -31,8 +107,38 @@ class Dashboard extends Component {
                 }]
             }
         });
-        console.log(myChart);
-        console.log(this.props.planningen);
+
+        this.setState({ Chart: myChart })
+    }
+
+    getMonday(d) {
+        d = new Date(d);
+        var day = d.getDay(),
+            diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+        return new Date(d.setDate(diff));
+    }
+
+    getSunday(d) {
+        d = new Date(d);
+        var day = d.getDay(),
+            diff = d.getDate() - day + 7;
+        return new Date(d.setDate(diff));
+    }
+
+    countInArray(array, what) {
+        var count = 0;
+        for (var i = 0; i < array.length; i++) {
+            if (array[i] === what) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+
+    componentDidUpdate() {
+
+
     }
 
 
@@ -176,7 +282,8 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = state => ({
-    planningen: state.planningen
+    planningen: state.planningen,
+    loggedUser: state.user
 });
 
 const mapDispatchToProps = {
