@@ -84,7 +84,6 @@ class AddUserModal extends Component {
       Restful.Get("user/Roles", this.props.user.token)
         .then(response => response.json())
         .then(jsonResponse => {
-          console.log(jsonResponse);
           if (jsonResponse["rollen"].length > 0) {
             this.setState({ roles: jsonResponse["rollen"] }, () => {
               $("select").material_select();

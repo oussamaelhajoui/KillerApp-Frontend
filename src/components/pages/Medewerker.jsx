@@ -1,10 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { getUser } from '../../actions/getUser';
-import LoadJS from 'loadjs';
 
-import { secondsToTimeString } from "../../logic/Libary"
-import { capitalizeFirstLetter } from '../../logic/Libary';
 import { populatePagination } from '../../actions/populatePagination';
 import { resetPagination } from '../../actions/resetPagination';
 import { getPlanningenOnUser } from '../../actions/getPlanningenOnUser';

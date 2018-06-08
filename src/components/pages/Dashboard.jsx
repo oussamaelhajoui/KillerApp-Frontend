@@ -1,8 +1,17 @@
 import React, { Component } from 'react';
 import Chart from "chart.js";
 import { Link } from 'react-router-dom';
+import { getPlanningen } from '../../actions/getPlanningen';
+import { connect } from 'react-redux';
 
 class Dashboard extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.props.getPlanningen();
+    }
+
     componentDidMount() {
         var ctx = document.getElementById("myChart");
         var myChart = new Chart(ctx, {
@@ -23,6 +32,7 @@ class Dashboard extends Component {
             }
         });
         console.log(myChart);
+        console.log(this.props.planningen);
     }
 
 
@@ -150,7 +160,7 @@ class Dashboard extends Component {
                     <div className="col s12">
                         <div className="card">
                             <div className="card-header" data-background-color="orange">
-                                <h5 className="title">Aantal routes per dag</h5>
+                                <h5 className="title">Aantal routes per dag deze week</h5>
                             </div>
                             <div className="card-content table-responsive">
                                 <canvas id="myChart" height="250" className="col s12" ></canvas>
@@ -165,4 +175,11 @@ class Dashboard extends Component {
     }
 }
 
-export default Dashboard;
+const mapStateToProps = state => ({
+    planningen: state.planningen
+});
+
+const mapDispatchToProps = {
+    getPlanningen
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
