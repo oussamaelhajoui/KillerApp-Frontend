@@ -1,7 +1,7 @@
 import { GET_USERSONROUTE, CHANGE_LOADING_USERSONROUTE } from "../actions/types";
 
 const initialState = {
-    loadingUsers: [],
+    users: [],
     loadingUsers: false,
 };
 
@@ -11,13 +11,13 @@ export default (state = initialState, { type, payload }) => {
             return {
                 ...state,
                 users: [...payload.users],
-                loadingUsers: payload.loadingPlanning
+                loadingUsers: payload.loadingUsers
             };
         // break;
         case CHANGE_LOADING_USERSONROUTE:
             return {
                 ...state,
-                loadingUsers: payload.loadingPlanning,
+                loadingUsers: payload.loadingUsers,
             };
         // break;
         default:
