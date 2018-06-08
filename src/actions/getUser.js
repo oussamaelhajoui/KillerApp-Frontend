@@ -2,21 +2,23 @@ import { GET_USER } from "./types";
 import Restful from '../logic/Restful';
 
 export const getUser = (data) => dispatch => {
-    console.log("getting user", data);
-    Restful.Get(`user/select/${data.id}`, data.token)
-        .then(response => response.json())
-        .then(jsonResponse => {
-            console.log(jsonResponse);
-            dispatch({
-                type: GET_USER,
-                payload: {
-                    newUser: { ...jsonResponse }
-                }
+    return new Promise((resolve, reject) => {
+        Restful.Get(`user/select/${data.id}`, data.token)
+            .then(response => response.json())
+            .then(jsonResponse => {
+                console.log(jsonResponse);
+                dispatch({
+                    type: GET_USER,
+                    payload: {
+                        newUser: { ...jsonResponse }
+                    }
+                });
+                resolve(jsonResponse);
+            })
+            .catch(message => {
+                console.log(message);
+                reject(message);
             });
-        })
-        .catch(message => {
-            console.log(message);
-        });
-    // 
-
+        // 
+    });
 };
