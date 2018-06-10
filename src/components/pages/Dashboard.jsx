@@ -122,6 +122,7 @@ class Dashboard extends Component {
                         for (let i = 0; i < 100; i++) {
                             this.state.Chart.data.datasets[0].data.pop();
                         }
+                        this.state.Chart.update();
 
                         this.state.Chart.data.datasets[0].data.push(this.state.planningValues.Monday);
                         this.state.Chart.data.datasets[0].data.push(this.state.planningValues.Tuesday);
@@ -192,7 +193,7 @@ class Dashboard extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="row">
+                {/* <div className="row">
                     <div className="col s6">
                         <div className="card">
                             <div className="card-header" data-background-color="orange">
@@ -271,22 +272,22 @@ class Dashboard extends Component {
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className="row">
+                </div> */}
+                <div className="row" style={{ marginTop: 60 }}>
                     <div className="col s12">
                         <div className="card">
                             <div className="card-header" data-background-color="orange">
                                 <h5 className="title">Aantal routes per dag deze week</h5>
                             </div>
                             <div className="card-content table-responsive">
-                                <canvas id="myChart" height="250" className="col s12" ></canvas>
+                                <canvas id="myChart" height="550" className="col s12" ></canvas>
                             </div>
                         </div>
                     </div>
 
                 </div>
 
-            </div>
+            </div >
         )
     }
 }
