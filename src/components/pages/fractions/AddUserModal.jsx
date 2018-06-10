@@ -105,7 +105,7 @@ class AddUserModal extends Component {
       <div id="AddUserModal" className="modal">
         <form onSubmit={this.handleSubmit}>
           <div className="modal-content">
-            <h4>Create account</h4>
+            <h4>Voeg een nieuwe route toe</h4>
 
             <div className="row">
               <div className="col s12">

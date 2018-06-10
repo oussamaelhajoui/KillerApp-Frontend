@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 import $ from "jquery";
 import { connect } from "react-redux";
-import AddUserModal from "./fractions/AddUserModal";
+import AddRouteModal from "./fractions/AddRouteModal";
 import PaginationRow from "./fractions/PaginationRow";
 
 import { populateRouteTable } from '../../actions/populateRouteTable';
@@ -13,20 +13,27 @@ class RoutesPage extends Component {
     constructor(props) {
         super(props);
 
-        this.props.resetPagination();
+        this.props.resetPagination()
+            .then(resolve => {
+                this.fetchRoutes();
+            })
 
 
+
+    }
+
+    componentDidMount() {
+        $(".modal").modal();
+        $("select").material_select();
+    }
+
+    fetchRoutes = () => {
         let rdxActionDataUserTable = {
             pagcurrent: this.props.pagination.pagcurrent,
             tableamount: this.props.pagination.tableamount,
             token: this.props.user.token
         }
         this.props.populateRouteTable(rdxActionDataUserTable);
-    }
-
-    componentDidMount() {
-        $(".modal").modal();
-        $("select").material_select();
     }
 
     render() {
@@ -79,7 +86,7 @@ class RoutesPage extends Component {
                             </div>
 
                             <div className="fixed-action-btn">
-                                <a href="#AddUserModal" className="btn-floating btn-large waves-effect waves-light modal-trigger">
+                                <a href="#AddRouteModal" className="btn-floating btn-large waves-effect waves-light modal-trigger">
                                     <i className="material-icons">add</i>
                                 </a>
                             </div>
@@ -87,7 +94,7 @@ class RoutesPage extends Component {
                     </div>
                 </div>
 
-                <AddUserModal />
+                <AddRouteModal addedHandler={this.fetchRoutes} />
             </Fragment>
         );
     }
