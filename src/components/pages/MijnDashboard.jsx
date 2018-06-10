@@ -6,7 +6,7 @@ class MijnDashboard extends Component {
     render() {
         return (
             <Fragment>
-
+                hoi
             </Fragment>
         );
     }

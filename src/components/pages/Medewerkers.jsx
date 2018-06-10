@@ -54,7 +54,7 @@ class Users extends Component {
       <Fragment>
         <div className="users container-fluid">
           <div className="row">
-            <h1>Users overview</h1>
+            <h1 className="titlePopOut">Users overview</h1>
 
             <div className="col s12">
               <PaginationRow table="populateUserTable" />

@@ -46,3 +46,12 @@
 thead.text-warning{
     color: #27b097;
 }
+
+.titlePopOut{
+    background: linear-gradient(30deg, #50dacd,#3b71c1);
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 1px 10px 20px 1px #5b91e0;
+    color: white;
+    text-shadow: 1px 1px 5px #222;
+}

@@ -34,11 +34,7 @@ class Login extends Component {
 
   componentWillMount() {
     if (this.props.user.loggedIn) {
-      if (this.props.user.userRole === 1) {
-        this.props[0].history.push("/");
-      } else {
-        this.props[0].history.push("/ratevideos");
-      }
+      this.props[0].history.push("/");
     }
   }
 

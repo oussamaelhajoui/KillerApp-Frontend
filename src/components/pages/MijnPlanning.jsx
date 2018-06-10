@@ -7,7 +7,7 @@ class MijnPlanning extends Component {
     render() {
         return (
             <Fragment>
-
+                hoi2
             </Fragment>
         );
     }

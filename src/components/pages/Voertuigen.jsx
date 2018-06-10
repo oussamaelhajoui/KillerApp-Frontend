@@ -45,7 +45,7 @@ class Voertuigen extends Component {
             <Fragment>
                 <div className="users container-fluid">
                     <div className="row">
-                        <h1>Route overview</h1>
+                        <h1 className="titlePopOut">Voertuigen overview</h1>
 
                         <div className="col s12">
                             {/* <PaginationRow table="populateRouteTable" /> */}
@@ -53,10 +53,10 @@ class Voertuigen extends Component {
                                 <table className="striped">
                                     <thead>
                                         <tr>
-                                            <th>Routenummer</th>
-                                            <th>Tijd start</th>
-                                            <th>Tijd eind</th>
-                                            <th>Vaste voertuig</th>
+                                            <th>Voertuigcode</th>
+                                            <th>Kenteken</th>
+                                            <th>Kleur</th>
+                                            <th>Model</th>
                                             {/* <th>Bekijk route</th> */}
                                         </tr>
                                     </thead>

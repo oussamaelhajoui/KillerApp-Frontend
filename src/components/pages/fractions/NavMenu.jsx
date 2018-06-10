@@ -43,7 +43,7 @@ class NavMenu extends Component {
               </LiNavLink>
               : ""}
             {(this.props.userRdx.userRole === 2) ?
-              <LiNavLink activeClassName="active" exact={true} strict to="/mijndashboard">
+              <LiNavLink activeClassName="active" exact={true} strict to="/">
                 <i className="material-icons">dashboard</i>
                 <p>Mijn Dashboard</p>
               </LiNavLink>
@@ -73,7 +73,7 @@ class NavMenu extends Component {
               : ""}
 
             {(this.props.userRdx.userRole === 2) ?
-              <LiNavLink activeClassName="active" exact={false} strict to="/mijnplanning" >
+              <LiNavLink activeClassName="active" exact={false} strict to="/planning" >
                 <i className="material-icons">schedule</i>
                 <p>Mijn Planning</p>
               </LiNavLink>

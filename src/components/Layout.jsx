@@ -37,7 +37,7 @@ class Layout extends Component {
             )}
           {this.props.user.loggedIn ? this.layoutVal : ""}
 
-          <div className={this.props.location.pathname === "/login" ? "" : "main-panel"}>{this.props.children}</div>
+          <div className={this.props.location.pathname === "/login" ? "login-panel-background" : "main-panel"}>{this.props.children}</div>
         </div>
       </Fragment>
     );
