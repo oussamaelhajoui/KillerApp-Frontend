@@ -3,6 +3,7 @@ import { GET_PLANNINGENUSER, CHANGE_LOADING_PLANNINENGUSER } from "./types";
 import Restful from '../logic/Restful';
 export const getPlanningenOnUser = (data) => dispatch => {
     return new Promise((resolve, reject) => {
+        console.log(data);
         dispatch({
             type: CHANGE_LOADING_PLANNINENGUSER,
             payload: {

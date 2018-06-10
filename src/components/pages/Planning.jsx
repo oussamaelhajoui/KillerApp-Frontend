@@ -109,7 +109,7 @@ class Planning extends Component {
             })
 
             const data = {
-                medewerker: this.state.medewerkerFilter.id,
+                id: this.state.medewerkerFilter.id,
                 token: this.props.user.token
             }
             this.props.getPlanningenOnUser(data);
