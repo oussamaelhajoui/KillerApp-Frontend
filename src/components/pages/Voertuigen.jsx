@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import $ from "jquery";
 import { connect } from "react-redux";
 import AddUserModal from "./fractions/AddUserModal";
-import PaginationRow from "./fractions/PaginationRow";
+// import PaginationRow from "./fractions/PaginationRow";
 
 import { populateVoertuigTable } from '../../actions/populateVoertuigTable';
 import { populatePagination } from '../../actions/populatePagination';
@@ -37,7 +37,7 @@ class Voertuigen extends Component {
                 <td>{car.kleur}</td>
                 <td>{car.soort.soort}</td>
                 <td>
-                    <Link to={`/voertuigen/${car.id}`}> Go to profile </Link>
+                    {/* <Link to={`/voertuigen/${car.id}`}> Go to profile </Link> */}
                 </td>
             </tr>
         ));
@@ -48,7 +48,7 @@ class Voertuigen extends Component {
                         <h1>Route overview</h1>
 
                         <div className="col s12">
-                            <PaginationRow table="populateRouteTable" />
+                            {/* <PaginationRow table="populateRouteTable" /> */}
                             <div className="row table-container">
                                 <table className="striped">
                                     <thead>
@@ -57,7 +57,7 @@ class Voertuigen extends Component {
                                             <th>Tijd start</th>
                                             <th>Tijd eind</th>
                                             <th>Vaste voertuig</th>
-                                            <th>Bekijk route</th>
+                                            {/* <th>Bekijk route</th> */}
                                         </tr>
                                     </thead>
                                     <tbody>{cars}</tbody>
