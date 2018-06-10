@@ -1,7 +1,8 @@
-import { GET_USERSONROUTE, CHANGE_LOADING_USERSONROUTE } from "./types";
+import { GET_USERSONROUTE, CHANGE_LOADING_USERSONROUTE, GET_ROUTE } from "./types";
 import Restful from '../logic/Restful';
 
-export const getPlanningenOnUser = (data) => dispatch => {
+export const getUsersOnRoute = (data) => dispatch => {
+    console.log("data", data)
     return new Promise((resolve, reject) => {
         dispatch({
             type: CHANGE_LOADING_USERSONROUTE,
@@ -9,18 +10,24 @@ export const getPlanningenOnUser = (data) => dispatch => {
                 loadingUsers: true
             }
         });
-        Restful.Get(`user/onroute/${data.id}`, data.token)
+        Restful.Post(`user/onroutepage/${data.id}`, { page: 1, amount: 1000 }, data.token)
             .then(response => { return response.json(); })
             .then(jsonResponse => {
                 if (jsonResponse["success"]) {
                     dispatch({
                         type: GET_USERSONROUTE,
                         payload: {
-                            users: [...jsonResponse["users"]],
+                            data: [...jsonResponse["data"]],
                             loadingUsers: false
                         }
                     });
-                    resolve(jsonResponse["users"])
+                    dispatch({
+                        type: GET_ROUTE,
+                        payload: {
+                            selectedRoute: { ...data.selectedRoute },
+                        }
+                    });
+                    resolve(jsonResponse)
                 }
 
             })
