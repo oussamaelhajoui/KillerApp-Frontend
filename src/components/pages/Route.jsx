@@ -6,7 +6,6 @@ import { getRoutes } from '../../actions/getRoutes';
 import { populatePagination } from '../../actions/populatePagination';
 import { resetPagination } from '../../actions/resetPagination';
 
-import PaginationRow from "./fractions/PaginationRow";
 
 class RoutePage extends Component {
 
