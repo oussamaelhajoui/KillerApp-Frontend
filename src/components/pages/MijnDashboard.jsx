@@ -139,7 +139,7 @@ class MijnDashboard extends Component {
                     <td>{planning.route.routenummer}</td>
                     <td>{planning.voertuig.voertuigcode}</td>
                     <td>{`${planning.route.tijdstart} - ${planning.route.tijdeind}`}</td>
-                    <td>{planning.gezien ? "Gezien" : <button> Accepteer </button>}</td>
+                    {/* <td>{planning.gezien ? "Gezien" : <button> Accepteer </button>}</td> */}
                 </tr>)
         })
         return (
@@ -174,7 +174,7 @@ class MijnDashboard extends Component {
                         <div className="card">
                             <div className="card-header card-header-warning blackwhitecolor" data-background-color="blue" >
                                 <h4 className="card-title">Planning deze week</h4>
-                                <p className="card-category">Accepteer de planningen die nodig zijn</p>
+                                <p className="card-category">Dit zijn de routes die je moet reden voor de gehele week</p>
                             </div>
                             <div className="card-body table-responsive">
                                 <table className="table table-hover">
@@ -184,7 +184,7 @@ class MijnDashboard extends Component {
                                             <th>Route</th>
                                             <th>Voertuig</th>
                                             <th>tijd</th>
-                                            <th>gezien</th>
+                                            {/* <th>gezien</th> */}
                                         </tr>
                                     </thead>
                                     <tbody>
