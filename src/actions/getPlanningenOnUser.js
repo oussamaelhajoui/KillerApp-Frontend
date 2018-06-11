@@ -22,6 +22,7 @@ export const getPlanningenOnUser = (data) => dispatch => {
                         }
                     });
                     resolve(jsonResponse["schedule"])
+                    console.log(jsonResponse);
                 }
 
             })

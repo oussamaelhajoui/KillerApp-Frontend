@@ -55,3 +55,7 @@ thead.text-warning{
     color: white;
     text-shadow: 1px 1px 5px #222;
 }
+
+.blackwhitecolor{
+    text-shadow: 1px 1px 10px  #222 !important;
+}
