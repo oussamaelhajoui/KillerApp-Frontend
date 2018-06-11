@@ -26,18 +26,23 @@ class Dashboard extends Component {
         },
         Chart: null,
         userAmount: 0,
-        routeAmount: 0
+        routeAmount: 0,
+        rawValuesDashboard: []
     }
 
-    componentDidMount() {
+    componentWillMount() {
+        this.initData();
+    }
+
+    loadChart = () => {
         var ctx = document.getElementById("myChart");
-        var myChart = new Chart(ctx, {
+        new Chart(ctx, {
             type: 'line',
             data: {
                 labels: ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"],
                 datasets: [{
                     label: 'Routes per dag',
-                    data: [0, 0, 0, 0, 0, 0, 0],
+                    data: this.state.rawValuesDashboard,
                     backgroundColor: [
                         'rgba(54, 162, 235, 0.2)'
                     ],
@@ -48,10 +53,6 @@ class Dashboard extends Component {
                 }]
             }
         });
-
-        this.setState({ Chart: myChart }, () => {
-            this.initData();
-        })
     }
 
     getMonday(d) {
@@ -93,46 +94,40 @@ class Dashboard extends Component {
                         }
                     })
 
-                    this.setState({ planningCurrentWeek })
-                    let arr = {};
-                    var weekday = new Array(7);
-                    weekday[0] = "Sunday";
-                    weekday[1] = "Monday";
-                    weekday[2] = "Tuesday";
-                    weekday[3] = "Wednesday";
-                    weekday[4] = "Thursday";
-                    weekday[5] = "Friday";
-                    weekday[6] = "Saturday";
+                    this.setState({ planningCurrentWeek }, () => {
+                        console.log("x")
+                        let arr = {};
+                        var weekday = new Array(7);
+                        weekday[0] = "Sunday";
+                        weekday[1] = "Monday";
+                        weekday[2] = "Tuesday";
+                        weekday[3] = "Wednesday";
+                        weekday[4] = "Thursday";
+                        weekday[5] = "Friday";
+                        weekday[6] = "Saturday";
 
-                    planningCurrentWeek.forEach(element1 => {
-                        planningCurrentWeek.forEach(element2 => {
-                            if (element1.datum === element2.datum) {
-                                let tmpDate = new Date(element1.datum);
-                                let day = weekday[tmpDate.getDay()];
-                                if (day in arr) {
-                                    arr[day] = arr[day] + 1;
-                                } else {
-                                    arr[day] = 1;
+                        planningCurrentWeek.forEach(element1 => {
+                            planningCurrentWeek.forEach(element2 => {
+                                if (element1.datum === element2.datum) {
+                                    let tmpDate = new Date(element1.datum);
+                                    let day = weekday[tmpDate.getDay()];
+                                    if (day in arr) {
+                                        arr[day] = arr[day] + 1;
+                                    } else {
+                                        arr[day] = 1;
+                                    }
                                 }
-                            }
-                        })
-                    });
-                    this.setState({ planningValues: { ...this.state.planningValues, ...arr } }, () => {
+                            })
+                        });
+                        this.setState({ planningValues: { ...this.state.planningValues, ...arr } }, () => {
+                            let tmpArr = [this.state.planningValues.Monday, this.state.planningValues.Tuesday, this.state.planningValues.Wednesday, this.state.planningValues.Thursday, this.state.planningValues.Friday, this.state.planningValues.Saturday, this.state.planningValues.Sunday];
 
-                        for (let i = 0; i < 100; i++) {
-                            this.state.Chart.data.datasets[0].data.pop();
-                        }
-                        this.state.Chart.update();
+                            this.setState({ rawValuesDashboard: tmpArr }, () => {
+                                this.loadChart();
+                            });
+                        });
+                    })
 
-                        this.state.Chart.data.datasets[0].data.push(this.state.planningValues.Monday);
-                        this.state.Chart.data.datasets[0].data.push(this.state.planningValues.Tuesday);
-                        this.state.Chart.data.datasets[0].data.push(this.state.planningValues.Wednesday);
-                        this.state.Chart.data.datasets[0].data.push(this.state.planningValues.Thursday);
-                        this.state.Chart.data.datasets[0].data.push(this.state.planningValues.Friday);
-                        this.state.Chart.data.datasets[0].data.push(this.state.planningValues.Saturday);
-                        this.state.Chart.data.datasets[0].data.push(this.state.planningValues.Sunday);
-                        this.state.Chart.update();
-                    });
 
                 }
             });
