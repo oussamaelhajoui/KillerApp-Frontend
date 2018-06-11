@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 // import { Link } from "react-router-dom";
 import $ from "jquery";
 import { connect } from "react-redux";
-import AddUserModal from "./fractions/AddUserModal";
+import AddVoertuigModal from "./fractions/AddVoertuigModal";
 // import PaginationRow from "./fractions/PaginationRow";
 
 import { populateVoertuigTable } from '../../actions/populateVoertuigTable';
@@ -15,18 +15,22 @@ class Voertuigen extends Component {
 
         this.props.resetPagination();
 
+        this.getVoertuigen();
 
+    }
+
+    componentDidMount() {
+        $(".modal").modal();
+        $("select").material_select();
+    }
+
+    getVoertuigen = () => {
         let rdxActionDataUserTable = {
             pagcurrent: this.props.pagination.pagcurrent,
             tableamount: this.props.pagination.tableamount,
             token: this.props.user.token
         }
         this.props.populateVoertuigTable(rdxActionDataUserTable);
-    }
-
-    componentDidMount() {
-        $(".modal").modal();
-        $("select").material_select();
     }
 
     render() {
@@ -79,7 +83,7 @@ class Voertuigen extends Component {
                             </div>
 
                             <div className="fixed-action-btn">
-                                <a href="#AddUserModal" className="btn-floating btn-large waves-effect waves-light modal-trigger">
+                                <a href="#AddVoertuigModal" className="btn-floating btn-large waves-effect waves-light modal-trigger">
                                     <i className="material-icons">add</i>
                                 </a>
                             </div>
@@ -87,7 +91,7 @@ class Voertuigen extends Component {
                     </div>
                 </div>
 
-                <AddUserModal />
+                <AddVoertuigModal addedHandler={this.getVoertuigen} />
             </Fragment>
         );
     }
