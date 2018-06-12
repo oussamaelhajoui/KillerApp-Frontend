@@ -162,7 +162,7 @@ class MijnDashboard extends Component {
                                 <i className="material-icons">info_outline</i>
                             </div>
                             <div className="card-content">
-                                <p className="category">Nieuwe planningen</p>
+                                <p className="category">Aantal keer ingepland deze week</p>
                                 <h4 className="title">{this.state.planningCurrentWeek.length}</h4>
                             </div>
                         </div>
