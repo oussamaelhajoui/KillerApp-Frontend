@@ -163,7 +163,7 @@ class MijnDashboard extends Component {
                             </div>
                             <div className="card-content">
                                 <p className="category">Nieuwe planningen</p>
-                                <h4 className="title">5</h4>
+                                <h4 className="title">{this.state.planningCurrentWeek.length}</h4>
                             </div>
                         </div>
                     </div>
