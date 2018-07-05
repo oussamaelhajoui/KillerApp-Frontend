@@ -28,10 +28,22 @@ class MijnDashboard extends Component {
     loadChart = () => {
         var ctx = document.getElementById("myChart");
         new Chart(ctx, {
-            type: 'line',
+            type: 'bar',
             data: {
                 labels: ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"],
                 datasets: [{
+                    label: 'Routes per dag',
+                    data: this.state.rawValuesDashboard,
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1,
+                    type: 'line'
+                },
+                {
                     label: 'Routes per dag',
                     data: this.state.rawValuesDashboard,
                     backgroundColor: [
@@ -40,7 +52,8 @@ class MijnDashboard extends Component {
                     borderColor: [
                         'rgba(54, 162, 235, 1)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 1,
+                    type: 'bar'
                 }]
             }
         });
@@ -103,32 +116,23 @@ class MijnDashboard extends Component {
                         weekday[4] = "Thursday";
                         weekday[5] = "Friday";
                         weekday[6] = "Saturday";
-                        let temp = [...planningCurrentWeek];
-                        let checkArr = [];
-                        for (var i = 0; i < temp.length; i++) {
-
-                            let tmpDate = new Date(temp[i].datum);
-                            console.group("temp");
+                        planningCurrentWeek.forEach(element1 => {
+                            let tmpDate = new Date(element1.datum);
                             let day = weekday[tmpDate.getDay()];
-                            for (var x = 0; x < temp.length; x++) {
-                                console.log(i, temp);
-                                if (temp[i].checked) continue;
-                                if (temp[i].idplanning === temp[x].idplanning) {
-                                    continue;
-                                }
-                                if (day in arr || temp[i].datum === temp[x].datum) {
-                                    arr[day] = arr[day] + 1;
-                                    temp[x].checked = true;
-                                } else {
-                                    arr[day] = 1;
-                                    temp[i].checked = true;
-                                }
-                                // temp.splice(x, 1);
-                                console.log("true", checkArr)
+                            console.log(day);
+                            /*   if (day in arr) {
+                                arr[day] = arr[day] + 1;
+                              } else {
+                                arr[day] = 1;
+                              } */
 
+                            if ((day in arr) === false) {
+                                arr[day] = 1;
+                            } else {
+                                arr[day] = arr[day] + 1;
                             }
-                            console.groupEnd();
-                        }
+                        });
+
                         // planningCurrentWeek.forEach(element1 => {
                         //     console.log("element1", element1);
                         //     let tmpDate = new Date(element1.datum);
