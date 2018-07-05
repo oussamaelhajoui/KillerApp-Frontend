@@ -47,7 +47,7 @@ class MijnDashboard extends Component {
     }
 
     componentDidUpdate() {
-        console.log("ai", this.state.planningCurrentWeek);
+        // console.log("ai", this.state.planningCurrentWeek);
     }
 
     getMonday(d) {
@@ -74,6 +74,8 @@ class MijnDashboard extends Component {
         return count;
     }
 
+
+
     initData = () => {
         this.props.getPlanningenOnUser({ id: this.props.user.dbResponse.id, token: this.props.user.token })
             .then(planningen => {
@@ -89,9 +91,9 @@ class MijnDashboard extends Component {
                             return false;
                         }
                     })
+                    console.log("week", planningCurrentWeek);
 
                     this.setState({ planningCurrentWeek }, () => {
-                        console.log("x")
                         let arr = {};
                         var weekday = new Array(7);
                         weekday[0] = "Sunday";
@@ -101,23 +103,62 @@ class MijnDashboard extends Component {
                         weekday[4] = "Thursday";
                         weekday[5] = "Friday";
                         weekday[6] = "Saturday";
+                        let temp = [...planningCurrentWeek];
+                        let checkArr = [];
+                        for (var i = 0; i < temp.length; i++) {
 
-                        planningCurrentWeek.forEach(element1 => {
-                            planningCurrentWeek.forEach(element2 => {
-                                if (element1.datum === element2.datum) {
-                                    let tmpDate = new Date(element1.datum);
-                                    let day = weekday[tmpDate.getDay()];
-                                    if (day in arr) {
-                                        arr[day] = arr[day] + 1;
-                                    } else {
-                                        arr[day] = 1;
-                                    }
+                            let tmpDate = new Date(temp[i].datum);
+                            console.group("temp");
+                            let day = weekday[tmpDate.getDay()];
+                            for (var x = 0; x < temp.length; x++) {
+                                console.log(i, temp);
+                                if (temp[i].checked) continue;
+                                if (temp[i].idplanning === temp[x].idplanning) {
+                                    continue;
                                 }
-                            })
-                        });
+                                if (day in arr || temp[i].datum === temp[x].datum) {
+                                    arr[day] = arr[day] + 1;
+                                    temp[x].checked = true;
+                                } else {
+                                    arr[day] = 1;
+                                    temp[i].checked = true;
+                                }
+                                // temp.splice(x, 1);
+                                console.log("true", checkArr)
+
+                            }
+                            console.groupEnd();
+                        }
+                        // planningCurrentWeek.forEach(element1 => {
+                        //     console.log("element1", element1);
+                        //     let tmpDate = new Date(element1.datum);
+                        //     let day = weekday[tmpDate.getDay()];
+                        //     planningCurrentWeek.forEach(element2 => {
+                        //         console.log("element2", element2);
+                        //         if (element1.idplanning === element2.idplanning) {
+                        //             return;
+                        //         }
+                        //         if (element1.datum === element2.datum) {
+                        //             if (day in arr) {
+                        //                 arr[day] = arr[day] + 1;
+                        //             } else {
+                        //                 arr[day] = 1;
+                        //             }
+                        //             console.log("true")
+                        //         } else {
+                        //             console.log("false");
+                        //             if (day in arr) {
+                        //                 arr[day] = arr[day] + 1;
+                        //             } else {
+                        //                 arr[day] = 1;
+                        //             }
+
+                        //         }
+                        //     })
+                        // });
+                        console.groupEnd();
                         this.setState({ planningValues: { ...this.state.planningValues, ...arr } }, () => {
                             let tmpArr = [this.state.planningValues.Monday, this.state.planningValues.Tuesday, this.state.planningValues.Wednesday, this.state.planningValues.Thursday, this.state.planningValues.Friday, this.state.planningValues.Saturday, this.state.planningValues.Sunday];
-
                             this.setState({ rawValuesDashboard: tmpArr }, () => {
                                 this.loadChart();
                             });
