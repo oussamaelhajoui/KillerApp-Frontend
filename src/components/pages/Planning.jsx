@@ -253,7 +253,6 @@ class Planning extends Component {
                     <td>{`${planning.route.tijdstart} - ${planning.route.tijdeind}`}</td>
                     <td>
                         <a class="btn-floating waves-effect waves-light red" onClick={() => { this.deletePlanning(planning.idplanning) }}><i class="material-icons">delete</i></a>
-                        {/* <a className="btn red btn-small waves-effect waves-light" onClick={() => { this.deletePlanning(planning.idplanning) }}>verwijder</a> */}
                     </td>
                     {/* <td>{planning.gezien ? "Gezien" : <button> Accepteer </button>}</td> */}
                 </tr>)
