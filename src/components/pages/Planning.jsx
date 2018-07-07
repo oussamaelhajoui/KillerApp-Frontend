@@ -7,6 +7,7 @@ import moment from 'moment';
 import 'moment/locale/nl';
 
 import '../../assets/css/planning.css';
+import Restful from '../../logic/Restful';
 
 import { getUsers } from '../../actions/getUsers';
 import { getRoutes } from '../../actions/getRoutes';
@@ -15,6 +16,7 @@ import { insertPlanning } from '../../actions/insertPlanning';
 import { getPlanningen } from '../../actions/getPlanningen';
 import { resetInsert } from '../../actions/resetInsertPlanning';
 import { getPlanningenOnUser } from '../../actions/getPlanningenOnUser';
+
 
 // import { GetStringFromDate, GetTimeFromDate } from '../../logic/Libary';
 
@@ -30,7 +32,8 @@ class Planning extends Component {
         route: "",
         geselecteerdeDatum: "",
         error: false,
-        medewerkerFilter: ""
+        medewerkerFilter: "",
+        planningCurrentWeek: []
     }
 
 
@@ -47,8 +50,51 @@ class Planning extends Component {
         this.props.getRoutes({ token: this.props.user.token });
         this.props.getVoertuigen({ token: this.props.user.token });
         this.props.getPlanningen({ token: this.props.user.token });
+        this.initData();
+    }
+
+    getMonday(d) {
+        d = new Date(d);
+        var day = d.getDay(),
+            diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+        return new Date(d.setDate(diff));
+    }
+
+    getSunday(d) {
+        d = new Date(d);
+        var day = d.getDay(),
+            diff = d.getDate() - day + 7;
+        return new Date(d.setDate(diff));
+    }
+
+    countInArray(array, what) {
+        var count = 0;
+        for (var i = 0; i < array.length; i++) {
+            if (array[i] === what) {
+                count++;
+            }
+        }
+        return count;
+    }
 
 
+    initData = () => {
+        this.props.getPlanningen({ id: this.props.user.dbResponse.id, token: this.props.user.token })
+            .then(planningen => {
+                if (planningen.length > 0) {
+                    let planningCurrentWeek = planningen.filter(planning => {
+                        let tmpDate = new Date(planning.datum)
+                        let Maandag = this.getMonday(new Date());
+                        let Zondag = this.getSunday(new Date());
+                        if (tmpDate >= Maandag && tmpDate <= Zondag) {
+                            return true
+                        } else {
+                            return false;
+                        }
+                    })
+                    this.setState({ planningCurrentWeek });
+                }
+            });
     }
 
     componentDidMount() {
@@ -146,7 +192,6 @@ class Planning extends Component {
 
 
     componentDidUpdate() {
-        console.log(this.props.getPlanningenOnUser);
         $('select').material_select();
         $(this.refs.medewerkerselect).material_select(this.handleChangeSelect);
         $(this.refs.routeselect).material_select(this.handleChangeSelect);
@@ -170,6 +215,21 @@ class Planning extends Component {
 
     }
 
+    deletePlanning = (id) => {
+        Restful.Get("schedule/delete/" + id, this.props.user.token)
+            .then(res => res.json())
+            .then(response => {
+                this.initData()
+                Swal({
+                    title: "Done",
+                    type: "info",
+                    text: "we updated the schedule"
+
+                })
+            })
+
+    }
+
     render() {
         const users = this.props.users.users && this.props.users.users.map((user, index) => (
             <option onClick={this.handleChangeSelect} key={user.id} value={JSON.stringify(user)}>{user.username}</option>
@@ -181,6 +241,23 @@ class Planning extends Component {
         const voertuigen = this.props.voertuigen.voertuigen && this.props.voertuigen.voertuigen.map((voertuig, index) => (
             <option onClick={this.handleChangeSelect} key={voertuig.id} value={JSON.stringify(voertuig)}>{voertuig.voertuigcode}</option>
         ));
+
+        const Planningen = this.state.planningCurrentWeek.map(planning => {
+            return (
+                <tr key={planning.idplanning}>
+                    <td>{planning.idplanning}</td>
+                    <td>{new Date(planning.datum).toDateString()}</td>
+                    <td>{(planning.gebruiker.voornaam !== null) ? `${planning.gebruiker.voornaam} ${planning.gebruiker.achternaam}` : planning.gebruiker.username}</td>
+                    <td>{planning.route.routenummer}</td>
+                    <td>{planning.voertuig.voertuigcode}</td>
+                    <td>{`${planning.route.tijdstart} - ${planning.route.tijdeind}`}</td>
+                    <td>
+                        <a class="btn-floating waves-effect waves-light red" onClick={() => { this.deletePlanning(planning.idplanning) }}><i class="material-icons">delete</i></a>
+                        {/* <a className="btn red btn-small waves-effect waves-light" onClick={() => { this.deletePlanning(planning.idplanning) }}>verwijder</a> */}
+                    </td>
+                    {/* <td>{planning.gezien ? "Gezien" : <button> Accepteer </button>}</td> */}
+                </tr>)
+        })
         return (
             <Fragment>
                 <div className="row">
@@ -236,7 +313,39 @@ class Planning extends Component {
                         </div>
                     </div>
                     <div id="planningBekijken" className="col s12">
-                        {this.props.planningen && <Calendar planningen={this.props.planningen} openModalHandler={this.openModal.bind(this)} />}
+
+                        <div className="row" style={{ marginTop: 25 }}>
+                            <div className="col s12">
+                                <div className="card">
+                                    <div className="card-header card-header-warning blackwhitecolor" data-background-color="blue" >
+                                        <h4 className="card-title">Planning deze week</h4>
+                                        <p className="card-category">Dit zijn de routes die je moet reden voor de gehele week<br />Vandaag is het {new Date().toDateString()}</p>
+                                    </div>
+                                    <div className="card-body table-responsive">
+                                        <table className="table table-hover">
+                                            <thead className="text-warning">
+                                                <tr><th>ID</th>
+                                                    <th>Datum</th>
+                                                    <th>Medewerker</th>
+                                                    <th>Route</th>
+                                                    <th>Voertuig</th>
+                                                    <th>tijd</th>
+                                                    <th>Wijzig</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {Planningen}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col s12">
+                                {this.props.planningen && <Calendar planningen={this.props.planningen} openModalHandler={this.openModal.bind(this)} />}
+                            </div>
+                        </div>
                     </div>
                     <div id="planningBekijkenMedewerker" className="col s12">
                         <div className="row">
@@ -253,7 +362,7 @@ class Planning extends Component {
                         </div>
                     </div>
                 </div>
-            </Fragment>
+            </Fragment >
         );
     }
 }

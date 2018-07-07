@@ -35,25 +35,12 @@ class MijnDashboard extends Component {
                     label: 'Routes per dag',
                     data: this.state.rawValuesDashboard,
                     backgroundColor: [
-                        'rgba(54, 162, 235, 0)'
+                        'rgba(54, 162, 235, 0.45)'
                     ],
                     borderColor: [
                         'rgba(54, 162, 235, 1)'
                     ],
                     borderWidth: 1,
-                    type: 'line'
-                },
-                {
-                    label: 'Routes per dag',
-                    data: this.state.rawValuesDashboard,
-                    backgroundColor: [
-                        'rgba(54, 162, 235, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(54, 162, 235, 1)'
-                    ],
-                    borderWidth: 1,
-                    type: 'bar'
                 }]
             }
         });
