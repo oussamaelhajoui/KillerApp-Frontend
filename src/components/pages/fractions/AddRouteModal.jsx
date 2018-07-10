@@ -117,7 +117,7 @@ class AddRouteModal extends Component {
             <div id="AddRouteModal" className="modal">
                 <form onSubmit={this.handleSubmit}>
                     <div className="modal-content">
-                        <h4>Create account</h4>
+                        <h4>Voeg Route toe</h4>
 
                         <div className="row">
                             <div className="col s12">
