@@ -127,6 +127,7 @@ class Planning extends Component {
             ampmclickable: true, // make AM PM clickable
             aftershow: function () { } //Function for after opening timepicker
         });
+        $('.modal').modal();
     }
 
 
@@ -186,7 +187,7 @@ class Planning extends Component {
             })
         }
 
-
+        this.initData();
 
     }
 
@@ -227,10 +228,25 @@ class Planning extends Component {
 
                 })
             })
+    }
 
+    CopyPlanning = () => {
+        Restful.Post("schedule/copyscheduleweek/", { DatumVan: this.getMonday(new Date()), DatumTot: this.getSunday(new Date()) }, this.props.user.token)
+            .then(res => res.json())
+            .then(response => {
+                this.initData()
+                Swal({
+                    title: "Done",
+                    type: "info",
+                    text: "we updated the schedule"
+
+                })
+            })
     }
 
     render() {
+
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         const users = this.props.users.users && this.props.users.users.map((user, index) => (
             <option onClick={this.handleChangeSelect} key={user.id} value={JSON.stringify(user)}>{user.username}</option>
         ));
@@ -246,13 +262,13 @@ class Planning extends Component {
             return (
                 <tr key={planning.idplanning}>
                     <td>{planning.idplanning}</td>
-                    <td>{new Date(planning.datum).toDateString()}</td>
+                    <td>{new Date(planning.datum).toLocaleDateString('nl-NL', options)}</td>
                     <td>{(planning.gebruiker.voornaam !== null) ? `${planning.gebruiker.voornaam} ${planning.gebruiker.achternaam}` : planning.gebruiker.username}</td>
                     <td>{planning.route.routenummer}</td>
                     <td>{planning.voertuig.voertuigcode}</td>
                     <td>{`${planning.route.tijdstart} - ${planning.route.tijdeind}`}</td>
                     <td>
-                        <a class="btn-floating waves-effect waves-light red" onClick={() => { this.deletePlanning(planning.idplanning) }}><i class="material-icons">delete</i></a>
+                        <a className="btn-floating waves-effect waves-light red" onClick={() => { this.deletePlanning(planning.idplanning) }}><i className="material-icons">delete</i></a>
                     </td>
                     {/* <td>{planning.gezien ? "Gezien" : <button> Accepteer </button>}</td> */}
                 </tr>)
@@ -302,13 +318,18 @@ class Planning extends Component {
                                 : <p>voer alle gegevens in..</p>}
                             <a className={this.props.planning.loadingInsertPlanning ? "waves-effect waves-light btn disabled" : "waves-effect waves-light btn"} onClick={this.addPlanning}>
                                 {this.props.planning.loadingInsertPlanning && (
-                                    <div class="progress">
-                                        <div class="indeterminate"></div>
+                                    <div className="progress">
+                                        <div className="indeterminate"></div>
                                     </div>
                                 )}
                                 voeg planning toe</a>
-                            {this.props.planning.errorInsertMsg !== "" && <p>{this.props.planning.errorInsertMsg}</p>}
-                            {this.state.error && <p>Niet alle gegevens zijn ingevoerd</p>}
+                            <a className={this.props.planning.loadingInsertPlanning ? "waves-effect waves-light btn purple disabled right " : "waves-effect waves-light purple btn right  modal-trigger"} href="#modal1">
+                                {this.props.planning.loadingInsertPlanning && (
+                                    <div className="progress">
+                                        <div className="indeterminate"></div>
+                                    </div>
+                                )}
+                                Kopieer planning naar de volgende week</a>
                         </div>
                     </div>
                     <div id="planningBekijken" className="col s12">
@@ -318,7 +339,7 @@ class Planning extends Component {
                                 <div className="card">
                                     <div className="card-header card-header-warning blackwhitecolor" data-background-color="blue" >
                                         <h4 className="card-title">Planning deze week</h4>
-                                        <p className="card-category">Dit zijn de routes die je moet reden voor de gehele week<br />Vandaag is het {new Date().toDateString()}</p>
+                                        <p className="card-category">Dit zijn de routes die je moet reden voor de gehele week<br />Vandaag is het {new Date().toLocaleDateString('nl-NL', options)}</p>
                                     </div>
                                     <div className="card-body table-responsive">
                                         <table className="table table-hover">
@@ -361,6 +382,26 @@ class Planning extends Component {
                         </div>
                     </div>
                 </div>
+
+                <div id="modal1" className="modal bottom-sheet">
+                    <div className="modal-content">
+                        {/* {console.log()} */}
+                        <h4>U kopieert de planning van vorige week naar deze week</h4>
+                        <p>De kopie zal gaan over de datums tussen {this.getMonday(new Date()).toLocaleDateString('nl-NL', options)} en {this.getSunday(new Date()).toLocaleDateString('nl-NL', options)}</p>
+                        <p>De planning wordt 7 dagen opgeschoven naar {this.getMonday(new Date(new Date().setDate(new Date().getDate() + 7))).toLocaleDateString('nl-NL', options)} en {this.getSunday(new Date(new Date().setDate(new Date().getDate() + 7))).toLocaleDateString('nl-NL', options)}</p>
+                        <a className={this.props.planning.loadingInsertPlanning ? "waves-effect waves-light btn purple disabled  " : "waves-effect waves-light purple btn "} onClick={this.CopyPlanning}>
+                            {this.props.planning.loadingInsertPlanning && (
+                                <div className="progress">
+                                    <div className="indeterminate"></div>
+                                </div>
+                            )}
+                            kopieer</a>
+                    </div>
+                    <div className="modal-footer">
+                        <a href="#!" className="modal-action modal-close waves-effect waves-green btn-flat">sluit</a>
+                    </div>
+                </div>
+
             </Fragment >
         );
     }
