@@ -9,7 +9,7 @@
 .main-panel{
     overflow: initial !important;
     height: 100vh;
-    padding: 40px !important;
+    padding: 40px 10px 40px 10px!important;
 }
 
 .rbc-calendar {
@@ -58,4 +58,8 @@ thead.text-warning{
 
 .blackwhitecolor{
     text-shadow: 1px 1px 10px  #222 !important;
+}
+
+hide{
+    display: none;
 }
