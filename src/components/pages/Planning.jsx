@@ -267,6 +267,7 @@ class Planning extends Component {
                     <td>{planning.route.routenummer}</td>
                     <td>{planning.voertuig.voertuigcode}</td>
                     <td>{`${planning.route.tijdstart} - ${planning.route.tijdeind}`}</td>
+                    <td>{(planning.gezien) ? `${planning.echtestarttijd} - ${planning.echteeindtijd}` : `N.V.T.`}</td>
                     <td>
                         <a className="btn-floating waves-effect waves-light red" onClick={() => { this.deletePlanning(planning.idplanning) }}><i className="material-icons">delete</i></a>
                     </td>
@@ -350,6 +351,7 @@ class Planning extends Component {
                                                     <th>Route</th>
                                                     <th>Voertuig</th>
                                                     <th>tijd</th>
+                                                    <th>gewerkte tijd</th>
                                                     <th>Wijzig</th>
                                                 </tr>
                                             </thead>

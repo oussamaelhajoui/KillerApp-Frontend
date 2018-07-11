@@ -259,6 +259,7 @@ class MijnDashboard extends Component {
                     <td>{planning.route.routenummer}</td>
                     <td>{planning.voertuig.voertuigcode}</td>
                     <td>{`${planning.route.tijdstart} - ${planning.route.tijdeind}`}</td>
+                    <td>{(planning.gezien) ? `${planning.echtestarttijd} - ${planning.echteeindtijd}` : `N.V.T.`}</td>
                     <td>
                         <a className={(new Date(`${planning.datum.split("T")[0]} ${planning.route.tijdeind}`) > new Date()) ? "waves-effect waves-light btn purple disabled  " : "waves-effect waves-light purple btn "} onClick={() => { this.ChangedTimesInState(planning.idplanning, planning.route.tijdstart, planning.route.tijdeind) }}>
                             Check-out
@@ -308,6 +309,7 @@ class MijnDashboard extends Component {
                                             <th>Route</th>
                                             <th>Voertuig</th>
                                             <th>tijd</th>
+                                            <th>Gewerkt</th>
                                             <th>Acties</th>
                                             {/* <th>gezien</th> */}
                                         </tr>
