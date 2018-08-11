@@ -6,7 +6,7 @@ import { populatePagination } from '../../actions/populatePagination';
 import { resetPagination } from '../../actions/resetPagination';
 import { getPlanningenOnUser } from '../../actions/getPlanningenOnUser';
 
-import PaginationRow from "./fractions/PaginationRow";
+// import PaginationRow from "./fractions/PaginationRow";
 
 class User extends Component {
     constructor(props) {

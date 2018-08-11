@@ -15,6 +15,9 @@ import Voertuig from "./../components/pages/Voertuig";
 import Planning from "./../components/pages/Planning";
 import PlanningGebruiker from "./../components/pages/PlanningGebruiker";
 import MijnPlanning from "./../components/pages/MijnPlanning";
+import Hours from './../components/pages/Hours';
+import HoursEmployee from './../components/pages/HoursEmployee';
+import MyHours from './../components/pages/MyHours';
 
 import Page404 from "./../components/pages/Page-404";
 
@@ -35,6 +38,9 @@ class Routes extends Component {
           {(this.props.user.userRole === 2) ? <PrivateRoute exact path="/" component={MijnDashboard} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Medewerkers" component={Medewerkers} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Medewerkers/:idmedewerker" component={Medewerker} user={this.props.user} /> : ""}
+          {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Hours" component={Hours} user={this.props.user} /> : ""}
+          {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Hours/:idmedewerker" component={HoursEmployee} user={this.props.user} /> : ""}
+          {(this.props.user.userRole === 2) ? <PrivateRoute exact path="/MyHours" component={MyHours} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Routes" component={RoutesPage} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Routes/:idroute" component={RoutePage} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/voertuigen" component={Voertuigen} user={this.props.user} /> : ""}
