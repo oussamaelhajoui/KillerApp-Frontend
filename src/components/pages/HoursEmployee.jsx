@@ -4,6 +4,7 @@ import { getUser } from '../../actions/getUser';
 import { populatePagination } from '../../actions/populatePagination';
 import { resetPagination } from '../../actions/resetPagination';
 import { getPlanningenOnUser } from '../../actions/getPlanningenOnUser';
+import '../../assets/css/HoursEmployee.css';
 
 import $ from 'jquery';
 
@@ -73,8 +74,8 @@ class HoursEmployee extends Component {
             d.setMinutes(reservEnd.getMinutes() - reservStart.getMinutes());
             d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
 
-            // let hours = reservEnd.getTime() - reservStart.getTime();
-            return (<p>{planning.datum.split("T")[0]}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString()} </p>);
+            // let Uren = reservEnd.getTime() - reservStart.getTime();
+            return (<p>{planning.datum.split("T")[0]}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString()} uur </p>);
 
         }
 
@@ -83,54 +84,42 @@ class HoursEmployee extends Component {
             <Fragment>
                 <div className="container-fluid">
                     <div className="row">
-                        <h1> Hours Informatie about {this.props.userDetail.voornaam} </h1>
+                        <h1> Uren Informatie van {this.props.userDetail.voornaam} </h1>
                         <div className="col s8">
                             <div className="row">
                                 <h5 className="">Select date range</h5>
                                 <div className="input-field col s5">
                                     <div className="input-field">
                                         <input type="text" name="datumTill" id="datumTill" ref="datumpicker" className="datepicker" onChange={this.handleChangeSelect} />
-                                        <label htmlFor="datumTill">From</label>
+                                        <label htmlFor="datumTill">Van</label>
                                     </div>
                                 </div>
                                 <div className="col s1"></div>
                                 <div className="input-field col s5">
                                     <div className="input-field">
                                         <input type="text" name="datumFrom" id="datumFrom" ref="datumpicker" className="datepicker" onChange={this.handleChangeSelect} />
-                                        <label htmlFor="datumFrom">Till</label>
+                                        <label htmlFor="datumFrom">Tot</label>
                                     </div>
                                 </div>
-                                <div className="input-field col s1"> <a class="waves-effect waves-light btn">Generate</a> </div>
+                                <div className="input-field col s1"> <a class="waves-effect waves-light btn">Genereer</a> </div>
                             </div>
                         </div>
                         <div className="col l12 m12">
-                            <h3 className="">Hours</h3>
                             {/* <PaginationRow table="populateRatingTable" /> */}
-                            <div className="col s12">
+                            <div className="col s12 l6 bgwhite">
+                                <h5 className="">Uren</h5>
                                 <div className="row">
                                     {ListHours}
                                 </div>
-                                {/* <div className="row table-container">
-                                    <table className="striped responsive-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Id</th>
-                                                <th>datum</th>
-                                                <th>route</th>
-                                                <th>voertuig</th>
-                                                <th>start tijd</th>
-                                                <th>eind tijd</th>
-                                                <th>route tijd start</th>
-                                                <th>route tijd eind</th>
-                                                <th>gezien</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>{planningen}</tbody>
-                                    </table>
-                                </div> */}
                             </div>
-                            <div className="row">
-                                {/* <a className="waves-effect waves-light btn red">Zet op non-actief</a> */}
+                            <div className="col s12 l6 ">
+                                <h5>Exporteer sectie</h5>
+                                <div className="row">
+                                    <a class="waves-effect waves-light btn">PDF</a>
+                                </div>
+                                <div className="row">
+                                    <a class="waves-effect waves-light btn">Excel</a>
+                                </div>
                             </div>
                         </div>
                     </div>
