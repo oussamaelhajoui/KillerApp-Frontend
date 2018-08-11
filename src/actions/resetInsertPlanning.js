@@ -8,5 +8,4 @@ export const resetInsert = (data) => dispatch => {
         }
     });
     // 
-
 };

@@ -30,7 +30,7 @@ class Dashboard extends Component {
         rawValuesDashboard: []
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.initData();
     }
 

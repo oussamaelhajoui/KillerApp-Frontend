@@ -220,12 +220,16 @@ class MijnDashboard extends Component {
         console.log(this.refs.timeEndInput.value);
         console.groupEnd();
 
+        let modifiedTimeStart = this.refs.timeStartInput.value;
+        let modifiedTimeEnd = this.refs.timeEndInput.value;
+
+
 
         if (startTime !== this.refs.timeStartInput.value || endTime !== this.refs.timeEndInput.value) {
             if ($('#textarea1').val() !== "") {
                 $('#textarea1').trigger('autoresize');
                 $("#modal6543").modal('close');
-                this.FillScheduleInDb(this.state.clickedTimes.id, this.state.clickedTimes.startTime, this.state.clickedTimes.endTime, $('#textarea1').val())
+                this.FillScheduleInDb(this.state.clickedTimes.id, modifiedTimeStart, modifiedTimeEnd, $('#textarea1').val())
                 Swal({
                     title: "Done",
                     type: "info",

@@ -63,3 +63,9 @@ thead.text-warning{
 hide{
     display: none;
 }
+
+canvas{
+    width: 100% !important;
+    max-width: 1550px;
+    height: auto !important;
+}

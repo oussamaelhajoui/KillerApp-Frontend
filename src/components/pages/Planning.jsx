@@ -100,7 +100,7 @@ class Planning extends Component {
     componentDidMount() {
         $('ul.tabs').tabs();
 
-
+        $('.tooltipped').tooltip({ delay: 50 });
         $("select").material_select();
 
 
@@ -193,6 +193,7 @@ class Planning extends Component {
 
 
     componentDidUpdate() {
+        $('.tooltipped').tooltip({ delay: 50 });
         $('select').material_select();
         $(this.refs.medewerkerselect).material_select(this.handleChangeSelect);
         $(this.refs.routeselect).material_select(this.handleChangeSelect);
@@ -260,7 +261,14 @@ class Planning extends Component {
 
         const Planningen = this.state.planningCurrentWeek.map(planning => {
             return (
-                <tr key={planning.idplanning}>
+                <tr key={planning.idplanning}
+                    style={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ?
+                        (planning.echtestarttijd !== "00:00:00") ? { backgroundColor: "#FF4136" } : { backgroundColor: "#DDD" } :
+                        { backgroundColor: "#01FF70" }}
+                    class={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? (planning.echtestarttijd !== "00:00:00") ? "tooltipped" : "" : ""}
+                    data-position="bottom" data-delay="50"
+                    data-tooltip={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? planning.reden : ""}
+                >
                     <td>{planning.idplanning}</td>
                     <td>{new Date(planning.datum).toLocaleDateString('nl-NL', options)}</td>
                     <td>{(planning.gebruiker.voornaam !== null) ? `${planning.gebruiker.voornaam} ${planning.gebruiker.achternaam}` : planning.gebruiker.username}</td>
