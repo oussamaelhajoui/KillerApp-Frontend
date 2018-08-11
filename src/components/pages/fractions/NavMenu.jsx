@@ -89,6 +89,28 @@ class NavMenu extends Component {
                 <p>Auto's</p>
               </LiNavLink>
               : ""}
+            {(this.props.userRdx.userRole === 1) ?
+              <LiNavLink
+                activeClassName="active"
+                exact={true}
+                strict
+                to="/hours"
+              >
+                <i className="material-icons">av_timer</i>
+                <p>Hours</p>
+              </LiNavLink>
+              : ""}
+            {(this.props.userRdx.userRole === 2) ?
+              <LiNavLink
+                activeClassName="active"
+                exact={true}
+                strict
+                to="/myhours"
+              >
+                <i className="material-icons">av_timer</i>
+                <p>My hours</p>
+              </LiNavLink>
+              : ""}
           </ul>
 
           <ul className="nav nav-mutated">
