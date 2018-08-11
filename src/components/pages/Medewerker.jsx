@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from "react-redux";
 import { getUser } from '../../actions/getUser';
-
+import $ from 'jquery';
 import { populatePagination } from '../../actions/populatePagination';
 import { resetPagination } from '../../actions/resetPagination';
 import { getPlanningenOnUser } from '../../actions/getPlanningenOnUser';
@@ -20,11 +20,22 @@ class User extends Component {
         this.props.getPlanningenOnUser({ id: this.userid, token: this.props.loggedUser.token });
     }
 
+    componentDidUpdate() {
+        $('.tooltipped').tooltip({ delay: 50 });
+    }
+
 
     render() {
         const planningen = this.props.planningenUser.planningen.map(planning => {
             return (
-                <tr>
+                <tr key={planning.idplanning}
+                    style={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ?
+                        (planning.echtestarttijd !== "00:00:00") ? { backgroundColor: "#FF4136" } : { backgroundColor: "#DDD" } :
+                        { backgroundColor: "#01FF70" }}
+                    class={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? (planning.echtestarttijd !== "00:00:00") ? "tooltipped" : "" : ""}
+                    data-position="bottom" data-delay="50"
+                    data-tooltip={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? planning.reden : ""}
+                >
                     <td>{planning.idplanning}</td>
                     <td>{planning.datum.split("T")[0]}</td>
                     <td>{planning.route.routenummer}</td>
@@ -70,7 +81,7 @@ class User extends Component {
                         </div>
                         <div className="col l12 m12">
                             <h3 className="center">Planning</h3>
-                            <PaginationRow table="populateRatingTable" />
+                            {/* <PaginationRow table="populateRatingTable" /> */}
                             <div className="col s12">
                                 <div className="row table-container">
                                     <table className="striped responsive-table">
