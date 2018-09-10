@@ -75,11 +75,14 @@ class HoursEmployee extends Component {
             d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
 
             // let Uren = reservEnd.getTime() - reservStart.getTime();
-            return (<p>{planning.datum.split("T")[0]}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString()} uur </p>);
+            return (<p>{new Date(planning.datum).toLocaleDateString()}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString()} uur </p>);
+        });
+        const TotalHours = () => {
 
+            return ("hoi")
         }
 
-        )
+
         return (
             <Fragment>
                 <div className="container-fluid">

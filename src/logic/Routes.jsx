@@ -21,6 +21,8 @@ import MyHours from './../components/pages/MyHours';
 
 import Page404 from "./../components/pages/Page-404";
 
+import Profile from "./../components/pages/Profile"
+
 import { PrivateRoute } from "./Libary";
 
 import { connect } from "react-redux";
@@ -37,6 +39,7 @@ class Routes extends Component {
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/" component={Dashboard} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 2) ? <PrivateRoute exact path="/" component={MijnDashboard} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Medewerkers" component={Medewerkers} user={this.props.user} /> : ""}
+          {(this.props.user.userRole === 2) ? <PrivateRoute exact path="/profiel" component={Profile} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Medewerkers/:idmedewerker" component={Medewerker} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Hours" component={Hours} user={this.props.user} /> : ""}
           {(this.props.user.userRole === 1) ? <PrivateRoute exact path="/Hours/:idmedewerker" component={HoursEmployee} user={this.props.user} /> : ""}

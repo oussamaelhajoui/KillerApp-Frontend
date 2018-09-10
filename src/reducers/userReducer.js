@@ -1,4 +1,4 @@
-import { LOG_IN, LOG_OUT, CHECK_LOGIN, GET_USER, ERROR_LOGIN, CHANGE_LOADING } from "../actions/types";
+import { LOG_IN, LOG_OUT, CHECK_LOGIN, GET_USER, ERROR_LOGIN, CHANGE_LOADING, CHANGE_PASSWORD } from "../actions/types";
 
 const initialState = {
   loggedIn: false, // set to false
@@ -36,7 +36,9 @@ const initialState = {
     managefeeds: "Manage feeds",
     deleterating: "Delete rating"
 
-  }
+  },
+  success_change: false,
+  change_finished: false
 
 };
 
@@ -96,6 +98,13 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loading: action.payload.loading
+      }
+    // break;
+    case CHANGE_PASSWORD:
+      return {
+        ...state,
+        success_change: action.payload.success_change,
+        change_finished: action.payload.change_finished
       }
     // break;
     default:

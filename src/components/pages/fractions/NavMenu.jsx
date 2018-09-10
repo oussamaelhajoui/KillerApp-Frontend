@@ -111,6 +111,17 @@ class NavMenu extends Component {
                 <p>My hours</p>
               </LiNavLink>
               : ""}
+            {(this.props.userRdx.userRole === 2) ?
+              <LiNavLink
+                activeClassName="active"
+                exact={true}
+                strict
+                to="/profiel"
+              >
+                <i className="material-icons">people</i>
+                <p>My profile</p>
+              </LiNavLink>
+              : ""}
           </ul>
 
           <ul className="nav nav-mutated">
