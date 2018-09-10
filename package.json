@@ -29,6 +29,7 @@
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
     "jquery": "^3.3.1",
+    "jspdf": "^1.4.1",
     "loadjs": "^3.5.2",
     "materialize-css": "^0.100.2",
     "moment": "^2.22.1",
