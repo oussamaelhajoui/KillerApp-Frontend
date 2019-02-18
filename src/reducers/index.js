@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 import userReducer from "./userReducer";
 import usersReducer from "./usersReducer";
 import paginationReducer from "./paginationReducer";
-import routesReducer from "./routesReducer";
+import routesReducer from "./RoutesReducerr";
 import voertuigenReducer from "./voertuigenReducer";
 import planningReducer from "./planningReducer";
 import planningenReducer from "./planningenReducer";
