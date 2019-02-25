@@ -73,10 +73,12 @@ class myCalendar extends Component {
                 let datum = planning.datum.split("T")[0];
                 let tijdStart = planning.route.tijdstart;
                 let tijdEind = planning.route.tijdeind;
-                const dateStart = new Date(`${datum} ${tijdStart}`);
-                const dateEind = new Date(`${datum} ${tijdEind}`);
-                console.log("startdate",datum.replace(new RegExp("-","g"),"/"));
-
+                const dateStart = new Date(`${datum.replace(new RegExp("-","g"),"/")} ${tijdStart}`);
+                const dateEind = new Date(`${datum.replace(new RegExp("-","g"),"/")} ${tijdEind}`);
+                console.group("data");
+                console.log("startdate",dateStart);
+                console.log("end",dateEind);
+                console.groupEnd();
                 return (
                     {
                         id: planning.idplanning,
