@@ -75,6 +75,7 @@ class myCalendar extends Component {
                 let tijdEind = planning.route.tijdeind;
                 const dateStart = new Date(`${datum} ${tijdStart}`);
                 const dateEind = new Date(`${datum} ${tijdEind}`);
+                console.log("startdate",datum.replace(new RegExp("-","g"),"/"));
 
                 return (
                     {
