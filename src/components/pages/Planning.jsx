@@ -33,7 +33,9 @@ class Planning extends Component {
         geselecteerdeDatum: "",
         error: false,
         medewerkerFilter: "",
-        planningCurrentWeek: []
+        planningCurrentWeek: [],
+        planningToday: [],
+        showFull: false
     }
 
 
@@ -93,6 +95,15 @@ class Planning extends Component {
                         }
                     })
                     this.setState({ planningCurrentWeek });
+                
+                    let planningToday = planningen.filter(planning => {
+                        let tmpDate = new Date(planning.datum).getDate();
+                        if(tmpDate == new Date().getDate()){
+                            return true;
+                        } else{ return false;}
+                    })
+
+                    this.setState({planningToday})
                 }
             });
     }
@@ -258,8 +269,9 @@ class Planning extends Component {
         const voertuigen = this.props.voertuigen.voertuigen && this.props.voertuigen.voertuigen.map((voertuig, index) => (
             <option onClick={this.handleChangeSelect} key={voertuig.id} value={JSON.stringify(voertuig)}>{voertuig.voertuigcode}</option>
         ));
-
-        const Planningen = this.state.planningCurrentWeek.map(planning => {
+        let Planningen;
+       if(this.state.showFull){
+         Planningen = this.state.planningCurrentWeek.map(planning => {
             return (
                 <tr key={planning.idplanning}
                     style={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ?
@@ -282,6 +294,31 @@ class Planning extends Component {
                     {/* <td>{planning.gezien ? "Gezien" : <button> Accepteer </button>}</td> */}
                 </tr>)
         })
+       }else{
+         Planningen = this.state.planningToday.map(planning => {
+            return (
+                <tr key={planning.idplanning}
+                    style={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ?
+                        (planning.echtestarttijd !== "00:00:00") ? { backgroundColor: "#FF4136" } : { backgroundColor: "#DDD" } :
+                        { backgroundColor: "#01FF70" }}
+                    class={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? (planning.echtestarttijd !== "00:00:00") ? "tooltipped" : "" : ""}
+                    data-position="bottom" data-delay="50"
+                    data-tooltip={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? planning.reden : ""}
+                >
+                    <td>{planning.idplanning}</td>
+                    <td>{new Date(planning.datum).toLocaleDateString('nl-NL', options)}</td>
+                    <td>{(planning.gebruiker.voornaam !== null) ? `${planning.gebruiker.voornaam} ${planning.gebruiker.achternaam}` : planning.gebruiker.username}</td>
+                    <td>{planning.route.routenummer}</td>
+                    <td>{planning.voertuig.voertuigcode}</td>
+                    <td>{`${planning.route.tijdstart} - ${planning.route.tijdeind}`}</td>
+                    <td>{(planning.gezien) ? `${planning.echtestarttijd} - ${planning.echteeindtijd}` : `N.V.T.`}</td>
+                    <td>
+                        <a className="btn-floating waves-effect waves-light red" onClick={() => { this.deletePlanning(planning.idplanning) }}><i className="material-icons">delete</i></a>
+                    </td>
+                    {/* <td>{planning.gezien ? "Gezien" : <button> Accepteer </button>}</td> */}
+                </tr>)
+        })
+       }
         return (
             <Fragment>
                 <div className="row">
@@ -349,6 +386,13 @@ class Planning extends Component {
                                     <div className="card-header card-header-warning blackwhitecolor" data-background-color="blue" >
                                         <h4 className="card-title">Planning deze week</h4>
                                         <p className="card-category">Dit zijn de routes die je moet reden voor de gehele week<br />Vandaag is het {new Date().toLocaleDateString('nl-NL', options)}</p>
+                                        {this.state.showFull ? <div>
+                                            <p style={{display:"block", color:"green", fontWeight: "700", textShadow:"0 0 0 #000"}}>Volledige week</p>
+                                            <p style={{display:"block", color:"gray", textShadow:"0 0 0 #000", cursor: "pointer"}} onClick={()=>{this.setState({showFull:!this.state.showFull})}}>Alleen vandaag</p>
+                                            </div>: <div>
+                                            <p style={{display:"block", color:"gray", textShadow:"0 0 0 #000", cursor: "pointer"}} onClick={()=>{this.setState({showFull:!this.state.showFull})}}>Volledige week</p>
+                                            <p style={{display:"block", color:"green", textShadow:"0 0 0 #000", fontWeight: "700"}}>Alleen vandaag</p>
+                                            </div>}
                                     </div>
                                     <div className="card-body table-responsive">
                                         <table className="table table-hover">
