@@ -86,11 +86,13 @@ class Planning extends Component {
                 if (planningen.length > 0) {
                     let planningCurrentWeek = planningen.filter(planning => {
                         let tmpDate = new Date(planning.datum)
-                        let Maandag = this.getMonday(new Date());
-                        let Zondag = this.getSunday(new Date());
+                        let Maandag = this.getMonday(new Date()).setHours(0,0,0,0);
+                        console.log("ma",Maandag);
+                        let Zondag = this.getSunday(new Date()).setHours(23,59,59,59);
                         if (tmpDate >= Maandag && tmpDate <= Zondag) {
                             return true
                         } else {
+                            console.log("tmpF",tmpDate)
                             return false;
                         }
                     })
