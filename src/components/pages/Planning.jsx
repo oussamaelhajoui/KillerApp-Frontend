@@ -35,7 +35,13 @@ class Planning extends Component {
         medewerkerFilter: "",
         planningCurrentWeek: [],
         planningToday: [],
-        showFull: false
+        showFull: false,
+        
+        clickedTimes: {
+            id: -1,
+            startTime: "00:00:00",
+            endTime: "00:00:00"
+        }
     }
 
 
@@ -258,6 +264,90 @@ class Planning extends Component {
             })
     }
 
+    ChangedTimesInState = (id, startTime, endTime) => {
+        let clickedTimes = {
+            id,
+            startTime,
+            endTime
+        }
+        this.setState({ clickedTimes }, () => {
+            $('#textarea1').val('');
+            $('#textarea1').trigger('autoresize');
+            if (!$('#reasonArea').hasClass("hide"))
+                $('#reasonArea').addClass("hide");
+            $('#modal6543').modal('open');
+
+        });
+    }
+
+    FillScheduleInDb(id, startTime, endTime, reason) {
+        let data = {
+            idPlanning: id,
+            gezien: 1,
+            echtestarttijd: startTime,
+            echteeindtijd: endTime,
+            reden: reason
+        }
+        Restful.Post("schedule/fill/", data, this.props.user.token)
+            .then(res => res.json())
+            .then(response => {
+                console.log(response);
+                this.initData()
+                Swal({
+                    title: "Done",
+                    type: "info",
+                    text: "we updated your times"
+
+                })
+            })
+    }
+
+    confirmCheckout = () => {
+        let startTime = this.state.clickedTimes.startTime.substring(0, 5);
+        let endTime = this.state.clickedTimes.endTime.substring(0, 5);
+        console.group("states");
+        console.log(startTime);
+        console.log(endTime);
+        console.groupEnd();
+
+
+        console.group("inputs");
+        console.log(this.refs.timeStartInput.value);
+        console.log(this.refs.timeEndInput.value);
+        console.groupEnd();
+
+        let modifiedTimeStart = this.refs.timeStartInput.value;
+        let modifiedTimeEnd = this.refs.timeEndInput.value;
+
+
+
+        if (startTime !== this.refs.timeStartInput.value || endTime !== this.refs.timeEndInput.value) {
+            if ($('#textarea1').val() !== "") {
+                $('#textarea1').trigger('autoresize');
+                $("#modal6543").modal('close');
+                this.FillScheduleInDb(this.state.clickedTimes.id, modifiedTimeStart, modifiedTimeEnd, $('#textarea1').val())
+                Swal({
+                    title: "Done",
+                    type: "info",
+                    text: "Jouw tijden zijn opgeslagen, je hebt met success uitgeklokt"
+                })
+            } else {
+                $('#textarea1').trigger('autoresize');
+                let reasonArea = document.querySelector("#reasonArea");
+                reasonArea.classList.remove("hide");
+            }
+        } else {
+            $('#textarea1').trigger('autoresize');
+            $("#modal6543").modal('close');
+            Swal({
+                title: "Done",
+                type: "info",
+                text: "Jouw tijden zijn opgeslagen, je hebt met success uitgeklokt"
+            })
+            this.FillScheduleInDb(this.state.clickedTimes.id, this.state.clickedTimes.startTime, this.state.clickedTimes.endTime, '')
+        }
+    }
+
     render() {
 
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -291,7 +381,11 @@ class Planning extends Component {
                     <td>{`${planning.route.tijdstart} - ${planning.route.tijdeind}`}</td>
                     <td>{(planning.gezien) ? `${planning.echtestarttijd} - ${planning.echteeindtijd}` : `N.V.T.`}</td>
                     <td>
-                        <a className="btn-floating waves-effect waves-light red" onClick={() => { this.deletePlanning(planning.idplanning) }}><i className="material-icons">delete</i></a>
+                            <a className={ "waves-effect waves-light purple btn "} style={{marginRight: "35px"}} onClick={() => { this.ChangedTimesInState(planning.idplanning, planning.route.tijdstart, planning.route.tijdeind) }}>
+                            Check-out
+                            </a>
+                            
+                            <a className="btn-floating waves-effect waves-light red" onClick={() => { this.deletePlanning(planning.idplanning) }}><i className="material-icons">delete</i></a>
                     </td>
                     {/* <td>{planning.gezien ? "Gezien" : <button> Accepteer </button>}</td> */}
                 </tr>)
@@ -458,6 +552,36 @@ class Planning extends Component {
                     </div>
                 </div>
 
+                <div id="modal6543" className="modal bottom-sheet" style={{ textAlign: "center" }}>
+                    <div className="modal-content">
+                        <h4>Check out ~ Gewerkte tijd</h4>
+                        <p>Check out your worked hours, please check if the times you worked resemble the time of your schedule. If the times do not resemble change them occordenly</p>
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-s6" style={{ textAlign: "left" }}>
+                                    <label htmlFor="timestartinput">Start time</label>
+                                    <input ref="timeStartInput" type="text" className="timepicker" id="timestartinput" value={this.state.clickedTimes.startTime.substring(0, 5)} />
+                                </div>
+                                <div className="col-s6" style={{ textAlign: "left" }}>
+                                    <label htmlFor="timeendinput">End time</label>
+                                    <input ref="timeEndInput" type="text" className="timepicker" id="timeendinput" value={this.state.clickedTimes.endTime.substring(0, 5)} />
+                                </div>
+                            </div>
+                            <div className="row hide" id="reasonArea">
+                                <div className="input-field col s12">
+                                    <textarea id="textarea1" className="materialize-textarea"></textarea>
+                                    <label htmlFor="textarea1">Reason for not having to complemented times</label>
+                                </div>
+                            </div>
+                        </div>
+                        <a className="waves-effect waves-light purple btn " onClick={this.confirmCheckout}>
+                            Check Out
+                        </a>
+                    </div>
+                    <div className="modal-footer">
+                        <a href="#!" className="modal-action modal-close waves-effect waves-green btn-flat">sluit</a>
+                    </div>
+                </div>
             </Fragment >
         );
     }

@@ -118,8 +118,21 @@ class HoursEmployee extends Component {
             d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
 
             // let Uren = reservEnd.getTime() - reservStart.getTime();
-            return (<p>{new Date(planning.datum).toLocaleDateString()}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString()} uur </p>);
+            return (<p>{new Date(planning.datum).toLocaleDateString()}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString().split(" AM")[0]} uur </p>);
         });
+
+        const timeConvert = (sec) => {
+            var hrs = Math.floor(sec / 3600);
+            var min = Math.floor((sec - (hrs * 3600)) / 60);
+            var seconds = sec - (hrs * 3600) - (min * 60);
+            seconds = Math.round(seconds * 100) / 100
+
+            var result = (hrs < 10 ? "0" + hrs : hrs);
+            result += ":" + (min < 10 ? "0" + min : min);
+            result += ":" + (seconds < 10 ? "0" + seconds : seconds);
+            return result;
+        }
+
         const TotalHours = this.props.planningenUser.planningen.reduce((accumulator, planning) => {
             let startDate = planning.echtestarttijd.split(":");
             let endDate = planning.echteeindtijd.split(":");
@@ -136,8 +149,8 @@ class HoursEmployee extends Component {
             var a = hours.split(':'); // split it at the colons
 
             // minutes are worth 60 seconds. Hours are worth 60 minutes.
-            var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
-
+            var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(" ")[0]);
+            console.log("uuren",timeConvert(seconds))
             return accumulator + seconds;
         }, 0);
 
@@ -152,17 +165,8 @@ class HoursEmployee extends Component {
                 .join(":")
         }
 
-        const timeConvert = (sec) => {
-            var hrs = Math.floor(sec / 3600);
-            var min = Math.floor((sec - (hrs * 3600)) / 60);
-            var seconds = sec - (hrs * 3600) - (min * 60);
-            seconds = Math.round(seconds * 100) / 100
-
-            var result = (hrs < 10 ? "0" + hrs : hrs);
-            result += ":" + (min < 10 ? "0" + min : min);
-            result += ":" + (seconds < 10 ? "0" + seconds : seconds);
-            return result;
-        }
+     
+        console.log(TotalHours);
 
         return (
             <Fragment>
