@@ -125,8 +125,8 @@ class MijnDashboard extends Component {
                 if (planningen.length > 0) {
                     let planningCurrentWeek = planningen.filter(planning => {
                         let tmpDate = new Date(planning.datum)
-                        let Maandag = this.getMonday(new Date()).setHours(0,0,0,0);
-                        let Zondag = this.getSunday(new Date()).setHours(23,59,59,59);
+                        let Maandag = this.getMonday(new Date()).setHours(0, 0, 0, 0);
+                        let Zondag = this.getSunday(new Date()).setHours(23, 59, 59, 59);
                         if (tmpDate >= Maandag && tmpDate <= Zondag) {
                             return true
                         } else {
@@ -255,8 +255,9 @@ class MijnDashboard extends Component {
     render() {
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         const Planningen = this.state.planningCurrentWeek.map(planning => {
-        console.log();
-        return (
+            const dateEind = new Date(`${planning.datum.replace(new RegExp("-", "g"), "/")} ${planning.route.tijdEind}`);
+            console.log();
+            return (
                 <tr key={planning.idplanning}>
                     <td>{planning.idplanning}</td>
                     <td>{new Date(planning.datum.split("T")[0]).toLocaleDateString('nl-NL', options)}</td>
@@ -265,7 +266,7 @@ class MijnDashboard extends Component {
                     <td>{`${planning.route.tijdstart} - ${planning.route.tijdeind}`}</td>
                     <td>{(planning.gezien) ? `${planning.echtestarttijd} - ${planning.echteeindtijd}` : `N.V.T.`}</td>
                     <td>
-                        <a className={(new Date(`${planning.datum.split("T")[0]} ${planning.route.tijdeind}`) > new Date() || new Date(`${planning.datum.split("T")[0]} 23:59:59`) < new Date()) ? "waves-effect waves-light btn purple disabled  " : "waves-effect waves-light purple btn "} onClick={() => { this.ChangedTimesInState(planning.idplanning, planning.route.tijdstart, planning.route.tijdeind) }}>
+                        <a className={(dateEind > new Date() || new Date(`${planning.datum.split("T")[0]} 23:59:59`) < new Date()) ? "waves-effect waves-light btn purple disabled  " : "waves-effect waves-light purple btn "} onClick={() => { this.ChangedTimesInState(planning.idplanning, planning.route.tijdstart, planning.route.tijdeind) }}>
                             Check-out
                         </a>
                     </td>
