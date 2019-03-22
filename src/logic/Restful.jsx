@@ -9,7 +9,7 @@ class Restful extends Component {
     this.Post = this.Post.bind(this);
     this.Get = this.Get.bind(this);
   }
-  static url = "http://31.186.175.10:80/api/";
+  static url = "http://136.144.203.14:8092/api/";
   // static url = "http://eow-portal.azurewebsites.net/api/";
 
 
