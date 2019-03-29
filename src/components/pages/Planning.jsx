@@ -93,12 +93,12 @@ class Planning extends Component {
                     let planningCurrentWeek = planningen.filter(planning => {
                         let tmpDate = new Date(planning.datum)
                         let Maandag = this.getMonday(new Date()).setHours(0, 0, 0, 0);
-                        console.log("ma", Maandag);
+                        // console.log("ma", Maandag);
                         let Zondag = this.getSunday(new Date()).setHours(23, 59, 59, 59);
                         if (tmpDate >= Maandag && tmpDate <= Zondag) {
                             return true
                         } else {
-                            console.log("tmpF", tmpDate)
+                            // console.log("tmpF", tmpDate)
                             return false;
                         }
                     })
@@ -155,7 +155,7 @@ class Planning extends Component {
     }
 
     ChangeTimeValue(props) {
-        console.log(props);
+        // console.log(props);
     }
 
     handleChangeSelect = () => {
@@ -291,7 +291,7 @@ class Planning extends Component {
         Restful.Post("schedule/fill/", data, this.props.user.token)
             .then(res => res.json())
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 this.initData()
                 Swal({
                     title: "Done",
@@ -305,16 +305,16 @@ class Planning extends Component {
     confirmCheckout = () => {
         let startTime = this.state.clickedTimes.startTime.substring(0, 5);
         let endTime = this.state.clickedTimes.endTime.substring(0, 5);
-        console.group("states");
-        console.log(startTime);
-        console.log(endTime);
-        console.groupEnd();
+        // console.group("states");
+        // console.log(startTime);
+        // console.log(endTime);
+        // console.groupEnd();
 
 
-        console.group("inputs");
-        console.log(this.refs.timeStartInput.value);
-        console.log(this.refs.timeEndInput.value);
-        console.groupEnd();
+        // console.group("inputs");
+        // console.log(this.refs.timeStartInput.value);
+        // console.log(this.refs.timeEndInput.value);
+        // console.groupEnd();
 
         let modifiedTimeStart = this.refs.timeStartInput.value;
         let modifiedTimeEnd = this.refs.timeEndInput.value;
@@ -363,7 +363,7 @@ class Planning extends Component {
         ));
 
         let lettemp = this.props.users.users && this.props.users.users.sort((u1, u2) => {
-            console.log(u1, u2);
+            // console.log(u1, u2);
             if (u1.id > u2.id) {
                 return 1;
             }
@@ -373,7 +373,7 @@ class Planning extends Component {
             // a must be equal to b
             return 0;
         });
-        console.log(lettemp)
+        // console.log(lettemp)
 
         let Planningen;
         if (this.state.showFull) {
