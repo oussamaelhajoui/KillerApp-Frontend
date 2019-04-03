@@ -9,7 +9,7 @@ import {
 const initialState = {
   pagcurrent: 1,
   pagli: [0],
-  tableamount: 10,
+  tableamount: 50,
   pagcount: 0
 };
 

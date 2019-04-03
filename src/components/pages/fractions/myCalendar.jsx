@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/nl';
+import $ from "jquery";
 
 import Swal from 'sweetalert2';
 
@@ -28,7 +29,16 @@ class myCalendar extends Component {
         planningen: {
             loadingPlanningen: false,
             planningen: []
-        }
+        },
+        date: new Date()
+    }
+
+    componentDidMount() {
+        $("select").material_select();
+    }
+
+    componentDidUpdate() {
+        $("select").material_select();
     }
 
     selecteventhandler = (props) => {
@@ -39,11 +49,26 @@ class myCalendar extends Component {
                     Route: ${data.route.routenummer}<br/>
                     Datum: ${data.datum.split("T")[0]}<br/>
                     Tijd: ${data.route.tijdstart} - ${data.route.tijdeind} <br/>
-                    Voertuig: ${data.voertuig.voertuigcode} - ${data.voertuig.soort.soort}`,
+                    Voertuig: ${data.voertuig.voertuigcode} - ${data.voertuig.soort.soort}
+                    <div className="input-field col s12">
+                        <select onChange={this.handleChangeSelect} id="swal-input1" ref="routeselect">
+                            <option value="" disabled selected>Kies de route</option>
+                            <option key={1} value={"xx"}>xxx</option>
+                        </select>
+                        <label>Selecteer Route</label>
+                    </div>
+                `,
+            preConfirm: () => {
+                return [
+                    document.getElementById('swal-input1').value
+                ]
+            },
             type: 'info',
             focusConfirm: false,
 
-        })
+        }).then((...x) => console.log("xx", x))
+        $("select").material_select();
+
 
     }
 
@@ -73,8 +98,8 @@ class myCalendar extends Component {
                 let datum = planning.datum.split("T")[0];
                 let tijdStart = planning.route.tijdstart;
                 let tijdEind = planning.route.tijdeind;
-                const dateStart = new Date(`${datum.replace(new RegExp("-","g"),"/")} ${tijdStart}`);
-                const dateEind = new Date(`${datum.replace(new RegExp("-","g"),"/")} ${tijdEind}`);
+                const dateStart = new Date(`${datum.replace(new RegExp("-", "g"), "/")} ${tijdStart}`);
+                const dateEind = new Date(`${datum.replace(new RegExp("-", "g"), "/")} ${tijdEind}`);
                 // console.group("data");
                 // console.log("startdate",dateStart);
                 // console.log("end",dateEind);
@@ -103,20 +128,20 @@ class myCalendar extends Component {
                     events={events}
                     startAccessor="startDate"
                     endAccessor="endDate"
-                    defaultDate={new Date()}
-                    defaultView={'agenda'}
-                    views={['day', 'agenda', 'week']}
+                    defaultDate={new Date(new Date().setHours(0))}
+                    defaultView={'week'}
+                    views={['day', 'agenda', 'week', 'month']}
                     popupOffset={{ x: 30, y: 20 }}
                     selectable={false}
                     toolbar={true}
-                    drilldownView="agenda"
+                    drilldownView={null}
                     onSelecting={this.selecthandler}
                     onSelectEvent={this.selecteventhandler}
                     onSelectSlot={this.selecthandler2}
                     popup={true}
                     culture="nl-NL"
                     step={15}
-                    timeslots={1}
+                    timeslots={2}
                     min={min}
                     max={max}
                 />

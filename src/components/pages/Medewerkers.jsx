@@ -11,6 +11,7 @@ import { populateUserTable } from '../../actions/populateUserTable';
 import { populatePagination } from '../../actions/populatePagination';
 import { resetPagination } from '../../actions/resetPagination';
 
+
 class Users extends Component {
 
   constructor(props) {
@@ -48,7 +49,30 @@ class Users extends Component {
           <Link to={`/medewerkers/${user.id}`}> Details</Link>
         </td>
       </tr>
-    ));
+    ))
+      .sort((u1, u2) => {
+        console.log(u1, u2);
+        if (u1.id < u2.id) {
+          return -1;
+        }
+        if (u1.id > u2.id) {
+          return 1;
+        }
+        // a must be equal to b
+        return 0;
+      })
+    let temp = this.props.users.users.sort((u1, u2) => {
+      console.log(u1, u2);
+      if (u1.id < u2.id) {
+        return -1;
+      }
+      if (u1.id > u2.id) {
+        return 1;
+      }
+      // a must be equal to b
+      return 0;
+    })
+    console.log(temp);
 
     return (
       <Fragment>

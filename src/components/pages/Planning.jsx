@@ -36,7 +36,7 @@ class Planning extends Component {
         planningCurrentWeek: [],
         planningToday: [],
         showFull: false,
-        
+
         clickedTimes: {
             id: -1,
             startTime: "00:00:00",
@@ -92,26 +92,26 @@ class Planning extends Component {
                 if (planningen.length > 0) {
                     let planningCurrentWeek = planningen.filter(planning => {
                         let tmpDate = new Date(planning.datum)
-                        let Maandag = this.getMonday(new Date()).setHours(0,0,0,0);
-                        console.log("ma",Maandag);
-                        let Zondag = this.getSunday(new Date()).setHours(23,59,59,59);
+                        let Maandag = this.getMonday(new Date()).setHours(0, 0, 0, 0);
+                        // console.log("ma", Maandag);
+                        let Zondag = this.getSunday(new Date()).setHours(23, 59, 59, 59);
                         if (tmpDate >= Maandag && tmpDate <= Zondag) {
                             return true
                         } else {
-                            console.log("tmpF",tmpDate)
+                            // console.log("tmpF", tmpDate)
                             return false;
                         }
                     })
                     this.setState({ planningCurrentWeek });
-                
+
                     let planningToday = planningen.filter(planning => {
                         let tmpDate = new Date(planning.datum).getDate();
-                        if(tmpDate == new Date().getDate()){
+                        if (tmpDate == new Date().getDate()) {
                             return true;
-                        } else{ return false;}
+                        } else { return false; }
                     })
 
-                    this.setState({planningToday})
+                    this.setState({ planningToday })
                 }
             });
     }
@@ -155,7 +155,7 @@ class Planning extends Component {
     }
 
     ChangeTimeValue(props) {
-        console.log(props);
+        // console.log(props);
     }
 
     handleChangeSelect = () => {
@@ -291,7 +291,7 @@ class Planning extends Component {
         Restful.Post("schedule/fill/", data, this.props.user.token)
             .then(res => res.json())
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 this.initData()
                 Swal({
                     title: "Done",
@@ -305,16 +305,16 @@ class Planning extends Component {
     confirmCheckout = () => {
         let startTime = this.state.clickedTimes.startTime.substring(0, 5);
         let endTime = this.state.clickedTimes.endTime.substring(0, 5);
-        console.group("states");
-        console.log(startTime);
-        console.log(endTime);
-        console.groupEnd();
+        // console.group("states");
+        // console.log(startTime);
+        // console.log(endTime);
+        // console.groupEnd();
 
 
-        console.group("inputs");
-        console.log(this.refs.timeStartInput.value);
-        console.log(this.refs.timeEndInput.value);
-        console.groupEnd();
+        // console.group("inputs");
+        // console.log(this.refs.timeStartInput.value);
+        // console.log(this.refs.timeEndInput.value);
+        // console.groupEnd();
 
         let modifiedTimeStart = this.refs.timeStartInput.value;
         let modifiedTimeEnd = this.refs.timeEndInput.value;
@@ -353,7 +353,7 @@ class Planning extends Component {
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         const users = this.props.users.users && this.props.users.users.map((user, index) => (
             <option onClick={this.handleChangeSelect} key={user.id} value={JSON.stringify(user)}>{user.username}</option>
-        ));
+        ))
         const routes = this.props.routes.routes && this.props.routes.routes.map((route, index) => (
             <option onClick={this.handleChangeSelect} key={route.id} value={JSON.stringify(route)}>{route.routenummer}</option>
         ));
@@ -361,60 +361,74 @@ class Planning extends Component {
         const voertuigen = this.props.voertuigen.voertuigen && this.props.voertuigen.voertuigen.map((voertuig, index) => (
             <option onClick={this.handleChangeSelect} key={voertuig.id} value={JSON.stringify(voertuig)}>{voertuig.voertuigcode}</option>
         ));
+
+        let lettemp = this.props.users.users && this.props.users.users.sort((u1, u2) => {
+            // console.log(u1, u2);
+            if (u1.id > u2.id) {
+                return 1;
+            }
+            if (u1.id < u2.id) {
+                return -1;
+            }
+            // a must be equal to b
+            return 0;
+        });
+        // console.log(lettemp)
+
         let Planningen;
-       if(this.state.showFull){
-         Planningen = this.state.planningCurrentWeek.map(planning => {
-            return (
-                <tr key={planning.idplanning}
-                    style={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ?
-                        (planning.echtestarttijd !== "00:00:00") ? { backgroundColor: "#FF4136" } : { backgroundColor: "#DDD" } :
-                        { backgroundColor: "#01FF70" }}
-                    class={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? (planning.echtestarttijd !== "00:00:00") ? "tooltipped" : "" : ""}
-                    data-position="bottom" data-delay="50"
-                    data-tooltip={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? planning.reden : ""}
-                >
-                    <td>{planning.idplanning}</td>
-                    <td>{new Date(planning.datum).toLocaleDateString('nl-NL', options)}</td>
-                    <td>{(planning.gebruiker.voornaam !== null) ? `${planning.gebruiker.voornaam} ${planning.gebruiker.achternaam}` : planning.gebruiker.username}</td>
-                    <td>{planning.route.routenummer}</td>
-                    <td>{planning.voertuig.voertuigcode}</td>
-                    <td>{`${planning.route.tijdstart} - ${planning.route.tijdeind}`}</td>
-                    <td>{(planning.gezien) ? `${planning.echtestarttijd} - ${planning.echteeindtijd}` : `N.V.T.`}</td>
-                    <td>
-                            <a className={ "waves-effect waves-light purple btn "} style={{marginRight: "35px"}} onClick={() => { this.ChangedTimesInState(planning.idplanning, planning.route.tijdstart, planning.route.tijdeind) }}>
-                            Check-out
+        if (this.state.showFull) {
+            Planningen = this.state.planningCurrentWeek.map(planning => {
+                return (
+                    <tr key={planning.idplanning}
+                        style={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ?
+                            (planning.echtestarttijd !== "00:00:00") ? { backgroundColor: "#FF4136" } : { backgroundColor: "#DDD" } :
+                            { backgroundColor: "#01FF70" }}
+                        class={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? (planning.echtestarttijd !== "00:00:00") ? "tooltipped" : "" : ""}
+                        data-position="bottom" data-delay="50"
+                        data-tooltip={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? planning.reden : ""}
+                    >
+                        <td>{planning.idplanning}</td>
+                        <td>{new Date(planning.datum).toLocaleDateString('nl-NL', options)}</td>
+                        <td>{(planning.gebruiker.voornaam !== null) ? `${planning.gebruiker.voornaam} ${planning.gebruiker.achternaam}` : planning.gebruiker.username}</td>
+                        <td>{planning.route.routenummer}</td>
+                        <td>{planning.voertuig.voertuigcode}</td>
+                        <td>{`${planning.route.tijdstart} - ${planning.route.tijdeind}`}</td>
+                        <td>{(planning.gezien) ? `${planning.echtestarttijd} - ${planning.echteeindtijd}` : `N.V.T.`}</td>
+                        <td>
+                            <a className={"waves-effect waves-light purple btn "} style={{ marginRight: "35px" }} onClick={() => { this.ChangedTimesInState(planning.idplanning, planning.route.tijdstart, planning.route.tijdeind) }}>
+                                Check-out
                             </a>
-                            
+
                             <a className="btn-floating waves-effect waves-light red" onClick={() => { this.deletePlanning(planning.idplanning) }}><i className="material-icons">delete</i></a>
-                    </td>
-                    {/* <td>{planning.gezien ? "Gezien" : <button> Accepteer </button>}</td> */}
-                </tr>)
-        })
-       }else{
-         Planningen = this.state.planningToday.map(planning => {
-            return (
-                <tr key={planning.idplanning}
-                    style={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ?
-                        (planning.echtestarttijd !== "00:00:00") ? { backgroundColor: "#FF4136" } : { backgroundColor: "#DDD" } :
-                        { backgroundColor: "#01FF70" }}
-                    class={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? (planning.echtestarttijd !== "00:00:00") ? "tooltipped" : "" : ""}
-                    data-position="bottom" data-delay="50"
-                    data-tooltip={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? planning.reden : ""}
-                >
-                    <td>{planning.idplanning}</td>
-                    <td>{new Date(planning.datum).toLocaleDateString('nl-NL', options)}</td>
-                    <td>{(planning.gebruiker.voornaam !== null) ? `${planning.gebruiker.voornaam} ${planning.gebruiker.achternaam}` : planning.gebruiker.username}</td>
-                    <td>{planning.route.routenummer}</td>
-                    <td>{planning.voertuig.voertuigcode}</td>
-                    <td>{`${planning.route.tijdstart} - ${planning.route.tijdeind}`}</td>
-                    <td>{(planning.gezien) ? `${planning.echtestarttijd} - ${planning.echteeindtijd}` : `N.V.T.`}</td>
-                    <td>
-                        <a className="btn-floating waves-effect waves-light red" onClick={() => { this.deletePlanning(planning.idplanning) }}><i className="material-icons">delete</i></a>
-                    </td>
-                    {/* <td>{planning.gezien ? "Gezien" : <button> Accepteer </button>}</td> */}
-                </tr>)
-        })
-       }
+                        </td>
+                        {/* <td>{planning.gezien ? "Gezien" : <button> Accepteer </button>}</td> */}
+                    </tr>)
+            })
+        } else {
+            Planningen = this.state.planningToday.map(planning => {
+                return (
+                    <tr key={planning.idplanning}
+                        style={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ?
+                            (planning.echtestarttijd !== "00:00:00") ? { backgroundColor: "#FF4136" } : { backgroundColor: "#DDD" } :
+                            { backgroundColor: "#01FF70" }}
+                        class={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? (planning.echtestarttijd !== "00:00:00") ? "tooltipped" : "" : ""}
+                        data-position="bottom" data-delay="50"
+                        data-tooltip={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? planning.reden : ""}
+                    >
+                        <td>{planning.idplanning}</td>
+                        <td>{new Date(planning.datum).toLocaleDateString('nl-NL', options)}</td>
+                        <td>{(planning.gebruiker.voornaam !== null) ? `${planning.gebruiker.voornaam} ${planning.gebruiker.achternaam}` : planning.gebruiker.username}</td>
+                        <td>{planning.route.routenummer}</td>
+                        <td>{planning.voertuig.voertuigcode}</td>
+                        <td>{`${planning.route.tijdstart} - ${planning.route.tijdeind}`}</td>
+                        <td>{(planning.gezien) ? `${planning.echtestarttijd} - ${planning.echteeindtijd}` : `N.V.T.`}</td>
+                        <td>
+                            <a className="btn-floating waves-effect waves-light red" onClick={() => { this.deletePlanning(planning.idplanning) }}><i className="material-icons">delete</i></a>
+                        </td>
+                        {/* <td>{planning.gezien ? "Gezien" : <button> Accepteer </button>}</td> */}
+                    </tr>)
+            })
+        }
         return (
             <Fragment>
                 <div className="row">
@@ -483,11 +497,11 @@ class Planning extends Component {
                                         <h4 className="card-title">Planning deze week</h4>
                                         <p className="card-category">Dit zijn de routes die je moet reden voor de gehele week<br />Vandaag is het {new Date().toLocaleDateString('nl-NL', options)}</p>
                                         {this.state.showFull ? <div>
-                                            <p style={{display:"block", color:"green", fontWeight: "700", textShadow:"0 0 0 #000"}}>Volledige week</p>
-                                            <p style={{display:"block", color:"gray", textShadow:"0 0 0 #000", cursor: "pointer"}} onClick={()=>{this.setState({showFull:!this.state.showFull})}}>Alleen vandaag</p>
-                                            </div>: <div>
-                                            <p style={{display:"block", color:"gray", textShadow:"0 0 0 #000", cursor: "pointer"}} onClick={()=>{this.setState({showFull:!this.state.showFull})}}>Volledige week</p>
-                                            <p style={{display:"block", color:"green", textShadow:"0 0 0 #000", fontWeight: "700"}}>Alleen vandaag</p>
+                                            <p style={{ display: "block", color: "green", fontWeight: "700", textShadow: "0 0 0 #000" }}>Volledige week</p>
+                                            <p style={{ display: "block", color: "gray", textShadow: "0 0 0 #000", cursor: "pointer" }} onClick={() => { this.setState({ showFull: !this.state.showFull }) }}>Alleen vandaag</p>
+                                        </div> : <div>
+                                                <p style={{ display: "block", color: "gray", textShadow: "0 0 0 #000", cursor: "pointer" }} onClick={() => { this.setState({ showFull: !this.state.showFull }) }}>Volledige week</p>
+                                                <p style={{ display: "block", color: "green", textShadow: "0 0 0 #000", fontWeight: "700" }}>Alleen vandaag</p>
                                             </div>}
                                     </div>
                                     <div className="card-body table-responsive">
