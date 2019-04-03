@@ -59,6 +59,14 @@ class Routes extends Component {
               />
             )}
           />
+          <Route
+            path="/index.html"
+            render={(...n) => (
+              <Login
+                {...n}
+              />
+            )}
+          />
           <Route component={Page404} />
         </Switch>
       </Layout>
