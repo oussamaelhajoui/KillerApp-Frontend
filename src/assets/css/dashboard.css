@@ -1,0 +1,14 @@
+.bottom-sheet{
+    max-height: 60% !important;
+}
+.picker__frame{
+    z-index: 1010 !important;
+    opacity: .9999999 !important;
+}
+
+/* Disable animations to fix the datepicker not showing up sometimes in iOS8+ */
+.picker__holder,
+.picker__frame,
+.picker--opened .picker__holder {
+    transition: none !important;
+}

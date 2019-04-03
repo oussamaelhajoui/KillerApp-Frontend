@@ -19,13 +19,14 @@
 .row{
     margin: 10px 5px 10px 5px;
 }
-.modal .bottom-sheet{
-    max-height: 60% !important;
+/* Disable animations to fix the datepicker not showing up sometimes in iOS8+ */
+.picker__holder,
+.picker__frame,
+.picker--opened .picker__holder {
+    transition: none !important;
 }
-.picker__frame{
-    z-index: 99999999 !important;
-    opacity: .9999999 !important;
-}
+
+select.form-control { transition: none; }
 
 .centerText{
     text-align: center;
