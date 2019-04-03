@@ -349,7 +349,7 @@ class MijnDashboard extends Component {
                     </div>
                 </div>
 
-                <div id="modal6543" className="modal bottom-sheet" style={{ textAlign: "center", maxHeight: "60%" }}>
+                <div id="modal6543" className="modal bottom-sheet" style={{ textAlign: "center", maxHeight: "60%", overflow: "visible" }}>
                     <div className="modal-content">
                         <h4>Check out ~ Gewerkte tijd</h4>
                         <p>Check out your worked hours, please check if the times you worked resemble the time of your schedule. If the times do not resemble change them occordenly</p>
