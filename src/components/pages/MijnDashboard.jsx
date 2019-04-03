@@ -255,8 +255,16 @@ class MijnDashboard extends Component {
     render() {
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         const Planningen = this.state.planningCurrentWeek.map(planning => {
-            const dateEind = new Date(`${planning.datum.replace(new RegExp("-", "g"), "/")} ${planning.route.tijdEind}`);
-            console.log();
+            const dx=planning.datum.replace(new RegExp("-", "g"), "/")
+       
+
+            //const dateEind = new Date(`${planning.datum.replace(new RegExp("-", "g"), "/")} ${planning.route.tijdeind}`);
+            const dateEind = new Date(`${dx.split("T")[0]} ${planning.route.tijdeind}`)
+            console.group("datum")
+            console.log("ss",dateEind > new Date())
+            console.log("xx",dateEind);
+            console.log("xx2",new Date())
+            console.groupEnd();
             return (
                 <tr key={planning.idplanning}>
                     <td>{planning.idplanning}</td>
@@ -266,7 +274,7 @@ class MijnDashboard extends Component {
                     <td>{`${planning.route.tijdstart} - ${planning.route.tijdeind}`}</td>
                     <td>{(planning.gezien) ? `${planning.echtestarttijd} - ${planning.echteeindtijd}` : `N.V.T.`}</td>
                     <td>
-                        <a className={(dateEind > new Date() || new Date(`${planning.datum.split("T")[0]} 23:59:59`) < new Date()) ? "waves-effect waves-light btn purple disabled  " : "waves-effect waves-light purple btn "} onClick={() => { this.ChangedTimesInState(planning.idplanning, planning.route.tijdstart, planning.route.tijdeind) }}>
+                        <a className={(dateEind > new Date() || new Date(dateEind).setHours(23,23) < new Date()) ? "waves-effect waves-light btn purple disabled  " : "waves-effect waves-light purple btn "} onClick={() => { this.ChangedTimesInState(planning.idplanning, planning.route.tijdstart, planning.route.tijdeind) }}>
                             Check-out
                         </a>
                     </td>
