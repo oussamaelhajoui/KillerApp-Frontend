@@ -19,6 +19,13 @@
 .row{
     margin: 10px 5px 10px 5px;
 }
+.modal .bottom-sheet{
+    max-height: 60% !important;
+}
+.picker__frame{
+    z-index: 99999999 !important;
+    opacity: .9999999 !important;
+}
 
 .centerText{
     text-align: center;
