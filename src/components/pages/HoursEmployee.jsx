@@ -116,9 +116,9 @@ class HoursEmployee extends Component {
             d.setHours(reservEnd.getHours() - reservStart.getHours());
             d.setMinutes(reservEnd.getMinutes() - reservStart.getMinutes());
             d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
-
+            console.log("planning111", planning)
             // let Uren = reservEnd.getTime() - reservStart.getTime();
-            return (<p>{new Date(planning.datum).toLocaleDateString()}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString().split(" AM")[0]} uur </p>);
+            return (<p>{new Date(planning.datum).toLocaleDateString('nl-NL',{weekday:'long', year: 'numeric', month: 'long', day: 'numeric'})}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{planning.route.routenummer}&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString().split(" AM")[0]} uur </p>);
         });
 
         const timeConvert = (sec) => {
