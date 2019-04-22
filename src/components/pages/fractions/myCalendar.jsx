@@ -138,6 +138,13 @@ class myCalendar extends Component {
                     onSelecting={this.selecthandler}
                     onSelectEvent={this.selecteventhandler}
                     onSelectSlot={this.selecthandler2}
+                    onView={(view) => {
+                        console.log("xxxx", view)
+                    }}
+                    onNavigate={(...v) => {
+                        this.props.getDate(...v);
+
+                    }}
                     popup={true}
                     culture="nl-NL"
                     step={15}

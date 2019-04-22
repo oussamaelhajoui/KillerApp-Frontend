@@ -41,7 +41,9 @@ class Planning extends Component {
             id: -1,
             startTime: "00:00:00",
             endTime: "00:00:00"
-        }
+        },
+
+        chosenDate: new Date()
     }
 
 
@@ -86,15 +88,15 @@ class Planning extends Component {
     }
 
 
-    initData = () => {
+    initData = (chosenDate = new Date()) => {
         this.props.getPlanningen({ id: this.props.user.dbResponse.id, token: this.props.user.token })
             .then(planningen => {
                 if (planningen.length > 0) {
                     let planningCurrentWeek = planningen.filter(planning => {
                         let tmpDate = new Date(planning.datum)
-                        let Maandag = this.getMonday(new Date()).setHours(0, 0, 0, 0);
+                        let Maandag = this.getMonday(chosenDate).setHours(0, 0, 0, 0);
                         // console.log("ma", Maandag);
-                        let Zondag = this.getSunday(new Date()).setHours(23, 59, 59, 59);
+                        let Zondag = this.getSunday(chosenDate).setHours(23, 59, 59, 59);
                         if (tmpDate >= Maandag && tmpDate <= Zondag) {
                             return true
                         } else {
@@ -254,7 +256,7 @@ class Planning extends Component {
         Restful.Post("schedule/copyscheduleweek/", { DatumVan: this.getMonday(new Date()), DatumTot: this.getSunday(new Date()) }, this.props.user.token)
             .then(res => res.json())
             .then(response => {
-                this.initData()
+                this.initData(this.state.chosenDate)
                 Swal({
                     title: "Done",
                     type: "info",
@@ -292,7 +294,7 @@ class Planning extends Component {
             .then(res => res.json())
             .then(response => {
                 // console.log(response);
-                this.initData()
+                this.initData(this.state.chosenDate)
                 Swal({
                     title: "Done",
                     type: "info",
@@ -346,6 +348,14 @@ class Planning extends Component {
             })
             this.FillScheduleInDb(this.state.clickedTimes.id, this.state.clickedTimes.startTime, this.state.clickedTimes.endTime, '')
         }
+    }
+
+    getDate = (date, view, action) => {
+        console.log(date);
+        console.log(view);
+        console.log(action);
+        this.setState({ chosenDate: new Date(date) })
+        this.initData(new Date(date));
     }
 
     render() {
@@ -503,6 +513,15 @@ class Planning extends Component {
                                                 <p style={{ display: "block", color: "gray", textShadow: "0 0 0 #000", cursor: "pointer" }} onClick={() => { this.setState({ showFull: !this.state.showFull }) }}>Volledige week</p>
                                                 <p style={{ display: "block", color: "green", textShadow: "0 0 0 #000", fontWeight: "700" }}>Alleen vandaag</p>
                                             </div>}
+
+                                        {/* <div style={{ position: "absolute", top: "20px", right: "200px" }}>
+                                            <p>Datum begin</p>
+                                            <input position={{ position: "relative" }} type="date" />
+                                        </div>
+                                        <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+                                            <p>Datum eind</p>
+                                            <input position={{ position: "relative" }} type="date" />
+                                        </div> */}
                                     </div>
                                     <div className="card-body table-responsive">
                                         <table className="table table-hover">
@@ -527,7 +546,7 @@ class Planning extends Component {
                         </div>
                         <div className="row">
                             <div className="col s12">
-                                {this.props.planningen && <Calendar planningen={this.props.planningen} openModalHandler={this.openModal.bind(this)} />}
+                                {this.props.planningen && <Calendar planningen={this.props.planningen} openModalHandler={this.openModal.bind(this)} getDate={this.getDate.bind(this)} />}
                             </div>
                         </div>
                     </div>
@@ -551,6 +570,10 @@ class Planning extends Component {
                     <div className="modal-content">
                         {/* {console.log()} */}
                         <h4>U kopieert de planning van vorige week naar deze week</h4>
+                        <label htmlFor="dateFromCopy">Van</label>
+                        <input type="date" id="dateFromCopy" name="dateFromCopy" />
+                        <label htmlFor="dateToCopy">Tot</label>
+                        <input type="date" id="dateToCopy" name="dateToCopy" />
                         <p>De kopie zal gaan over de datums tussen {this.getMonday(new Date()).toLocaleDateString('nl-NL', options)} en {this.getSunday(new Date()).toLocaleDateString('nl-NL', options)}</p>
                         <p>De planning wordt 7 dagen opgeschoven naar {this.getMonday(new Date(new Date().setDate(new Date().getDate() + 7))).toLocaleDateString('nl-NL', options)} en {this.getSunday(new Date(new Date().setDate(new Date().getDate() + 7))).toLocaleDateString('nl-NL', options)}</p>
                         <a className={this.props.planning.loadingInsertPlanning ? "waves-effect waves-light btn purple disabled  " : "waves-effect waves-light purple btn "} onClick={this.CopyPlanning}>
