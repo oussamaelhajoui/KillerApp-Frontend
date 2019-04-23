@@ -561,7 +561,7 @@ class Planning extends Component {
                             </div>
                         </div>
                         <div className="row">
-                            {this.props.planningen && <Calendar planningen={this.props.planningenUser} openModalHandler={this.openModal.bind(this)} />}
+                            {this.props.planningen && <Calendar planningen={this.props.planningenUser} openModalHandler={this.openModal.bind(this)} getDate={(c) => console.log(c)} />}
                         </div>
                     </div>
                 </div>

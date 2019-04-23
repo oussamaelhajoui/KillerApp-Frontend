@@ -142,7 +142,10 @@ class myCalendar extends Component {
                         console.log("xxxx", view)
                     }}
                     onNavigate={(...v) => {
-                        this.props.getDate(...v);
+                        if (!(v === undefined)) {
+                            console.log(...v);
+                            this.props.getDate(...v);
+                        }
 
                     }}
                     popup={true}
