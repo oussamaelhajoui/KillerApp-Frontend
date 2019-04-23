@@ -18,6 +18,11 @@ class HoursEmployee extends Component {
 
         this.userid = props.match.params.idmedewerker;
         this.GeneratePdf = this.GeneratePdf.bind(this);
+        this.state = {
+            genDateStart: new Date(),
+            genDateEnd: new Date(new Date() + 7),
+            showFull: true
+        }
     }
 
     componentWillMount() {
@@ -34,6 +39,23 @@ class HoursEmployee extends Component {
             close: 'Ok',
             closeOnSelect: true, // Close upon selecting a date,
             container: 'body', // ex. 'body' will append picker to body
+            onSet: (a) => {
+                this.setState({ genDateStart: new Date(a.select) })
+                console.log(new Date(a.select).toLocaleDateString())
+            }
+        });
+        $('.datepickerEnd').pickadate({
+            selectMonths: true, // Creates a dropdown to control month
+            selectYears: 15, // Creates a dropdown of 15 years to control year,
+            today: 'Today',
+            clear: 'Clear',
+            close: 'Ok',
+            closeOnSelect: true, // Close upon selecting a date,
+            container: 'body', // ex. 'body' will append picker to body
+            onSet: (a) => {
+                this.setState({ genDateEnd: new Date(a.select) })
+                console.log(new Date(a.select).toLocaleDateString())
+            }
         });
 
     }
@@ -79,6 +101,10 @@ class HoursEmployee extends Component {
     }
 
 
+    handleChangeSelect = (x) => {
+        console.log(x);
+    }
+
 
     render() {
         // const planningen = this.props.planningenUser.planningen.map(planning => {
@@ -104,7 +130,7 @@ class HoursEmployee extends Component {
         //     )
         // })
 
-        const ListHours = this.props.planningenUser.planningen.map(planning => {
+        let ListHours = this.props.planningenUser.planningen.map(planning => {
             if (planning.echtestarttijd === "00:00:00")
                 return null;
             let startDate = planning.echtestarttijd.split(":");
@@ -118,7 +144,7 @@ class HoursEmployee extends Component {
             d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
             console.log("planning111", planning)
             // let Uren = reservEnd.getTime() - reservStart.getTime();
-            return (<p>{new Date(planning.datum).toLocaleDateString('nl-NL',{weekday:'long', year: 'numeric', month: 'long', day: 'numeric'})}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{planning.route.routenummer}&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString().split(" AM")[0]} uur </p>);
+            return (<p>{new Date(planning.datum).toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{planning.route.routenummer}&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString().split(" AM")[0]} uur </p>);
         });
 
         const timeConvert = (sec) => {
@@ -150,9 +176,34 @@ class HoursEmployee extends Component {
 
             // minutes are worth 60 seconds. Hours are worth 60 minutes.
             var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(" ")[0]);
-            console.log("uuren",timeConvert(seconds))
+            console.log("uuren", timeConvert(seconds))
             return accumulator + seconds;
         }, 0);
+
+
+
+        const TotalHours3 = this.props.planningenUser.planningen
+            .filter(planning => { return new Date(planning.datum) >= new Date(this.state.genDateStart) && new Date(planning.datum) <= new Date(this.state.genDateEnd) })
+            .reduce((accumulator, planning) => {
+                let startDate = planning.echtestarttijd.split(":");
+                let endDate = planning.echteeindtijd.split(":");
+                var reservStart = new Date(2018, 1, 1, startDate[0], startDate[1], startDate[2]);
+                var reservEnd = new Date(2018, 1, 1, endDate[0], endDate[1], endDate[2]);
+
+                var d = new Date();
+                d.setHours(reservEnd.getHours() - reservStart.getHours());
+                d.setMinutes(reservEnd.getMinutes() - reservStart.getMinutes());
+                d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
+
+                let hours = d.toLocaleTimeString();
+
+                var a = hours.split(':'); // split it at the colons
+
+                // minutes are worth 60 seconds. Hours are worth 60 minutes.
+                var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(" ")[0]);
+                console.log("uuren", timeConvert(seconds))
+                return accumulator + seconds;
+            }, 0);
 
         const secsToTime = (secs) => {
             var sec_num = parseInt(secs, 10)
@@ -165,8 +216,52 @@ class HoursEmployee extends Component {
                 .join(":")
         }
 
-     
-        console.log(TotalHours);
+        const ListHours3 = this.props.planningenUser.planningen
+            .filter(planning => { return new Date(planning.datum) >= new Date(this.state.genDateStart) && new Date(planning.datum) <= new Date(this.state.genDateEnd) })
+            .map(planning => {
+                console.log("xxxxxxxx", planning);
+                if (planning.echtestarttijd === "00:00:00")
+                    return null;
+                let startDate = planning.echtestarttijd.split(":");
+                let endDate = planning.echteeindtijd.split(":");
+                var reservStart = new Date(2018, 1, 1, startDate[0], startDate[1], startDate[2]);
+                var reservEnd = new Date(2018, 1, 1, endDate[0], endDate[1], endDate[2]);
+
+                var d = new Date();
+                d.setHours(reservEnd.getHours() - reservStart.getHours());
+                d.setMinutes(reservEnd.getMinutes() - reservStart.getMinutes());
+                d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
+                console.log("planning111", planning)
+                // let Uren = reservEnd.getTime() - reservStart.getTime();
+                return (<p>{new Date(planning.datum).toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{planning.route.routenummer}&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString().split(" AM")[0]} uur </p>);
+            });
+
+
+        const genDate = () => {
+            console.log("xxxxxxxxxx");
+            this.setState({ showFull: false }, () => {
+                const ListHours3 = this.props.planningenUser.planningen
+                    .filter(planning => { return new Date(planning.datum) >= new Date(this.state.genDateStart) && new Date(planning.datum) <= new Date(this.state.genDateEnd) })
+                    .map(planning => {
+                        console.log("xxxxxxxx", planning);
+                        if (planning.echtestarttijd === "00:00:00")
+                            return null;
+                        let startDate = planning.echtestarttijd.split(":");
+                        let endDate = planning.echteeindtijd.split(":");
+                        var reservStart = new Date(2018, 1, 1, startDate[0], startDate[1], startDate[2]);
+                        var reservEnd = new Date(2018, 1, 1, endDate[0], endDate[1], endDate[2]);
+
+                        var d = new Date();
+                        d.setHours(reservEnd.getHours() - reservStart.getHours());
+                        d.setMinutes(reservEnd.getMinutes() - reservStart.getMinutes());
+                        d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
+                        console.log("planning111", planning)
+                        // let Uren = reservEnd.getTime() - reservStart.getTime();
+                        return (<p>{new Date(planning.datum).toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{planning.route.routenummer}&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString().split(" AM")[0]} uur </p>);
+                    });
+            });
+
+        }
 
         return (
             <Fragment>
@@ -185,11 +280,11 @@ class HoursEmployee extends Component {
                                 <div className="col s1"></div>
                                 <div className="input-field col s5">
                                     <div className="input-field">
-                                        <input type="text" name="datumFrom" id="datumFrom" ref="datumpicker" className="datepicker" onChange={this.handleChangeSelect} />
+                                        <input type="text" name="datumFrom" id="datumFrom" ref="datumpicker" className="datepickerEnd" onChange={this.handleChangeSelect} />
                                         <label htmlFor="datumFrom">Tot</label>
                                     </div>
                                 </div>
-                                <div className="input-field col s1"> <a className="waves-effect waves-light btn">Genereer</a> </div>
+                                <div className="input-field col s1"> <a className="waves-effect waves-light btn" onClick={() => { genDate() }}>Genereer</a> </div>
                             </div>
                         </div>
                         <div className="col l12 m12">
@@ -197,11 +292,11 @@ class HoursEmployee extends Component {
                             <div className="col s12 l6 bgwhite">
                                 <h5 className="">Uren</h5>
                                 <div className="row">
-                                    {ListHours}
+                                    {this.state.showFull ? ListHours : ListHours3}
                                 </div>
                                 <hr />
                                 <div className="row">
-                                    Totale uren - {timeConvert(TotalHours)}
+                                    Totale uren - {this.state.showFull ? timeConvert(TotalHours) : timeConvert(TotalHours3)}
                                 </div>
                             </div>
                             <div className="col s12 l6 ">
