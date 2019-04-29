@@ -354,32 +354,33 @@ class Planning extends Component {
             }
         })
         console.log(formValues);
+        if (formValues !== undefined) {
+            let data = {
+                idplanning: regel.idplanning,
+                datum: regel.datum,
+                gezien: regel.gezien,
+                echtestarttijd: regel.echtestarttijd,
+                echteeindtijd: regel.echteeindtijd,
+                reden: regel.reden,
+                gebruiker: formValues.user.id,
+                route: formValues.route.id,
+                carModel: formValues.vehicle.id
+            }
+            console.log("data",data)
 
-        let data = {
-            idplanning: regel.idplanning,
-            datum: regel.datum,
-            gezien: regel.gezien,
-            echtestarttijd: regel.echtestarttijd,
-            echteeindtijd: regel.echteeindtijd,
-            reden: regel.reden,
-            gebruiker: formValues.user.id,
-            route: formValues.route.id,
-            carModel: formValues.vehicle.id
-        }
-        console.log("data",data)
+            Restful.Post("schedule/update/", data, this.props.user.token)
+                .then(res => res.json())
+                .then(response => {
+                    // console.log(response);
+                    this.initData(this.state.chosenDate);
+                    Swal({
+                        title: "Done",
+                        type: "info",
+                        text: "we updated your times"
 
-        Restful.Post("schedule/update/", data, this.props.user.token)
-            .then(res => res.json())
-            .then(response => {
-                // console.log(response);
-                this.initData(this.state.chosenDate);
-                Swal({
-                    title: "Done",
-                    type: "info",
-                    text: "we updated your times"
-
+                    })
                 })
-            })
+        }
     }
 
     ChangedTimesInState = (id, startTime, endTime) => {
