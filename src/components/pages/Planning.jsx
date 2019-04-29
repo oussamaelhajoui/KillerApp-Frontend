@@ -393,7 +393,7 @@ class Planning extends Component {
                         style={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ?
                             (planning.echtestarttijd !== "00:00:00") ? { backgroundColor: "#FF4136" } : { backgroundColor: "#DDD" } :
                             { backgroundColor: "#01FF70" }}
-                        class={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? (planning.echtestarttijd !== "00:00:00") ? "tooltipped" : "" : ""}
+                        className={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? (planning.echtestarttijd !== "00:00:00") ? "tooltipped" : "" : ""}
                         data-position="bottom" data-delay="50"
                         data-tooltip={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? planning.reden : ""}
                     >
@@ -405,10 +405,10 @@ class Planning extends Component {
                         <td>{`${planning.route.tijdstart} - ${planning.route.tijdeind}`}</td>
                         <td>{(planning.gezien) ? `${planning.echtestarttijd} - ${planning.echteeindtijd}` : `N.V.T.`}</td>
                         <td>
-                            <a className={"waves-effect waves-light purple btn "} style={{ marginRight: "35px" }} onClick={() => { this.ChangedTimesInState(planning.idplanning, planning.route.tijdstart, planning.route.tijdeind) }}>
+                            <a className="btn-floating waves-effect waves-light blue" onClick={() => {this.updatePlanning(planning)}}><i className="material-icons">edit</i></a>
+                            <a className={"waves-effect waves-light purple btn "} style={{ marginRight: "5px", marginLeft: "5px" }} onClick={() => { this.ChangedTimesInState(planning.idplanning, planning.route.tijdstart, planning.route.tijdeind) }}>
                                 Check-out
                             </a>
-
                             <a className="btn-floating waves-effect waves-light red" onClick={() => { this.deletePlanning(planning.idplanning) }}><i className="material-icons">delete</i></a>
                         </td>
                         {/* <td>{planning.gezien ? "Gezien" : <button> Accepteer </button>}</td> */}
@@ -421,7 +421,7 @@ class Planning extends Component {
                         style={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ?
                             (planning.echtestarttijd !== "00:00:00") ? { backgroundColor: "#FF4136" } : { backgroundColor: "#DDD" } :
                             { backgroundColor: "#01FF70" }}
-                        class={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? (planning.echtestarttijd !== "00:00:00") ? "tooltipped" : "" : ""}
+                        className={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? (planning.echtestarttijd !== "00:00:00") ? "tooltipped" : "" : ""}
                         data-position="bottom" data-delay="50"
                         data-tooltip={(planning.route.tijdstart !== planning.echtestarttijd || planning.route.tijdeind !== planning.echteeindtijd) ? planning.reden : ""}
                     >
