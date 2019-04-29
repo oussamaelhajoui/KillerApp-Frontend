@@ -49,8 +49,8 @@ class Planning extends Component {
 
     constructor(props) {
         super(props);
-        moment().locale('nl')
-        moment.locale('nl')
+        moment().locale('nl');
+        moment.locale('nl');
         moment().format("dddd MMMM YYYY");
 
         this.openModal = this.openModal.bind(this);
@@ -239,10 +239,39 @@ class Planning extends Component {
     }
 
     deletePlanning = (id) => {
-        Restful.Get("schedule/delete/" + id, this.props.user.token)
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            console.log(result);
+            if (result.value) {
+                Restful.Get("schedule/delete/" + id, this.props.user.token)
+                    .then(res => res.json())
+                    .then(response => {
+                        this.initData();
+                        Swal.fire(
+                            'Verwijderd!',
+                            'Planning regel is verwijderd.',
+                            'success'
+                        )
+                    })
+
+            }
+        });
+
+
+    }
+
+    CopyPlanning = () => {
+        Restful.Post("schedule/copyscheduleweek/", { DatumVan: this.getMonday(new Date()), DatumTot: this.getSunday(new Date()) }, this.props.user.token)
             .then(res => res.json())
             .then(response => {
-                this.initData()
+                this.initData(this.state.chosenDate);
                 Swal({
                     title: "Done",
                     type: "info",
@@ -252,15 +281,102 @@ class Planning extends Component {
             })
     }
 
-    CopyPlanning = () => {
-        Restful.Post("schedule/copyscheduleweek/", { DatumVan: this.getMonday(new Date()), DatumTot: this.getSunday(new Date()) }, this.props.user.token)
+    async updatePlanning(regel){
+        console.log(regel);
+        $("select").material_select();
+
+        const {value: formValues} = await Swal.fire({
+            title: 'Bewerk planning regel',
+            html:
+                `
+                    <div>
+                        <label for="userListModel">Medewerker</label>
+                        <select name="userListModel" id="userListModel"></select>
+                    </div>
+               
+                    <div>
+                        <label for="routeListModel">Route</label>
+                        <select name="routeListModel" id="routeListModel"></select>
+                    </div>
+                    <div>
+                        <label for="vehicleListModel">Voertuig</label>
+                        <select name="vehicleListModel" id="vehicleListModel"></select>
+                    </div>                
+`,
+            focusConfirm: false,
+            preConfirm: () => {
+                $("select").material_select();
+                return {
+                        user: JSON.parse(document.getElementById('userListModel').value),
+                        route: JSON.parse(document.getElementById('routeListModel').value),
+                        vehicle: JSON.parse(document.getElementById('vehicleListModel').value)
+                }
+            },
+            onBeforeOpen: () => {
+
+            },
+            onOpen: () => {
+                let userSelect = document.getElementById('userListModel');
+                let routeSelect = document.getElementById('routeListModel');
+                let vehicleSelect = document.getElementById('vehicleListModel');
+
+
+                this.props.users.users.forEach(_user => {
+                    var opt = document.createElement("option");
+                    opt.value= JSON.stringify(_user);
+                    opt.innerHTML = _user.username; // whatever property it has
+                    opt.selected = regel.gebruiker.id ===_user.id;
+                    userSelect.appendChild(opt);
+                });
+
+                // const routes = this.props.routes.routes && this.props.routes.routes.map((route, index) => (
+                //     <option onClick={this.handleChangeSelect} key={route.id} value={JSON.stringify(route)}>{route.routenummer}</option>
+                // ));
+                this.props.routes.routes.forEach(_route => {
+                    var opt = document.createElement("option");
+                    opt.value= JSON.stringify(_route);
+                    opt.innerHTML = _route.routenummer; // whatever property it has
+                    opt.selected = regel.route.id ===_route.id;
+                    routeSelect.appendChild(opt);
+                });
+
+                {/*<option onClick={this.handleChangeSelect} key={voertuig.id} value={JSON.stringify(voertuig)}>{voertuig.voertuigcode}</option>*/}
+                this.props.voertuigen.voertuigen.forEach(_voertuig => {
+                    var opt = document.createElement("option");
+                    opt.value= JSON.stringify(_voertuig);
+                    opt.innerHTML = _voertuig.voertuigcode; // whatever property it has
+                    opt.selected = regel.voertuig.id ===_voertuig.id;
+                    vehicleSelect.appendChild(opt);
+                });
+
+
+                $("select").material_select();
+            }
+        })
+        console.log(formValues);
+
+        let data = {
+            idplanning: regel.idplanning,
+            datum: regel.datum,
+            gezien: regel.gezien,
+            echtestarttijd: regel.echtestarttijd,
+            echteeindtijd: regel.echteeindtijd,
+            reden: regel.reden,
+            gebruiker: formValues.user.id,
+            route: formValues.route.id,
+            carModel: formValues.vehicle.id
+        }
+        console.log("data",data)
+
+        Restful.Post("schedule/update/", data, this.props.user.token)
             .then(res => res.json())
             .then(response => {
-                this.initData(this.state.chosenDate)
+                // console.log(response);
+                this.initData(this.state.chosenDate);
                 Swal({
                     title: "Done",
                     type: "info",
-                    text: "we updated the schedule"
+                    text: "we updated your times"
 
                 })
             })
