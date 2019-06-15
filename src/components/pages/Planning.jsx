@@ -107,8 +107,10 @@ class Planning extends Component {
                     this.setState({ planningCurrentWeek });
 
                     let planningToday = planningen.filter(planning => {
-                        let tmpDate = new Date(planning.datum).getDate();
-                        if (tmpDate == new Date().getDate()) {
+                        let tmpDate = `${new Date(planning.datum).getDate()} ${new Date(planning.datum).getMonth()} ${new Date(planning.datum).getFullYear()}`;
+                        let _currDate = `${new Date().getDate()} ${new Date().getMonth()} ${new Date().getFullYear()}`;
+                        console.log("date",_currDate);
+                        if (tmpDate === _currDate) {
                             return true;
                         } else { return false; }
                     })
