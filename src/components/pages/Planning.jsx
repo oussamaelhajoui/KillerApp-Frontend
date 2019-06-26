@@ -109,7 +109,6 @@ class Planning extends Component {
                     let planningToday = planningen.filter(planning => {
                         let tmpDate = `${new Date(planning.datum).getDate()} ${new Date(planning.datum).getMonth()} ${new Date(planning.datum).getFullYear()}`;
                         let _currDate = `${new Date().getDate()} ${new Date().getMonth()} ${new Date().getFullYear()}`;
-                        console.log("date",_currDate);
                         if (tmpDate === _currDate) {
                             return true;
                         } else { return false; }
@@ -135,7 +134,12 @@ class Planning extends Component {
             close: 'Ok',
             closeOnSelect: true, // Close upon selecting a date,
             container: 'body', // ex. 'body' will append picker to body
+            onOpen: (e => {console.log("EX",this)}),
+            onClose: (ed => {console.log("DS", this.refs.datumcopyvan)})
         });
+
+        $('.datepicker').on('mousedown',function(event){ event.preventDefault(); });
+
 
 
         $('.timepicker').pickatime({
@@ -150,6 +154,9 @@ class Planning extends Component {
             ampmclickable: true, // make AM PM clickable
             aftershow: function () { } //Function for after opening timepicker
         });
+        $('select').on('mousedown',function(event){ event.preventDefault(); })
+        $('timepicker').on('mousedown',function(event){ event.preventDefault(); })
+
         $('.modal').modal();
     }
 
@@ -163,6 +170,7 @@ class Planning extends Component {
     }
 
     handleChangeSelect = () => {
+        console.log("vali",this.refs.medewerkerselect.value);
         if (this.refs.voertuigselect.value !== "" && this.refs.medewerkerselect.value !== "" && this.refs.routeselect.value !== "" && this.refs.datumpicker.value !== "")
             this.setState({
                 medewerker: JSON.parse(this.refs.medewerkerselect.value),
@@ -170,6 +178,10 @@ class Planning extends Component {
                 voertuig: JSON.parse(this.refs.voertuigselect.value),
                 geselecteerdeDatum: this.refs.datumpicker.value
             });
+    }
+
+    handleChangeSelect2 = () => {
+        console.log(this.refs.datumcopyvan);
     }
 
     handleChangeSelectFilter = () => {
@@ -267,9 +279,13 @@ class Planning extends Component {
         });
 
 
+        $('select').on('mousedown',function(event){ event.preventDefault(); })
+        $('timepicker').on('mousedown',function(event){ event.preventDefault(); })
     }
 
     CopyPlanning = () => {
+        // console.log({ DatumVan: this.getMonday(new Date()), DatumTot: this.getSunday(new Date()) });
+        // console.log("DSA", this.refs.datumcopyvan.value);
         Restful.Post("schedule/copyscheduleweek/", { DatumVan: this.getMonday(new Date()), DatumTot: this.getSunday(new Date()) }, this.props.user.token)
             .then(res => res.json())
             .then(response => {
@@ -577,7 +593,7 @@ class Planning extends Component {
                                     <label htmlFor="datum">Datum</label>
                                 </div>
                             </div>
-                            <div className="input-field col s12">
+                            <div className="input-field col s12" onMouseDown={d => { d.preventDefault()}}>
                                 <select onChange={this.handleChangeSelect} ref="medewerkerselect">
                                     <option value="" disabled selected>Kies de chauffeur</option>
                                     {users}
@@ -689,10 +705,7 @@ class Planning extends Component {
                     <div className="modal-content">
                         {/* {console.log()} */}
                         <h4>U kopieert de planning van vorige week naar deze week</h4>
-                        <label htmlFor="dateFromCopy">Van</label>
-                        <input type="date" id="dateFromCopy" name="dateFromCopy" />
-                        <label htmlFor="dateToCopy">Tot</label>
-                        <input type="date" id="dateToCopy" name="dateToCopy" />
+
                         <p>De kopie zal gaan over de datums tussen {this.getMonday(new Date()).toLocaleDateString('nl-NL', options)} en {this.getSunday(new Date()).toLocaleDateString('nl-NL', options)}</p>
                         <p>De planning wordt 7 dagen opgeschoven naar {this.getMonday(new Date(new Date().setDate(new Date().getDate() + 7))).toLocaleDateString('nl-NL', options)} en {this.getSunday(new Date(new Date().setDate(new Date().getDate() + 7))).toLocaleDateString('nl-NL', options)}</p>
                         <a className={this.props.planning.loadingInsertPlanning ? "waves-effect waves-light btn purple disabled  " : "waves-effect waves-light purple btn "} onClick={this.CopyPlanning}>

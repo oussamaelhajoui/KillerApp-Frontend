@@ -160,36 +160,11 @@ class HoursEmployee extends Component {
         }
 
         const TotalHours = this.props.planningenUser.planningen.reduce((accumulator, planning) => {
-            let startDate = planning.echtestarttijd.split(":");
-            let endDate = planning.echteeindtijd.split(":");
-            var reservStart = new Date(2018, 1, 1, startDate[0], startDate[1], startDate[2]);
-            var reservEnd = new Date(2018, 1, 1, endDate[0], endDate[1], endDate[2]);
-
-            var d = new Date();
-            d.setHours(reservEnd.getHours() - reservStart.getHours());
-            d.setMinutes(reservEnd.getMinutes() - reservStart.getMinutes());
-            d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
-
-            let hours = d.toLocaleTimeString();
-
-            var a = hours.split(':'); // split it at the colons
-
-            // minutes are worth 60 seconds. Hours are worth 60 minutes.
-            var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(" ")[0]);
-            console.log("uuren", timeConvert(seconds))
-            return accumulator + seconds;
-        }, 0);
-
-
-
-        const TotalHours3 = this.props.planningenUser.planningen
-            .filter(planning => { return new Date(planning.datum) >= new Date(this.state.genDateStart) && new Date(planning.datum) <= new Date(this.state.genDateEnd) })
-            .reduce((accumulator, planning) => {
+            if(planning.gezien){
                 let startDate = planning.echtestarttijd.split(":");
                 let endDate = planning.echteeindtijd.split(":");
-                var reservStart = new Date(2018, 1, 1, startDate[0], startDate[1], startDate[2]);
-                var reservEnd = new Date(2018, 1, 1, endDate[0], endDate[1], endDate[2]);
-
+                var reservStart = new Date(2019, 1, 1, startDate[0], startDate[1], startDate[2]);
+                var reservEnd = new Date(2019, 1, 1, endDate[0], endDate[1], endDate[2]);
                 var d = new Date();
                 d.setHours(reservEnd.getHours() - reservStart.getHours());
                 d.setMinutes(reservEnd.getMinutes() - reservStart.getMinutes());
@@ -201,8 +176,43 @@ class HoursEmployee extends Component {
 
                 // minutes are worth 60 seconds. Hours are worth 60 minutes.
                 var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(" ")[0]);
-                console.log("uuren", timeConvert(seconds))
+                // console.log("uuren "+ planning+":", timeConvert(seconds));
+                console.log("found");
                 return accumulator + seconds;
+            }
+            return accumulator;
+        }, 0);
+
+
+
+        const TotalHours3 = this.props.planningenUser.planningen
+            .filter(planning => { return new Date(planning.datum) >= new Date(this.state.genDateStart) && new Date(planning.datum) <= new Date(this.state.genDateEnd) })
+            .reduce((accumulator, planning) => {
+                if(planning.gezien){
+                    let startDate = planning.echtestarttijd.split(":");
+                    let endDate = planning.echteeindtijd.split(":");
+                    var reservStart = new Date(2018, 1, 1, startDate[0], startDate[1], startDate[2]);
+                    var reservEnd = new Date(2018, 1, 1, endDate[0], endDate[1], endDate[2]);
+
+                    var d = new Date();
+                    d.setHours(reservEnd.getHours() - reservStart.getHours());
+                    d.setMinutes(reservEnd.getMinutes() - reservStart.getMinutes());
+                    d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
+
+                    let hours = d.toLocaleTimeString();
+
+                    var a = hours.split(':'); // split it at the colons
+
+                    // minutes are worth 60 seconds. Hours are worth 60 minutes.
+                    var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(" ")[0]);
+                    console.group("groupee");
+                    console.log("uuren", timeConvert(seconds))
+                    console.log("p",planning)
+                    console.groupEnd();
+                    return accumulator + seconds;
+                }
+                return accumulator;
+
             }, 0);
 
         const secsToTime = (secs) => {
@@ -219,7 +229,6 @@ class HoursEmployee extends Component {
         const ListHours3 = this.props.planningenUser.planningen
             .filter(planning => { return new Date(planning.datum) >= new Date(this.state.genDateStart) && new Date(planning.datum) <= new Date(this.state.genDateEnd) })
             .map(planning => {
-                console.log("xxxxxxxx", planning);
                 if (planning.echtestarttijd === "00:00:00")
                     return null;
                 let startDate = planning.echtestarttijd.split(":");
@@ -238,7 +247,6 @@ class HoursEmployee extends Component {
 
 
         const genDate = () => {
-            console.log("xxxxxxxxxx");
             this.setState({ showFull: false }, () => {
                 const ListHours3 = this.props.planningenUser.planningen
                     .filter(planning => { return new Date(planning.datum) >= new Date(this.state.genDateStart) && new Date(planning.datum) <= new Date(this.state.genDateEnd) })
