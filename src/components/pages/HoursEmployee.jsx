@@ -21,13 +21,25 @@ class HoursEmployee extends Component {
         this.state = {
             genDateStart: new Date(),
             genDateEnd: new Date(new Date() + 7),
-            showFull: true
+            showFull: true,
+            gebruiker: ''
         }
+
+
     }
 
     componentWillMount() {
         this.props.getUser({ id: this.userid, token: this.props.loggedUser.token });
-        this.props.getPlanningenOnUser({ id: this.userid, token: this.props.loggedUser.token });
+        this.props.getPlanningenOnUser({ id: this.userid, token: this.props.loggedUser.token })
+            .then(schedule => {
+                schedule.map( p => {
+                    if(this.state.gebruiker.length > 0)
+                        return;
+                    else
+                        this.setState({gebruiker: p.gebruiker.username})
+
+                })
+            })
     }
 
     componentDidUpdate() {
@@ -41,7 +53,6 @@ class HoursEmployee extends Component {
             container: 'body', // ex. 'body' will append picker to body
             onSet: (a) => {
                 this.setState({ genDateStart: new Date(a.select) })
-                console.log(new Date(a.select).toLocaleDateString())
             }
         });
         $('.datepickerEnd').pickadate({
@@ -54,9 +65,10 @@ class HoursEmployee extends Component {
             container: 'body', // ex. 'body' will append picker to body
             onSet: (a) => {
                 this.setState({ genDateEnd: new Date(a.select) })
-                console.log(new Date(a.select).toLocaleDateString())
             }
         });
+
+
 
     }
 
@@ -68,7 +80,6 @@ class HoursEmployee extends Component {
         doc.setFontSize(12);
         let x = 30;
         arr.forEach(element => {
-            console.log(element);
 
             if (element !== null) {
 
@@ -130,7 +141,9 @@ class HoursEmployee extends Component {
         //     )
         // })
 
-        let ListHours = this.props.planningenUser.planningen.map(planning => {
+        let ListHours = this.props.planningenUser.planningen.sort( (a, b) => {
+            return a < b;
+        }).map(planning => {
             if (planning.echtestarttijd === "00:00:00")
                 return null;
             let startDate = planning.echtestarttijd.split(":");
@@ -142,9 +155,15 @@ class HoursEmployee extends Component {
             d.setHours(reservEnd.getHours() - reservStart.getHours());
             d.setMinutes(reservEnd.getMinutes() - reservStart.getMinutes());
             d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
-            console.log("planning111", planning)
             // let Uren = reservEnd.getTime() - reservStart.getTime();
-            return (<p>{new Date(planning.datum).toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{planning.route.routenummer}&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString().split(" AM")[0]} uur </p>);
+            return (
+                <tr>
+                    <td>{new Date(planning.datum).toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</td>
+                    <td>{planning.route.routenummer}</td>
+                    <td>{d.toLocaleTimeString().split(" AM")[0]} uur</td>
+                </tr>
+                // <p>{new Date(planning.datum).toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{planning.route.routenummer}&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString().split(" AM")[0]} uur </p>
+            );
         });
 
         const timeConvert = (sec) => {
@@ -177,12 +196,40 @@ class HoursEmployee extends Component {
                 // minutes are worth 60 seconds. Hours are worth 60 minutes.
                 var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(" ")[0]);
                 // console.log("uuren "+ planning+":", timeConvert(seconds));
-                console.log("found");
                 return accumulator + seconds;
             }
             return accumulator;
         }, 0);
 
+        var a = [1, 1, 2];
+
+        const alldays = this.props.planningenUser.planningen.map( p => {
+            if(p.gezien){
+                return p.datum
+            }
+        });
+
+        let xior = [... new Set(alldays)];
+        xior = xior.filter( x => {
+            if(x !== undefined)
+                return x
+        });
+
+        const TotalDays = xior.length;
+
+        const allDaysSelect = this.props.planningenUser.planningen
+            .filter(planning => { return new Date(planning.datum) >= new Date(this.state.genDateStart) && new Date(planning.datum) <= new Date(this.state.genDateEnd) }).map(p => {
+                if(p.gezien){
+                    return p.datum
+                }
+            });
+        let xior2 = [... new Set(allDaysSelect)];
+        xior2 = xior2.filter( x => {
+            if(x !== undefined){
+                return x
+            }
+        });
+        const TotalDaysSelect = xior2.length;
 
 
         const TotalHours3 = this.props.planningenUser.planningen
@@ -205,10 +252,6 @@ class HoursEmployee extends Component {
 
                     // minutes are worth 60 seconds. Hours are worth 60 minutes.
                     var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(" ")[0]);
-                    console.group("groupee");
-                    console.log("uuren", timeConvert(seconds))
-                    console.log("p",planning)
-                    console.groupEnd();
                     return accumulator + seconds;
                 }
                 return accumulator;
@@ -240,9 +283,17 @@ class HoursEmployee extends Component {
                 d.setHours(reservEnd.getHours() - reservStart.getHours());
                 d.setMinutes(reservEnd.getMinutes() - reservStart.getMinutes());
                 d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
-                console.log("planning111", planning)
                 // let Uren = reservEnd.getTime() - reservStart.getTime();
-                return (<p>{new Date(planning.datum).toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{planning.route.routenummer}&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString().split(" AM")[0]} uur </p>);
+
+                return (
+
+                    <tr>
+                        <td>{new Date(planning.datum).toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</td>
+                        <td>{planning.route.routenummer}</td>
+                        <td>{d.toLocaleTimeString().split(" AM")[0]} uur</td>
+                    </tr>
+                    // <p>{new Date(planning.datum).toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{planning.route.routenummer}&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString().split(" AM")[0]} uur </p>
+                );
             });
 
 
@@ -251,7 +302,6 @@ class HoursEmployee extends Component {
                 const ListHours3 = this.props.planningenUser.planningen
                     .filter(planning => { return new Date(planning.datum) >= new Date(this.state.genDateStart) && new Date(planning.datum) <= new Date(this.state.genDateEnd) })
                     .map(planning => {
-                        console.log("xxxxxxxx", planning);
                         if (planning.echtestarttijd === "00:00:00")
                             return null;
                         let startDate = planning.echtestarttijd.split(":");
@@ -263,19 +313,17 @@ class HoursEmployee extends Component {
                         d.setHours(reservEnd.getHours() - reservStart.getHours());
                         d.setMinutes(reservEnd.getMinutes() - reservStart.getMinutes());
                         d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
-                        console.log("planning111", planning)
                         // let Uren = reservEnd.getTime() - reservStart.getTime();
                         return (<p>{new Date(planning.datum).toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{planning.route.routenummer}&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString().split(" AM")[0]} uur </p>);
                     });
             });
 
         }
-
         return (
             <Fragment>
                 <div className="container-fluid">
                     <div className="row">
-                        <h1> Uren Informatie van {this.props.userDetail.voornaam} </h1>
+                        <h1> Uren Informatie van {this.state.gebruiker} </h1>
                         <div className="col s8">
                             <div className="row">
                                 <h5 className="">Select date range</h5>
@@ -301,6 +349,10 @@ class HoursEmployee extends Component {
                                 <h5 className="">Uren</h5>
                                 <div className="row">
                                     {this.state.showFull ? ListHours : ListHours3}
+                                </div>
+                                <div className="row">
+                                    Dagen: {this.state.showFull ? TotalDays : TotalDaysSelect}
+
                                 </div>
                                 <hr />
                                 <div className="row">
