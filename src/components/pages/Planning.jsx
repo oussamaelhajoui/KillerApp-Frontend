@@ -284,9 +284,10 @@ class Planning extends Component {
     }
 
     CopyPlanning = () => {
+        // console.log({ DatumVan: this.getMonday(new Date().setHours(0,0,0,0)), DatumTot: this.getSunday(new Date().setHours(23,59,59,1)) })
         // console.log({ DatumVan: this.getMonday(new Date()), DatumTot: this.getSunday(new Date()) });
         // console.log("DSA", this.refs.datumcopyvan.value);
-        Restful.Post("schedule/copyscheduleweek/", { DatumVan: this.getMonday(new Date()), DatumTot: this.getSunday(new Date()) }, this.props.user.token)
+        Restful.Post("schedule/copyscheduleweek/", { DatumVan: this.getMonday(new Date().setHours(0,0,0,0)), DatumTot: this.getSunday(new Date().setHours(0,0,0,0)) }, this.props.user.token)
             .then(res => res.json())
             .then(response => {
                 this.initData(this.state.chosenDate);
