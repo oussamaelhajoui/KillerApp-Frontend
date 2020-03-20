@@ -715,7 +715,7 @@ class Planning extends Component {
                                     <div className="indeterminate"></div>
                                 </div>
                             )}
-                            kopieer</a>
+                            kopieer week</a>
                     </div>
                     <div className="modal-footer">
                         <a href="#!" className="modal-action modal-close waves-effect waves-green btn-flat">sluit</a>
