@@ -10,6 +10,7 @@ class Restful extends Component {
     this.Get = this.Get.bind(this);
   }
   static url = "http://136.144.203.14:8092/api/";
+  // static url = "http://localhost:53447/api/";
   // static url = "http://eow-portal.azurewebsites.net/api/";
 
 

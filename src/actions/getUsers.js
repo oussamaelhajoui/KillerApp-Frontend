@@ -13,6 +13,7 @@ export const getUsers = (data) => dispatch => {
     Restful.Post(`user/page/`, { page: 1, amount: 100 }, data.token)
       .then(response => { return response.json(); })
       .then(jsonResponse => {
+        console.log("users", jsonResponse);
         dispatch({
           type: GET_USERS,
           payload: {

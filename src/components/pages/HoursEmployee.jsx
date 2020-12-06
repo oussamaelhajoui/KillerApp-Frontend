@@ -156,11 +156,13 @@ class HoursEmployee extends Component {
             d.setMinutes(reservEnd.getMinutes() - reservStart.getMinutes());
             d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
             // let Uren = reservEnd.getTime() - reservStart.getTime();
+            console.log('planning',planning);
             return (
                 <tr>
                     <td>{new Date(planning.datum).toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</td>
                     <td>{planning.route.routenummer}</td>
                     <td>{d.toLocaleTimeString().split(" AM")[0]} uur</td>
+                    <td>{planning.voertuig.voertuigcode}</td>
                 </tr>
                 // <p>{new Date(planning.datum).toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{planning.route.routenummer}&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString().split(" AM")[0]} uur </p>
             );
@@ -180,6 +182,52 @@ class HoursEmployee extends Component {
 
         const TotalHours = this.props.planningenUser.planningen.reduce((accumulator, planning) => {
             if(planning.gezien){
+                let startDate = planning.echtestarttijd.split(":");
+                let endDate = planning.echteeindtijd.split(":");
+                var reservStart = new Date(2019, 1, 1, startDate[0], startDate[1], startDate[2]);
+                var reservEnd = new Date(2019, 1, 1, endDate[0], endDate[1], endDate[2]);
+                var d = new Date();
+                d.setHours(reservEnd.getHours() - reservStart.getHours());
+                d.setMinutes(reservEnd.getMinutes() - reservStart.getMinutes());
+                d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
+
+                let hours = d.toLocaleTimeString();
+
+                var a = hours.split(':'); // split it at the colons
+
+                // minutes are worth 60 seconds. Hours are worth 60 minutes.
+                var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(" ")[0]);
+                // console.log("uuren "+ planning+":", timeConvert(seconds));
+                return accumulator + seconds;
+            }
+            return accumulator;
+        }, 0);
+
+        const TotalHoursEXPERIMENTALEIGEN = this.props.planningenUser.planningen.reduce((accumulator, planning) => {
+            if(planning.gezien && planning.voertuig.voertuigcode === "EIGENVERVOER"){
+                let startDate = planning.echtestarttijd.split(":");
+                let endDate = planning.echteeindtijd.split(":");
+                var reservStart = new Date(2019, 1, 1, startDate[0], startDate[1], startDate[2]);
+                var reservEnd = new Date(2019, 1, 1, endDate[0], endDate[1], endDate[2]);
+                var d = new Date();
+                d.setHours(reservEnd.getHours() - reservStart.getHours());
+                d.setMinutes(reservEnd.getMinutes() - reservStart.getMinutes());
+                d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
+
+                let hours = d.toLocaleTimeString();
+
+                var a = hours.split(':'); // split it at the colons
+
+                // minutes are worth 60 seconds. Hours are worth 60 minutes.
+                var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(" ")[0]);
+                // console.log("uuren "+ planning+":", timeConvert(seconds));
+                return accumulator + seconds;
+            }
+            return accumulator;
+        }, 0);
+
+        const TotalHoursEXPERIMENTALEOW = this.props.planningenUser.planningen.reduce((accumulator, planning) => {
+            if(planning.gezien && planning.voertuig.voertuigcode !== "EIGENVERVOER"){
                 let startDate = planning.echtestarttijd.split(":");
                 let endDate = planning.echteeindtijd.split(":");
                 var reservStart = new Date(2019, 1, 1, startDate[0], startDate[1], startDate[2]);
@@ -258,6 +306,58 @@ class HoursEmployee extends Component {
 
             }, 0);
 
+        const TotalHours3EXPERIMENTALEIGEN = this.props.planningenUser.planningen
+            .filter(planning => { return new Date(planning.datum) >= new Date(this.state.genDateStart) && new Date(planning.datum) <= new Date(this.state.genDateEnd) })
+            .reduce((accumulator, planning) => {
+                if(planning.gezien && planning.voertuig.voertuigcode === "EIGENVERVOER"){
+                    let startDate = planning.echtestarttijd.split(":");
+                    let endDate = planning.echteeindtijd.split(":");
+                    var reservStart = new Date(2018, 1, 1, startDate[0], startDate[1], startDate[2]);
+                    var reservEnd = new Date(2018, 1, 1, endDate[0], endDate[1], endDate[2]);
+
+                    var d = new Date();
+                    d.setHours(reservEnd.getHours() - reservStart.getHours());
+                    d.setMinutes(reservEnd.getMinutes() - reservStart.getMinutes());
+                    d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
+
+                    let hours = d.toLocaleTimeString();
+
+                    var a = hours.split(':'); // split it at the colons
+
+                    // minutes are worth 60 seconds. Hours are worth 60 minutes.
+                    var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(" ")[0]);
+                    return accumulator + seconds;
+                }
+                return accumulator;
+
+            }, 0);
+
+        const TotalHours3EXPERIMENTALEOW = this.props.planningenUser.planningen
+            .filter(planning => { return new Date(planning.datum) >= new Date(this.state.genDateStart) && new Date(planning.datum) <= new Date(this.state.genDateEnd) })
+            .reduce((accumulator, planning) => {
+                if(planning.gezien && planning.voertuig.voertuigcode !== "EIGENVERVOER"){
+                    let startDate = planning.echtestarttijd.split(":");
+                    let endDate = planning.echteeindtijd.split(":");
+                    var reservStart = new Date(2018, 1, 1, startDate[0], startDate[1], startDate[2]);
+                    var reservEnd = new Date(2018, 1, 1, endDate[0], endDate[1], endDate[2]);
+
+                    var d = new Date();
+                    d.setHours(reservEnd.getHours() - reservStart.getHours());
+                    d.setMinutes(reservEnd.getMinutes() - reservStart.getMinutes());
+                    d.setSeconds(reservEnd.getSeconds() - reservStart.getSeconds());
+
+                    let hours = d.toLocaleTimeString();
+
+                    var a = hours.split(':'); // split it at the colons
+
+                    // minutes are worth 60 seconds. Hours are worth 60 minutes.
+                    var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2].split(" ")[0]);
+                    return accumulator + seconds;
+                }
+                return accumulator;
+
+            }, 0);
+
         const secsToTime = (secs) => {
             var sec_num = parseInt(secs, 10)
             var hours = Math.floor(sec_num / 3600) % 24
@@ -291,6 +391,7 @@ class HoursEmployee extends Component {
                         <td>{new Date(planning.datum).toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</td>
                         <td>{planning.route.routenummer}</td>
                         <td>{d.toLocaleTimeString().split(" AM")[0]} uur</td>
+                        <td>{planning.voertuig.voertuigcode}</td>
                     </tr>
                     // <p>{new Date(planning.datum).toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{planning.route.routenummer}&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{d.toLocaleTimeString().split(" AM")[0]} uur </p>
                 );
@@ -357,6 +458,8 @@ class HoursEmployee extends Component {
                                 <hr />
                                 <div className="row">
                                     Totale uren - {this.state.showFull ? timeConvert(TotalHours) : timeConvert(TotalHours3)}
+                                    &nbsp; - &nbsp; UREN EIGENVERVOER - {this.state.showFull ? timeConvert(TotalHoursEXPERIMENTALEIGEN): timeConvert(TotalHours3EXPERIMENTALEIGEN)}
+                                    &nbsp; - &nbsp; EOW VERVOER - {this.state.showFull ? timeConvert(TotalHoursEXPERIMENTALEOW) : timeConvert(TotalHours3EXPERIMENTALEOW)}
                                 </div>
                             </div>
                             <div className="col s12 l6 ">
