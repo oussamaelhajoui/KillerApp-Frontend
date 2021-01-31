@@ -340,7 +340,13 @@ class Planning extends Component {
                 let vehicleSelect = document.getElementById('vehicleListModel');
 
 
-                this.props.users.users.forEach(_user => {
+                this.props.users.users.sort(  (a,b) => { 
+                    if (a.routenummer < b.routenummer)
+                        return -1;
+                    if ( a.routenummer > b.routenummer)
+                        return 1;
+                    return 0;
+                    }).forEach(_user => {
                     var opt = document.createElement("option");
                     opt.value= JSON.stringify(_user);
                     opt.innerHTML = _user.username; // whatever property it has
@@ -351,7 +357,13 @@ class Planning extends Component {
                 // const routes = this.props.routes.routes && this.props.routes.routes.map((route, index) => (
                 //     <option onClick={this.handleChangeSelect} key={route.id} value={JSON.stringify(route)}>{route.routenummer}</option>
                 // ));
-                this.props.routes.routes.forEach(_route => {
+                this.props.routes.routes.sort(  (a,b) => { 
+                    if (a.routenummer < b.routenummer)
+                        return -1;
+                    if ( a.routenummer > b.routenummer)
+                        return 1;
+                    return 0;
+                    }).forEach(_route => {
                     var opt = document.createElement("option");
                     opt.value= JSON.stringify(_route);
                     opt.innerHTML = _route.routenummer; // whatever property it has
@@ -360,7 +372,13 @@ class Planning extends Component {
                 });
 
                 {/*<option onClick={this.handleChangeSelect} key={voertuig.id} value={JSON.stringify(voertuig)}>{voertuig.voertuigcode}</option>*/}
-                this.props.voertuigen.voertuigen.forEach(_voertuig => {
+                this.props.voertuigen.voertuigen.sort(  (a,b) => { 
+                    if (a.routenummer < b.routenummer)
+                        return -1;
+                    if ( a.routenummer > b.routenummer)
+                        return 1;
+                    return 0;
+                    }).forEach(_voertuig => {
                     var opt = document.createElement("option");
                     opt.value= JSON.stringify(_voertuig);
                     opt.innerHTML = _voertuig.voertuigcode; // whatever property it has
